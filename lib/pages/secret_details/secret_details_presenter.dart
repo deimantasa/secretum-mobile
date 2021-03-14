@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:secretum/main.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/stores/secrets_store.dart';
@@ -84,5 +85,12 @@ class SecretDetailsPresenter implements Presenter {
         element?.cancel();
       },
     );
+  }
+
+  @override
+  Future<void> copyText(String code) async {
+    await Clipboard.setData(ClipboardData(text: code));
+    _view.showMessage("Code was copied to clipboard");
+    _view.closePage();
   }
 }

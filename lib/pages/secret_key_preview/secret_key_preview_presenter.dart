@@ -28,7 +28,7 @@ class SecretKeyPreviewPresenter implements Presenter {
     await Clipboard.setData(ClipboardData(text: _secretKeyPreviewModel.secretKey));
 
     _secretKeyPreviewModel.isKeyCopied = true;
-    _view.showMessage("Secret Key copied to clipboard");
+    _view.showMessage("Secret Key was copied to clipboard");
     _view.updateView();
   }
 }

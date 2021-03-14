@@ -94,4 +94,63 @@ class Dialogs {
     );
     return newEntry;
   }
+
+  static void showInformationBottomSheet(
+    BuildContext context, {
+    required String title,
+    required String content,
+    required String buttonText,
+    required void Function() onPressed,
+  }) {
+    showBarModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 8,
+            top: 0,
+            right: 8,
+            //Use bottom padding to detect if keyboard is shown, so it'd not hide our rendered elements
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headline6,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Divider(height: 1),
+              SizedBox(height: 8),
+              Text(content),
+              SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text(buttonText),
+                        onPressed: onPressed,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

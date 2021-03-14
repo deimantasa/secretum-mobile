@@ -5,6 +5,7 @@ abstract class Presenter {
   void dispose();
   Future<void> updateSecret(Secret secret);
   void deleteSecret(String primaryPassword);
+  Future<void> copyText(String code);
 }
 
 abstract class View {

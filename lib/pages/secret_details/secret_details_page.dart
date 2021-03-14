@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/utils/dialogs.dart';
+import 'package:secretum/utils/utils.dart';
 
 import 'secret_details_contract.dart';
 import 'secret_details_model.dart';
@@ -154,52 +155,78 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-          title: Text("Notes"),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () async {
-              String? newNote = await Dialogs.showEditEntryBottomSheet(
-                context,
-                title: "Update Note",
-                entry: _secretDetailsModel.secret?.note,
-                hintText: "Enter some notes/hints about the secret",
-                buttonText: "Update",
-                textCapitalization: TextCapitalization.sentences,
-                validateWithPrimaryPassword: true,
-                validateWithSecondaryPassword: false,
-                validateWithBiometric: true,
-              );
+            title: Text("Notes"),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () async {
+                String? newNote = await Dialogs.showEditEntryBottomSheet(
+                  context,
+                  title: "Update Note",
+                  entry: _secretDetailsModel.secret?.note,
+                  hintText: "Enter some notes/hints about the secret",
+                  buttonText: "Update",
+                  textCapitalization: TextCapitalization.sentences,
+                  validateWithPrimaryPassword: true,
+                  validateWithSecondaryPassword: false,
+                  validateWithBiometric: true,
+                );
 
-              if (newNote != null) {
-                _secretDetailsPresenter.updateSecret(Secret.update(note: newNote));
-              }
-            },
-          ),
-        ),
+                if (newNote != null) {
+                  _secretDetailsPresenter.updateSecret(Secret.update(note: newNote));
+                }
+              },
+            ),
+            onTap: _secretDetailsModel.secret?.note?.isNotEmpty == true
+                ? () async {
+                    bool isSuccess = await Utils.authViaBiometric("");
+                    if (isSuccess) {
+                      Dialogs.showInformationBottomSheet(
+                        context,
+                        title: "Note",
+                        content: _secretDetailsModel.secret!.note!,
+                        buttonText: "Close",
+                        onPressed: () => Navigator.pop(context),
+                      );
+                    }
+                  }
+                : null),
         Divider(height: 1),
         ListTile(
-          title: Text("Code"),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () async {
-              String? newCode = await Dialogs.showEditEntryBottomSheet(
-                context,
-                title: "Update Code",
-                hintText: "Enter new code",
-                entry: _secretDetailsModel.secret?.code,
-                buttonText: "Update",
-                textCapitalization: TextCapitalization.none,
-                validateWithPrimaryPassword: true,
-                validateWithSecondaryPassword: false,
-                validateWithBiometric: true,
-              );
+            title: Text("Code"),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () async {
+                String? newCode = await Dialogs.showEditEntryBottomSheet(
+                  context,
+                  title: "Update Code",
+                  hintText: "Enter new code",
+                  entry: _secretDetailsModel.secret?.code,
+                  buttonText: "Update",
+                  textCapitalization: TextCapitalization.none,
+                  validateWithPrimaryPassword: true,
+                  validateWithSecondaryPassword: false,
+                  validateWithBiometric: true,
+                );
 
-              if (newCode != null) {
-                _secretDetailsPresenter.updateSecret(Secret.update(code: newCode));
-              }
-            },
-          ),
-        ),
+                if (newCode != null) {
+                  _secretDetailsPresenter.updateSecret(Secret.update(code: newCode));
+                }
+              },
+            ),
+            onTap: _secretDetailsModel.secret?.code?.isNotEmpty == true
+                ? () async {
+                    bool isSuccess = await Utils.authViaBiometric("");
+                    if (isSuccess) {
+                      Dialogs.showInformationBottomSheet(
+                        context,
+                        title: "Note",
+                        content: _secretDetailsModel.secret!.code!,
+                        buttonText: "Copy",
+                        onPressed: () => _secretDetailsPresenter.copyText(_secretDetailsModel.secret!.code!),
+                      );
+                    }
+                  }
+                : null),
         Divider(height: 1),
       ],
     );
