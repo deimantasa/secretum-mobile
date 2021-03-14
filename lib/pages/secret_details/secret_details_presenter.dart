@@ -67,12 +67,21 @@ class SecretDetailsPresenter implements Presenter {
   @override
   void deleteSecret(String password) async {
     if (encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
-      bool isSuccess = await Utils.authViaBiometric("");
+      bool isSuccess = await Utils.authViaBiometric();
       if (isSuccess) {
-        _secretsStore.deleteSecret(
+        _secretsStore
+            .deleteSecret(
           _usersStore.user!.documentSnapshot!.id,
           _secretDetailsModel.secret!.documentSnapshot!.id,
-        );
+        )
+            .then((isSuccess) {
+          if (isSuccess) {
+            _view.showMessage("${_secretDetailsModel.secret?.name} was deleted");
+          } else {
+            _view.showMessage("Cannot delete ${_secretDetailsModel.secret?.name}. Something went wrong");
+          }
+        });
+
         _view.closePage();
       }
     }

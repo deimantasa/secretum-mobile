@@ -141,7 +141,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
                       }
 
                       if (_editEntryModel.validateWithBiometric) {
-                        bool isSuccess = await Utils.authViaBiometric("");
+                        bool isSuccess = await Utils.authViaBiometric();
                         if (!isSuccess) {
                           showMessage("Authentication failed", isSuccess: false);
                           return;

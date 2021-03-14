@@ -33,15 +33,15 @@ class HomePresenter implements Presenter {
   }
 
   @override
-  void addNewSecret(String walletsName) {
+  void addNewSecret(String secretName) {
     String userId = _usersStore.user!.documentSnapshot!.id;
 
-    Secret secret = Secret.newSecret(userId, walletsName);
+    Secret secret = Secret.newSecret(userId, secretName);
     _secretsStore.addNewSecret(userId, secret).then((isSuccess) {
       if (isSuccess) {
-        _view.showMessage("$walletsName added");
+        _view.showMessage("$secretName added");
       } else {
-        _view.showMessage("Cannot add $walletsName, something went wrong", isSuccess: false);
+        _view.showMessage("Cannot add $secretName, something went wrong", isSuccess: false);
       }
     });
   }

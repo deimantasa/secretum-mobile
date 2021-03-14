@@ -39,7 +39,7 @@ class IntroPresenter implements Presenter {
 
       if (password != null &&
           encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
-        bool isSuccess = await Utils.authViaBiometric("");
+        bool isSuccess = await Utils.authViaBiometric();
         if (isSuccess) {
           _secretsStore.init(_usersStore.user!.documentSnapshot!.id);
           _view.goToHomePage();
@@ -48,7 +48,7 @@ class IntroPresenter implements Presenter {
       }
       //Since user is identified but password or biometric doesn't match - close the app
       //to prevent from any potential data leak
-      SystemNavigator.pop();
+      Utils.closeApp();
     } else {
       _view.goToWelcomePage();
     }

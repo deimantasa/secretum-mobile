@@ -15,9 +15,17 @@ import 'package:secretum/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 //Globals
-late AppLifecycleState appLifecycleState;
+AppLifecycleState? appLifecycleState;
 late LoggingService loggingService;
 late EncryptionService encryptionService;
+
+///[isBiometricAuthShowing] is introduced to tackle different Biometrics behaviour within Android and iOS devices.
+///Android shows Fragment, and activity is not paused, while iOS pauses the app and shows Biometrics screen
+///triggering AppLifecycleState to change. After iOS auth is success, AppLifecycleState becomes resume thus
+///we are in the loop.
+///Current way simply ensures that if Biometrics screen is shown, other won't be shown.
+///It still seems to fail sometimes (on iOS), but fairly rarely.
+bool isBiometricAuthShowing = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,15 +66,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    appLifecycleState = state;
     loggingService.log("_MyAppState.didChangeAppLifecycleState: $state");
 
     switch (state) {
       case AppLifecycleState.resumed:
-        bool isSuccess = await Utils.authViaBiometric("");
-        //If after coming back to app verification fail - kill the app
-        if (!isSuccess) {
-          SystemNavigator.pop();
+        if (!isBiometricAuthShowing) {
+          bool isSuccess = await Utils.authViaBiometric();
+          if (!isSuccess) {
+            Utils.closeApp();
+          }
         }
         break;
       case AppLifecycleState.inactive:
@@ -74,6 +82,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       case AppLifecycleState.detached:
         break;
     }
+
+    appLifecycleState = state;
   }
 
   @override

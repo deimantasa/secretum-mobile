@@ -61,7 +61,7 @@ class LandingPresenter implements Presenter {
   void verifyPassword(String password) async {
     if (_usersStore.user != null) {
       if (encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
-        bool isSuccess = await Utils.authViaBiometric("");
+        bool isSuccess = await Utils.authViaBiometric();
         if (isSuccess) {
           await _usersStore.initUserOnAppStart();
           _view.goToHomePage();

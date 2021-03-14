@@ -126,14 +126,20 @@ class _HomePageState extends State<HomePage> implements View {
                           hintText: "Secondary Password",
                         );
 
-                        if (password != null && _homePresenter.isPasswordMatch(password)) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot!.id),
-                            ),
-                          );
+                        if (password != null) {
+                          if (_homePresenter.isPasswordMatch(password)) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot!.id),
+                              ),
+                            );
+                          } else {
+                            showMessage("Password is invalid", isSuccess: false);
+                          }
                         }
+                        //If password is null, then user just dismissed dialog themselves
+                        //Do nothing
                       },
                     ),
                     Divider(height: 1),

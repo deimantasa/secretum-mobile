@@ -178,7 +178,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
             ),
             onTap: _secretDetailsModel.secret?.note?.isNotEmpty == true
                 ? () async {
-                    bool isSuccess = await Utils.authViaBiometric("");
+                    bool isSuccess = await Utils.authViaBiometric();
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,
@@ -215,7 +215,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
             ),
             onTap: _secretDetailsModel.secret?.code?.isNotEmpty == true
                 ? () async {
-                    bool isSuccess = await Utils.authViaBiometric("");
+                    bool isSuccess = await Utils.authViaBiometric();
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,
