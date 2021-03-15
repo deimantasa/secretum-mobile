@@ -11,6 +11,7 @@ import 'package:secretum/services/logging_service.dart';
 import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
+import 'package:secretum/utils/secretum_colors.dart';
 import 'package:secretum/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -104,7 +105,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         title: "Secretum",
         theme: ThemeData(
           accentColor: Colors.white,
-          primarySwatch: Colors.cyan,
+          primarySwatch: SecretumColors.kMaterialColor1,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           brightness: Brightness.dark,
           buttonTheme: Theme.of(context).buttonTheme.copyWith(),

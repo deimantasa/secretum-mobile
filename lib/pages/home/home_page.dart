@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:package_info/package_info.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/pages/secret_details/secret_details_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';
@@ -7,6 +9,8 @@ import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:provider/provider.dart';
+import 'package:secretum/utils/secretum_assets.dart';
+import 'package:secretum/utils/secretum_colors.dart';
 
 import 'home_contract.dart';
 import 'home_model.dart';
@@ -52,31 +56,14 @@ class _HomePageState extends State<HomePage> implements View {
     return Scaffold(
       appBar: AppBar(
         title: Text("Secretum"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text("Are you sure you want to sign-out?"),
-                      actions: [
-                        TextButton(
-                          child: Text("No"),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        TextButton(
-                          child: Text("Yes"),
-                          onPressed: () => _homePresenter.signOut(),
-                        ),
-                      ],
-                    );
-                  });
-            },
-          ),
-        ],
+        actions: [],
       ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: null,
+        child: Icon(Icons.add),
+        onPressed: () => _showAddNewWalletBottomSheet(),
+      ),
+      drawer: _buildDrawer(),
       body: _buildBodyWidget(),
     );
   }
@@ -148,44 +135,6 @@ class _HomePageState extends State<HomePage> implements View {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FloatingActionButton(
-                    heroTag: null,
-                    child: Icon(Icons.download_rounded),
-                    onPressed: () async {
-                      String? fileName = await Dialogs.showEditEntryBottomSheet(
-                        context,
-                        title: "Export File",
-                        description: "All your secrets will be exported in one file in your phone.",
-                        hintText: "Enter file name",
-                        entry: "",
-                        buttonText: "Export",
-                        textCapitalization: TextCapitalization.none,
-                        validateWithPrimaryPassword: false,
-                        validateWithSecondaryPassword: false,
-                        validateWithBiometric: true,
-                      );
-
-                      if (fileName != null && fileName.isNotEmpty) {
-                        _homePresenter.exportSecrets(fileName);
-                      }
-                    },
-                  ),
-                  FloatingActionButton(
-                    heroTag: null,
-                    child: Icon(Icons.add),
-                    onPressed: () => _showAddNewWalletBottomSheet(),
-                  )
-                ],
-              ),
-            ),
-          )
         ],
       );
     }
@@ -234,6 +183,123 @@ class _HomePageState extends State<HomePage> implements View {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildDrawer() {
+    const double kImageSize = 80;
+
+    return Drawer(
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      SvgPicture.asset(
+                        SecretumAssets.kSecretumLogo,
+                        width: kImageSize,
+                        height: kImageSize,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'SECRETUM',
+                        style: TextStyle(
+                          color: SecretumColors.kMaterialColor1,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 24,
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1),
+          ListTile(
+            leading: Icon(Icons.download_rounded),
+            title: Text("Export"),
+            onTap: () async {
+              String? fileName = await Dialogs.showEditEntryBottomSheet(
+                context,
+                title: "Export File",
+                description: "All your secrets will be exported to the text file in your phone.",
+                hintText: "Enter file name",
+                entry: "",
+                buttonText: "Export",
+                textCapitalization: TextCapitalization.none,
+                validateWithPrimaryPassword: false,
+                validateWithSecondaryPassword: false,
+                validateWithBiometric: true,
+              );
+
+              if (fileName != null && fileName.isNotEmpty) {
+                _homePresenter.exportSecrets(fileName);
+              }
+            },
+          ),
+          Divider(height: 1),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Log-Out'),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Are you sure you want to log-out?"),
+                      content: Text(
+                          "Make sure you have your secret key saved. This will be the only way to log-in to your account again."),
+                      actions: [
+                        TextButton(
+                          child: Text("Cancel"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          child: Text(
+                            "Log-Out",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onPressed: () => _homePresenter.signOut(),
+                        ),
+                      ],
+                    );
+                  });
+            },
+          ),
+          Divider(height: 1),
+          SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      "App Version: ${snapshot.data != null ? snapshot.data!.version : ""}",
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

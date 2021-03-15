@@ -6,6 +6,7 @@ import 'package:secretum/pages/registration/registration_page.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:secretum/utils/hero_tags.dart';
 import 'package:secretum/utils/secretum_assets.dart';
+import 'package:secretum/utils/secretum_colors.dart';
 
 import 'welcome_contract.dart';
 import 'welcome_model.dart';
@@ -65,7 +66,7 @@ class _WelcomePageState extends State<WelcomePage> implements View {
                 Text(
                   "SECRETUM",
                   style: TextStyle(
-                    color: Colors.cyan,
+                    color: SecretumColors.kMaterialColor1,
                     fontWeight: FontWeight.bold,
                     fontSize: 40,
                   ),

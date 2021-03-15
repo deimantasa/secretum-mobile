@@ -92,7 +92,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
           ),
           SizedBox(height: 16),
           Divider(height: 1),
-          SizedBox(height: 8),
+          SizedBox(height: 16),
           if (_editEntryModel.description.isNotEmpty) ...[
             Text(_editEntryModel.description),
             SizedBox(height: 16),
@@ -107,7 +107,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
               maxLines: null,
             ),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(

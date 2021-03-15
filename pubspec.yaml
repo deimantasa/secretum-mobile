@@ -49,8 +49,7 @@ dependencies:
   #Other
   json_annotation: ^4.0.0
   uuid: ^3.0.1
-
-
+  package_info: ^2.0.0
 
 dev_dependencies:
   flutter_test:

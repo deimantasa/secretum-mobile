@@ -82,10 +82,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                       ),
                       Divider(height: 1),
                       ListTile(
-                        leading: Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
+                        leading: Icon(Icons.delete),
                         title: Text("Delete Secret"),
                         onTap: () {
                           //Close bottom sheet
@@ -98,11 +95,16 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                                 title: Text("Are you sure want to delete everything?"),
                                 actions: [
                                   TextButton(
-                                    child: Text("No"),
+                                    child: Text("Cancel"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                    child: Text("Yes"),
+                                    child: Text(
+                                      "Delete",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                     onPressed: () async {
                                       //Close previous dialog
                                       Navigator.pop(context);
