@@ -40,6 +40,9 @@ class UsersStore extends ChangeNotifier {
         //SecretKey is already init'd in the StorageService. We need to make
         //sure that EncryptionService `key` is also up to date
         encryptionService.updateSecretKey(secretKey);
+        //Update user immediately in Store, because listening might take 0.x second to retrieve the
+        //user from stream
+        updateUserLocally(user);
         _listenToUserByUserId(user.documentSnapshot!.id);
       }
       //If user doesn't exist, something went wrong, because SecretKey is in storage

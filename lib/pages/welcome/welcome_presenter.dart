@@ -30,6 +30,7 @@ class WelcomePresenter implements Presenter {
 
   @override
   Future<void> confirmSecretKey(String secretKey) async {
+    //TODO anti-spam mechanism
     _view.showMessage("Verifying...");
     //Make sure to update encryptionService for handling the key,
     //because if key is correct - then retrieved result will need to be decrypted,

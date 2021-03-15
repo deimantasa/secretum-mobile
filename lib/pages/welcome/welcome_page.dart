@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:secretum/pages/home/home_page.dart';
 import 'package:secretum/pages/registration/registration_page.dart';
 import 'package:secretum/utils/dialogs.dart';
+import 'package:secretum/utils/hero_tags.dart';
+import 'package:secretum/utils/secretum_assets.dart';
 
 import 'welcome_contract.dart';
 import 'welcome_model.dart';
@@ -50,7 +53,23 @@ class _WelcomePageState extends State<WelcomePage> implements View {
             child: Column(
               children: [
                 Spacer(),
-                FlutterLogo(size: 200),
+                Hero(
+                  tag: HeroTags.kFromWelcomeToRegistrationTag,
+                  child: SvgPicture.asset(
+                    SecretumAssets.kSecretumLogo,
+                    height: 200,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 24),
+                Text(
+                  "SECRETUM",
+                  style: TextStyle(
+                    color: Colors.cyan,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                  ),
+                ),
                 Spacer(),
                 Row(
                   children: [

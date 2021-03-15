@@ -101,7 +101,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider(create: (_) => SecretsStore()),
       ],
       child: MaterialApp(
-        title: 'Local Demo',
+        title: "Secretum",
         theme: ThemeData(
           accentColor: Colors.white,
           primarySwatch: Colors.cyan,
@@ -117,6 +117,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               padding: EdgeInsets.all(12),
             ),
           ),
+          //Cannot use GoogleFonts because it will completely override colors
+          //Ignoring `brightness` setting. Therefore use manual font selection
+          fontFamily: "Montserrat",
         ),
         navigatorKey: navigatorKey,
         home: IntroPage(),
