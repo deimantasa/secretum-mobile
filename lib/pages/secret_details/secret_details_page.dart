@@ -137,7 +137,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
 
   @override
   void showMessage(String message, {bool isSuccess = true}) {
-    Dialogs.showMessage(context, message: message, isSuccess: isSuccess);
+    Dialogs.showMessage(message: message, isSuccess: isSuccess);
   }
 
   @override
@@ -151,11 +151,15 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
   }
 
   Widget _buildBody() {
+    String? note = _secretDetailsModel.secret?.note;
+    String? code = _secretDetailsModel.secret?.code;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
             title: Text("Notes"),
+            subtitle: note == null || note.isEmpty ? null : Text("********"),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
@@ -189,10 +193,11 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                       );
                     }
                   }
-                : null),
+                : () => showMessage("There is no note saved")),
         Divider(height: 1),
         ListTile(
             title: Text("Code"),
+            subtitle: code == null || code.isEmpty ? null : Text("********"),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
@@ -219,14 +224,14 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,
-                        title: "Note",
+                        title: "Code",
                         content: _secretDetailsModel.secret!.code!,
                         buttonText: "Copy",
                         onPressed: () => _secretDetailsPresenter.copyText(_secretDetailsModel.secret!.code!),
                       );
                     }
                   }
-                : null),
+                : () => showMessage("There is no code saved")),
         Divider(height: 1),
       ],
     );

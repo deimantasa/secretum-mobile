@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 AppLifecycleState? appLifecycleState;
 late LoggingService loggingService;
 late EncryptionService encryptionService;
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 ///[isBiometricAuthShowing] is introduced to tackle different Biometrics behaviour within Android and iOS devices.
 ///Android shows Fragment, and activity is not paused, while iOS pauses the app and shows Biometrics screen
@@ -117,6 +118,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ),
           ),
         ),
+        navigatorKey: navigatorKey,
         home: IntroPage(),
       ),
     );

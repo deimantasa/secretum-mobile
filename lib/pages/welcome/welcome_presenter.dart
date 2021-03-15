@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
-import 'package:secretum/models/user.dart';
 import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';

@@ -78,7 +78,7 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
 
   @override
   void showMessage(String message, {bool isSuccess = true}) {
-    Dialogs.showMessage(context, message: message, isSuccess: isSuccess);
+    Dialogs.showMessage(message: message, isSuccess: isSuccess);
   }
 
   @override

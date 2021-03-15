@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> implements View {
 
   @override
   void showMessage(String message, {bool isSuccess = true}) {
-    Dialogs.showMessage(context, message: message, isSuccess: isSuccess);
+    Dialogs.showMessage(message: message, isSuccess: isSuccess);
   }
 
   @override

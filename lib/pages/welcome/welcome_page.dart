@@ -33,7 +33,7 @@ class _WelcomePageState extends State<WelcomePage> implements View {
 
   @override
   void showMessage(String message, {bool isSuccess = true}) {
-    Dialogs.showMessage(context, message: message, isSuccess: isSuccess);
+    Dialogs.showMessage(message: message, isSuccess: isSuccess);
   }
 
   @override
@@ -105,7 +105,6 @@ class _WelcomePageState extends State<WelcomePage> implements View {
         context: context,
         builder: (context) {
           final TextEditingController textEditingController = TextEditingController();
-          bool isLoading = false;
           return AlertDialog(
             title: Text("Enter your secret key"),
             content: TextFormField(

@@ -163,7 +163,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
 
   @override
   void showMessage(String message, {bool isSuccess = true}) {
-    Dialogs.showMessage(context, message: message, isSuccess: isSuccess);
+    Dialogs.showMessage(message: message, isSuccess: isSuccess);
   }
 
   @override

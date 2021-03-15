@@ -32,17 +32,19 @@ class SecretDetailsPresenter implements Presenter {
   @override
   Future<void> updateSecret(Secret secret) async {
     if (_secretDetailsModel.secret != null) {
-      bool isSuccess = await _secretsStore.updateSecret(
+      _secretsStore
+          .updateSecret(
         _usersStore.user?.documentSnapshot?.id ?? "",
         _secretDetailsModel.secret?.documentSnapshot?.id ?? "",
         secret,
-      );
-
-      if (isSuccess) {
-        _view.showMessage("Secret updated");
-      } else {
-        _view.showMessage("Cannot update secret, something went wrong");
-      }
+      )
+          .then((isSuccess) {
+        if (isSuccess) {
+          _view.showMessage("Secret updated");
+        } else {
+          _view.showMessage("Cannot update secret, something went wrong");
+        }
+      });
     }
   }
 
