@@ -7,7 +7,9 @@ import 'edit_entry_contract.dart';
 import 'edit_entry_model.dart';
 
 class EditEntryPresenter implements Presenter {
+  //ignore: unused_field
   late final View _view;
+  //ignore: unused_field
   late final EditEntryModel _editEntryModel;
 
   late final UsersStore _usersStore;

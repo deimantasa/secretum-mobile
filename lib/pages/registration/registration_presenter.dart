@@ -11,6 +11,7 @@ import 'registration_model.dart';
 
 class RegistrationPresenter implements Presenter {
   late final View _view;
+  //ignore: unused_field
   late final RegistrationModel _registrationModel;
 
   late final UsersStore _usersStore;

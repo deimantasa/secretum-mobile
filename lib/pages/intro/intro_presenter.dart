@@ -11,6 +11,7 @@ import 'intro_model.dart';
 
 class IntroPresenter implements Presenter {
   late final View _view;
+  //ignore: unused_field
   late final IntroModel _introModel;
 
   late final UsersStore _usersStore;

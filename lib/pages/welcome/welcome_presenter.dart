@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
-import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +9,8 @@ import 'welcome_model.dart';
 
 class WelcomePresenter implements Presenter {
   late final View _view;
+  //ignore: unused_field
   late final WelcomeModel _welcomeModel;
-
-  late final StorageService _storageService;
 
   late final UsersStore _usersStore;
   late final SecretsStore _secretsStore;
@@ -21,8 +18,6 @@ class WelcomePresenter implements Presenter {
   WelcomePresenter(View view, BuildContext context, WelcomeModel welcomeModel) {
     _view = view;
     _welcomeModel = welcomeModel;
-
-    _storageService = GetIt.instance<StorageService>();
 
     _usersStore = context.read<UsersStore>();
     _secretsStore = context.read<SecretsStore>();
