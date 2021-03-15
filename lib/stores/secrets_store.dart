@@ -66,6 +66,7 @@ class SecretsStore extends ChangeNotifier {
         secrets.onAdded<Secret>(
           secret,
           logReference: "UsersStore._updateSecretsLocally",
+          onSort: (secrets) => _sortListByCreatedAtDesc(secrets),
           onViewUpdate: () => notifyListeners(),
         );
         break;
@@ -73,6 +74,7 @@ class SecretsStore extends ChangeNotifier {
         secrets.onModified<Secret>(
           secret,
           logReference: "UsersStore._updateSecretsLocally",
+          onSort: (secrets) => _sortListByCreatedAtDesc(secrets),
           onViewUpdate: () => notifyListeners(),
         );
         break;
@@ -84,6 +86,16 @@ class SecretsStore extends ChangeNotifier {
         );
         break;
     }
+  }
+
+  void _sortListByCreatedAtDesc(List<Secret> secrets) {
+    secrets.sort((a, b) {
+      if (a.createdAt != null && b.createdAt != null) {
+        return b.createdAt!.compareTo(a.createdAt!);
+      } else {
+        return -1;
+      }
+    });
   }
 
   void resetStore() {

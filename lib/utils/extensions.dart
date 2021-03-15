@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:secretum/main.dart';
 import 'package:secretum/models/firestore_metadata.dart';
 
@@ -39,14 +38,14 @@ extension FirestoreMetadataExtension on List<FirestoreMetadata> {
     T givenElement, {
     required String logReference,
     required Function onViewUpdate,
-    ValueSetter<List<FirestoreMetadata>>? onSort,
+    void Function(List<T>)? onSort,
   }) {
     bool exists = this.any((element) => element.documentSnapshot!.id == givenElement.documentSnapshot!.id);
     if (!exists) {
       this.add(givenElement);
       //If there is already exist several items and new item is added, make sure it goes to the right place in the
       //list by sorting it
-      if (onSort != null) onSort(this);
+      if (onSort != null) onSort(this as List<T>);
       onViewUpdate();
 
       loggingService.log("onAdded.$logReference: ${givenElement.documentSnapshot!.id}");
@@ -63,12 +62,12 @@ extension FirestoreMetadataExtension on List<FirestoreMetadata> {
     T givenElement, {
     required String logReference,
     required Function onViewUpdate,
-    ValueSetter<List<FirestoreMetadata>>? onSort,
+    void Function(List<T>)? onSort,
   }) {
     for (int i = 0; i < this.length; i++) {
       if (this[i].documentSnapshot!.id == givenElement.documentSnapshot!.id) {
         this[i] = givenElement;
-        if (onSort != null) onSort(this);
+        if (onSort != null) onSort(this as List<T>);
         onViewUpdate();
 
         loggingService.log("onModified.$logReference: ${givenElement.documentSnapshot!.id}");

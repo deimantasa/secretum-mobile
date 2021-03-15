@@ -91,7 +91,8 @@ class FireSecretsService {
             .collection(FireUsersService.kCollectionUsers)
             .doc(userId)
             .collection(kSubCollectionSecrets)
-            .where(Secret.kFieldAddedBy, isEqualTo: encryptedAddedBy);
+            .where(Secret.kFieldAddedBy, isEqualTo: encryptedAddedBy)
+            .orderBy(Secret.kFieldCreatedAt, descending: true);
     }
   }
 }

@@ -35,8 +35,12 @@ class HomePresenter implements Presenter {
   @override
   void addNewSecret(String secretName) {
     String userId = _usersStore.user!.documentSnapshot!.id;
+    Secret secret = Secret.newSecret(
+      addedBy: userId,
+      createdAt: DateTime.now(),
+      name: secretName,
+    );
 
-    Secret secret = Secret.newSecret(userId, secretName);
     _secretsStore.addNewSecret(userId, secret).then((isSuccess) {
       if (isSuccess) {
         _view.showMessage("$secretName added");

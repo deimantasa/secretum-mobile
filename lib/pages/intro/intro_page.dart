@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:secretum/pages/home/home_page.dart';
-import 'package:secretum/pages/landing/landing_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';
+import 'package:secretum/utils/secretum_assets.dart';
+import 'package:secretum/utils/secretum_colors.dart';
 
 import 'intro_contract.dart';
 import 'intro_model.dart';
@@ -44,16 +46,33 @@ class _IntroPageState extends State<IntroPage> implements View {
 
   Widget _buildBodyWidget() {
     return Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  @override
-  void goToLandingPage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LandingPage(),
+      child: Column(
+        children: [
+          Spacer(),
+          SvgPicture.asset(
+            SecretumAssets.kSecretumLogo,
+            height: 200,
+            color: Colors.white,
+          ),
+          SizedBox(height: 24),
+          Text(
+            "SECRETUM",
+            style: TextStyle(
+              color: SecretumColors.kMaterialColor1,
+              fontWeight: FontWeight.bold,
+              fontSize: 40,
+            ),
+          ),
+          Spacer(),
+          Container(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+            ),
+          ),
+          Spacer(),
+        ],
       ),
     );
   }
