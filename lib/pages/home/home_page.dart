@@ -2,15 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
+import 'package:secretum/models/db_backup.dart';
+import 'package:secretum/models/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/pages/secret_details/secret_details_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';
+import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:provider/provider.dart';
 import 'package:secretum/utils/secretum_assets.dart';
 import 'package:secretum/utils/secretum_colors.dart';
+import 'package:secretum/utils/utils.dart';
 
 import 'home_contract.dart';
 import 'home_model.dart';
@@ -50,6 +54,7 @@ class _HomePageState extends State<HomePage> implements View {
   Widget build(BuildContext context) {
     context.watch<UsersStore>();
     context.watch<SecretsStore>();
+    context.watch<DbBackupStore>();
 
     _homePresenter.updateData();
 
@@ -188,6 +193,7 @@ class _HomePageState extends State<HomePage> implements View {
 
   Widget _buildDrawer() {
     const double kImageSize = 80;
+    final DbBackup? dbBackup = _homeModel.dbBackup;
 
     return Drawer(
       child: Column(
@@ -227,13 +233,78 @@ class _HomePageState extends State<HomePage> implements View {
           ),
           Divider(height: 1),
           ListTile(
+            leading: Icon(Icons.backup),
+            title: Text("Backup"),
+            subtitle:
+                Text(dbBackup == null ? "Not backed up yet" : "Last backup: ${Utils.getFormattedDate(dbBackup.backupDate)}"),
+            onTap: () async {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text("Save snapshot from DB locally"),
+                    content: Text(
+                        "Once backed up, your database records will be saved into encrypted local database.\n\nBackups are stored only locally on your device."),
+                    actions: [
+                      TextButton(
+                        child: Text("Cancel"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: Text(
+                          "Backup",
+                          style: TextStyle(
+                            color: Colors.green,
+                          ),
+                        ),
+                        onPressed: () async {
+                          //Close previous dialog
+                          Navigator.pop(context);
+
+                          _homePresenter.saveDbLocally();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          //Only show local export if db backup is available
+          if (dbBackup != null) ...[
+            Divider(height: 1),
+            ListTile(
+              leading: Icon(Icons.download_rounded),
+              title: Text("Export from Backup"),
+              onTap: () async {
+                String? fileName = await Dialogs.showEditEntryBottomSheet(
+                  context,
+                  title: "Export File",
+                  description: "All your secrets will be exported from backup to the text file in your phone.",
+                  hintText: "Enter file name",
+                  entry: "",
+                  buttonText: "Export",
+                  textCapitalization: TextCapitalization.none,
+                  validateWithPrimaryPassword: false,
+                  validateWithSecondaryPassword: false,
+                  validateWithBiometric: true,
+                );
+
+                if (fileName != null && fileName.isNotEmpty) {
+                  _homePresenter.exportSecrets(ExportFromType.backup, fileName);
+                }
+              },
+            ),
+          ],
+          Divider(height: 1),
+          ListTile(
             leading: Icon(Icons.download_rounded),
-            title: Text("Export"),
+            title: Text("Export from DB"),
             onTap: () async {
               String? fileName = await Dialogs.showEditEntryBottomSheet(
                 context,
                 title: "Export File",
-                description: "All your secrets will be exported to the text file in your phone.",
+                description: "All your secrets will be exported from the database to the text file in your phone.",
                 hintText: "Enter file name",
                 entry: "",
                 buttonText: "Export",
@@ -244,7 +315,7 @@ class _HomePageState extends State<HomePage> implements View {
               );
 
               if (fileName != null && fileName.isNotEmpty) {
-                _homePresenter.exportSecrets(fileName);
+                _homePresenter.exportSecrets(ExportFromType.database, fileName);
               }
             },
           ),

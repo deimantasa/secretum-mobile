@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secretum/main.dart';
+import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/dialogs.dart';
@@ -14,6 +15,7 @@ class IntroPresenter implements Presenter {
   //ignore: unused_field
   late final IntroModel _introModel;
 
+  late final DbBackupStore _dbBackupStore;
   late final UsersStore _usersStore;
   late final SecretsStore _secretsStore;
 
@@ -21,6 +23,7 @@ class IntroPresenter implements Presenter {
     _view = view;
     _introModel = introModel;
 
+    _dbBackupStore = context.read<DbBackupStore>();
     _usersStore = context.read<UsersStore>();
     _secretsStore = context.read<SecretsStore>();
   }
@@ -32,6 +35,7 @@ class IntroPresenter implements Presenter {
     await Future.wait([
       Future.delayed(Duration(seconds: 2)),
       _usersStore.initUserOnAppStart(),
+      _dbBackupStore.initDbBackup(),
     ]);
 
     if (_usersStore.user != null) {

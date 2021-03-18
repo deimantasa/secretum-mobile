@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:secretum/main.dart';
+import 'package:secretum/models/db_backup.dart';
+import 'package:secretum/models/log_type.dart';
 
 class StorageService {
   final String _secretKey = "secretKey";
+  final String _dbBackupKey = "dbBackupKey";
   final FlutterSecureStorage _flutterSecureStorage = FlutterSecureStorage();
 
   ///Not hashed and not encrypted secretKey (raw)
@@ -23,6 +28,33 @@ class StorageService {
     encryptionService.updateSecretKey(secretKey);
 
     loggingService.log("StorageService.initSecretKey: SecretKey init'd. $secretKey");
+  }
+
+  Future<DbBackup?> getDbBackup() async {
+    String? dbBackupString = await _flutterSecureStorage.read(key: _dbBackupKey);
+    if (dbBackupString != null) {
+      try {
+        DbBackup dbBackup = DbBackup.fromJson(json.decode(dbBackupString));
+        loggingService.log("StorageService.getDbBackup: DbBackup retrieved");
+        return dbBackup;
+      } catch (e) {
+        loggingService.log(
+          "StorageService.getDbBackup: DbBackup parsing failed. $e",
+          logType: LogType.error,
+        );
+        return null;
+      }
+    } else {
+      loggingService.log("StorageService.getDbBackup: dbBackupString is null");
+      return null;
+    }
+  }
+
+  Future<void> updateDbBackup(DbBackup dbBackup) async {
+    String dbBackupString = json.encode(dbBackup.toJson());
+    await _flutterSecureStorage.write(key: _dbBackupKey, value: dbBackupString);
+
+    loggingService.log("StorageService.updateDbBackup: DbBackup backed up");
   }
 
   Future<void> resetStorage() async {

@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
+import 'package:secretum/models/db_backup.dart';
+import 'package:secretum/models/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/services/storage_service.dart';
+import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,6 +22,7 @@ class HomePresenter implements Presenter {
 
   late final StorageService _storageService;
 
+  late final DbBackupStore _dbBackupStore;
   late final UsersStore _usersStore;
   late final SecretsStore _secretsStore;
 
@@ -28,6 +32,7 @@ class HomePresenter implements Presenter {
 
     _storageService = GetIt.instance<StorageService>();
 
+    _dbBackupStore = context.read<DbBackupStore>();
     _usersStore = context.read<UsersStore>();
     _secretsStore = context.read<SecretsStore>();
   }
@@ -52,17 +57,22 @@ class HomePresenter implements Presenter {
 
   @override
   void init() {
-    _updateSecrets();
+    updateData();
   }
 
   void _updateSecrets() {
     _homeModel.secrets = List.of(_secretsStore.secrets);
-    _view.updateView();
+  }
+
+  void _updateDbBackup() {
+    _homeModel.dbBackup = _dbBackupStore.dbBackup;
   }
 
   @override
   void updateData() {
     _updateSecrets();
+    _updateDbBackup();
+    _view.updateView();
   }
 
   @override
@@ -84,7 +94,7 @@ class HomePresenter implements Presenter {
   }
 
   @override
-  Future<void> exportSecrets(String fileName) async {
+  Future<void> exportSecrets(ExportFromType exportFromType, String fileName) async {
     if (fileName.isEmpty) {
       _view.showMessage("File name cannot be empty", isSuccess: false);
     } else {
@@ -93,13 +103,29 @@ class HomePresenter implements Presenter {
 
       //Generate Text and write to file
       StringBuffer stringBuffer = StringBuffer();
-      _homeModel.secrets.forEach((element) {
-        stringBuffer.writeln("***************************");
-        stringBuffer.writeln(element.toJson(isEncrypted: false));
-      });
+      stringBuffer.writeln("***************************");
+
+      switch (exportFromType) {
+        case ExportFromType.database:
+          _homeModel.secrets.forEach((element) {
+            stringBuffer.writeln(element.toJson(isEncrypted: false));
+          });
+          break;
+        case ExportFromType.backup:
+          _homeModel.dbBackup?.secrets.forEach((element) {
+            stringBuffer.writeln(element.toJson(isEncrypted: false));
+          });
+          break;
+      }
 
       await file.writeAsString(stringBuffer.toString());
       _view.showMessageDialog("${file.path}");
     }
+  }
+
+  @override
+  Future<void> saveDbLocally() async {
+    DbBackup dbBackup = DbBackup(_homeModel.secrets, DateTime.now());
+    _dbBackupStore.updateDbBackupInLocalDb(dbBackup);
   }
 }

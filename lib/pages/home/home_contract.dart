@@ -1,10 +1,13 @@
+import 'package:secretum/models/export_from_type.dart';
+
 abstract class Presenter {
   void init();
   void updateData();
   void addNewSecret(String walletsName);
   bool isPasswordMatch(String password);
   void signOut();
-  Future<void> exportSecrets(String fileName);
+  Future<void> exportSecrets(ExportFromType exportFromType, String fileName);
+  Future<void> saveDbLocally();
 }
 
 abstract class View {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:secretum/main.dart';
 
@@ -30,7 +31,6 @@ class Utils {
     }
   }
 
-
   // https://stackoverflow.com/questions/56627888/how-to-print-firestore-timestamp-as-formatted-date-and-time-in-flutter
   /// When we use firestore, we receive [Timestamp] object which we can parse to [DateTime] directly.
   static DateTime? dateTimeFromTimestamp(Timestamp? timestamp) {
@@ -50,4 +50,14 @@ class Utils {
     }
   }
 
+  ///Custom Date Format.
+  ///More references for date formats - https://www.journaldev.com/17899/java-simpledateformat-java-date-format
+  static String getFormattedDate(DateTime? dateTime) {
+    if (dateTime == null) {
+      return "";
+    } else {
+      String formattedDate = DateFormat("dd-MMM-yy HH:mm:ss").format(dateTime);
+      return formattedDate;
+    }
+  }
 }

@@ -9,6 +9,7 @@ import 'package:secretum/services/firestore/fire_users_service.dart';
 import 'package:secretum/services/firestore/generic/firestore_generic_service.dart';
 import 'package:secretum/services/logging_service.dart';
 import 'package:secretum/services/storage_service.dart';
+import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/secretum_colors.dart';
@@ -98,6 +99,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => DbBackupStore()),
         ChangeNotifierProvider(create: (_) => UsersStore()),
         ChangeNotifierProvider(create: (_) => SecretsStore()),
       ],
