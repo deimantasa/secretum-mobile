@@ -13,7 +13,7 @@ Download from AppStore (TBD).
 3. [Security](#security)
 4. [Guidance](#guidance)
     1. [Topics](#topics)
-5. [Connect your own Firestore](#connect-your-own-firestore)
+5. [Connect to your own Firestore](#connect-to-your-own-firestore)
 6. [Outro](#outro)
 7. [Donations](#donations)
 
