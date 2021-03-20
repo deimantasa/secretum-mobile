@@ -89,6 +89,7 @@ class HomePresenter implements Presenter {
     _usersStore.resetStore();
     _secretsStore.resetStore();
     _storageService.resetStorage();
+    _dbBackupStore.resetStore();
 
     _view.goToWelcomePage();
   }

@@ -48,3 +48,4 @@ app.*.map.json
 #Private Files
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
+/secrets/

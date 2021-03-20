@@ -24,4 +24,8 @@ class DbBackupStore extends ChangeNotifier {
     _dbBackup = dbBackup;
     notifyListeners();
   }
+
+  void resetStore(){
+    _dbBackup = null;
+  }
 }

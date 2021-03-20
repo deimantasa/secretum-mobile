@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secretum/main.dart';
+import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class WelcomePresenter implements Presenter {
 
   late final UsersStore _usersStore;
   late final SecretsStore _secretsStore;
+  late final DbBackupStore _dbBackupStore;
 
   WelcomePresenter(View view, BuildContext context, WelcomeModel welcomeModel) {
     _view = view;
@@ -21,6 +23,7 @@ class WelcomePresenter implements Presenter {
 
     _usersStore = context.read<UsersStore>();
     _secretsStore = context.read<SecretsStore>();
+    _dbBackupStore = context.read<DbBackupStore>();
   }
 
   @override
@@ -35,6 +38,8 @@ class WelcomePresenter implements Presenter {
     await _usersStore.initUserViaSecretKey(secretKey);
     if (_usersStore.user != null) {
       _secretsStore.init(_usersStore.user!.documentSnapshot!.id);
+      await _dbBackupStore.initDbBackup();
+
       _view.showMessage("Account retrieved. Welcome back!");
       _view.goToHomePage();
     } else {

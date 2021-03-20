@@ -8,18 +8,32 @@ import 'package:secretum/main.dart';
 
 class Utils {
   static Future<bool> authViaBiometric({String reason = "Verify"}) async {
-    isBiometricAuthShowing = true;
     final LocalAuthentication localAuthentication = LocalAuthentication();
+    bool areBiometricsAvailable = await localAuthentication.canCheckBiometrics;
 
-    bool didAuthenticate = await localAuthentication.authenticate(
-      //localizedReason must be provided when running on iOS device
-      //Android device doesn't complain, if there is no localizedReason.
-      localizedReason: reason,
-      biometricOnly: true,
-    );
+    //If there are no biometrics - skip this step
+    if (!areBiometricsAvailable) {
+      return true;
+    } else {
+      try {
+        isBiometricAuthShowing = true;
 
-    isBiometricAuthShowing = false;
-    return didAuthenticate;
+        bool didAuthenticate = await localAuthentication.authenticate(
+          //localizedReason must be provided when running on iOS device
+          //Android device doesn't complain, if there is no localizedReason.
+          localizedReason: reason,
+          biometricOnly: false,
+        );
+
+        isBiometricAuthShowing = false;
+        return didAuthenticate;
+      }
+      //For now just handle it as true - only for testing
+      on PlatformException catch (e) {
+        isBiometricAuthShowing = false;
+        return true;
+      }
+    }
   }
 
   ///[SystemNavigator.pop] doesn't work on iOS, therefore quit the app hard way.

@@ -42,6 +42,8 @@ PODS:
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
+  - package_info (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.12)
@@ -55,6 +57,7 @@ DEPENDENCIES:
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - local_auth (from `.symlinks/plugins/local_auth/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 SPEC REPOS:
@@ -84,6 +87,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   local_auth:
     :path: ".symlinks/plugins/local_auth/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
 
@@ -106,6 +111,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: abda45f519bc4073aa1171d2f8742108def46017
   local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196

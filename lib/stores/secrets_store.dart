@@ -100,6 +100,7 @@ class SecretsStore extends ChangeNotifier {
 
   void resetStore() {
     secrets.clear();
+
     _streamSubscriptions.forEach((element) {
       element?.cancel();
     });
