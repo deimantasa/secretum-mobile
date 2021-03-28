@@ -52,6 +52,10 @@ Currently I don't have much time on my plate, but I'll try to submit new videos,
 -- TODO
 - Encryption
 -- TODO
+- Unit Tests
+-- TODO
+- Integration Tests
+-- TODO
 - TODO
 -- TODO
 
