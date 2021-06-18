@@ -6,7 +6,7 @@ part of 'secret.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Secret _$SecretFromJson(Map json) {
+Secret _$SecretFromJson(Map<String, dynamic> json) {
   return Secret(
     json['addedBy'] as String?,
     Utils.dateTimeFromTimestamp(json['createdAt'] as Timestamp?),

@@ -37,7 +37,7 @@ Currently I don't have much time on my plate, but I'll try to submit new videos,
 
 ### Topics:
 - Overall package structure
--- TODO
+-- https://www.loom.com/share/fa563fafb09147f9b231597b46866d89
 - Model Serialization and Encryption
 -- TODO
 - Flutter and Firestore

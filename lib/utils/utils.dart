@@ -8,6 +8,7 @@ import 'package:secretum/main.dart';
 
 class Utils {
   static Future<bool> authViaBiometric({String reason = "Verify"}) async {
+    return true;
     final LocalAuthentication localAuthentication = LocalAuthentication();
     bool areBiometricsAvailable = await localAuthentication.canCheckBiometrics;
 

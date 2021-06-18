@@ -6,12 +6,12 @@ import 'package:secretum/utils/utils.dart';
 
 part 'secret.g.dart';
 
-@JsonSerializable(anyMap: true, explicitToJson: true)
+@JsonSerializable(anyMap: false, explicitToJson: true)
 class Secret extends FirestoreMetadata {
   static const String kFieldAddedBy = "addedBy";
   static const String kFieldCreatedAt = "createdAt";
 
-  @JsonKey(includeIfNull: false)
+  @JsonKey(includeIfNull: false, ignore: true)
   String? addedBy;
   @JsonKey(fromJson: Utils.dateTimeFromTimestamp, toJson: Utils.dateTimeToTimestamp, includeIfNull: false)
   DateTime? createdAt;

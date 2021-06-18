@@ -1,4 +1,5 @@
-enum ExportFromType{
+enum ExportFromType {
   database,
   backup,
+  unknown,
 }
