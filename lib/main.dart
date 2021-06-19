@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:secretum/pages/authentication/authentication_page.dart';
 import 'package:secretum/pages/intro/intro_page.dart';
+import 'package:secretum/services/authentication_service.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/services/firestore/fire_secrets_service.dart';
 import 'package:secretum/services/firestore/fire_users_service.dart';
@@ -13,21 +15,12 @@ import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/app_colors.dart';
-import 'package:secretum/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 // Globals
 AppLifecycleState? appLifecycleState;
 late LoggingService loggingService;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-/// [isBiometricAuthShowing] is introduced to tackle different Biometrics behaviour within Android and iOS devices.
-/// Android shows Fragment, and activity is not paused, while iOS pauses the app and shows Biometrics screen
-/// triggering AppLifecycleState to change. After iOS auth is success, AppLifecycleState becomes resume thus
-/// we are in the loop.
-/// Current way simply ensures that if Biometrics screen is shown, other won't be shown.
-/// It still seems to fail sometimes (on iOS), but fairly rarely.
-bool isBiometricAuthShowing = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +50,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     /// Other
     // Encryption is reusable within other services thus need to initialise it first
     serviceLocator.registerSingleton(EncryptionService());
+    serviceLocator.registerSingleton(AuthenticationService());
     serviceLocator.registerSingleton(FireGenericService());
     serviceLocator.registerSingleton(FireSecretsService());
     serviceLocator.registerSingleton(FireUsersService());
@@ -75,11 +69,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     switch (state) {
       case AppLifecycleState.resumed:
-        if (!isBiometricAuthShowing) {
-          bool isSuccess = await Utils.authViaBiometric();
-          if (!isSuccess) {
-            Utils.closeApp();
-          }
+        final BuildContext? context = navigatorKey.currentContext;
+        final bool isBiometricAuthShowing = GetIt.instance<AuthenticationService>().isBiometricAuthShowing;
+
+        if (!isBiometricAuthShowing && context != null) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
         }
         break;
       case AppLifecycleState.inactive:
@@ -122,8 +116,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               padding: EdgeInsets.all(12),
             ),
           ),
-          //Cannot use GoogleFonts because it will completely override colors
-          //Ignoring `brightness` setting. Therefore use manual font selection
+          // Cannot use GoogleFonts because it will completely override colors
+          // Ignoring `brightness` setting. Therefore use manual font selection
           fontFamily: 'Montserrat',
         ),
         navigatorKey: navigatorKey,

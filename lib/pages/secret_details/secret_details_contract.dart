@@ -6,6 +6,7 @@ abstract class Presenter {
   Future<void> updateSecret(Secret secret);
   void deleteSecret(String primaryPassword);
   Future<void> copyText(String code);
+  Future<bool> authenticate();
 }
 
 abstract class View {

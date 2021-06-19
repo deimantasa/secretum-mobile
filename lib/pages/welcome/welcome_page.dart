@@ -32,7 +32,7 @@ class _WelcomePageState extends State<WelcomePage> implements View {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBodyWidget(),
+      body: _buildBody(),
     );
   }
 
@@ -46,7 +46,7 @@ class _WelcomePageState extends State<WelcomePage> implements View {
     if (mounted) setState(() {});
   }
 
-  Widget _buildBodyWidget() {
+  Widget _buildBody() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(

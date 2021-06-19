@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:secretum/pages/authentication/authentication_page.dart';
 import 'package:secretum/pages/home/home_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';
 import 'package:secretum/utils/app_assets.dart';
@@ -25,14 +26,13 @@ class _IntroPageState extends State<IntroPage> implements View {
 
     _introModel = IntroModel();
     _introPresenter = IntroPresenter(this, _introModel);
-
-    _introPresenter.init(context);
+    _introPresenter.init();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBodyWidget(),
+      body: _buildBody(),
     );
   }
 
@@ -46,7 +46,7 @@ class _IntroPageState extends State<IntroPage> implements View {
     if (mounted) setState(() {});
   }
 
-  Widget _buildBodyWidget() {
+  Widget _buildBody() {
     return Center(
       child: Column(
         children: [
@@ -90,12 +90,17 @@ class _IntroPageState extends State<IntroPage> implements View {
   }
 
   @override
-  void goToHomePage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(isFirstTime: false),
-      ),
-    );
+  Future<void> goToAuthenticationPage() async {
+    final bool? isSuccess = await Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
+
+    if (isSuccess == true) {
+      _introPresenter.finishInit();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(isFirstTime: false),
+        ),
+      );
+    }
   }
 }

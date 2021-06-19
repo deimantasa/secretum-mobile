@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:secretum/utils/dialogs.dart';
-import 'package:secretum/utils/utils.dart';
 
 import 'edit_entry_contract.dart';
 import 'edit_entry_model.dart';
@@ -141,7 +140,8 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
                       }
 
                       if (_editEntryModel.validateWithBiometric) {
-                        bool isSuccess = await Utils.authViaBiometric();
+                        final bool isSuccess = await _editEntryPresenter.authenticate();
+
                         if (!isSuccess) {
                           showMessage('Authentication failed', isSuccess: false);
                           return;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/utils/dialogs.dart';
-import 'package:secretum/utils/utils.dart';
 
 import 'secret_details_contract.dart';
 import 'secret_details_model.dart';
@@ -86,7 +85,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                         leading: Icon(Icons.delete),
                         title: Text('Delete Secret'),
                         onTap: () {
-                          //Close bottom sheet
+                          // Close bottom sheet
                           Navigator.pop(context);
 
                           showDialog(
@@ -110,7 +109,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                                       //Close previous dialog
                                       Navigator.pop(context);
 
-                                      String? password = await Dialogs.showPasswordConfirmationDialog(
+                                      final String? password = await Dialogs.showPasswordConfirmationDialog(
                                         context,
                                         hintText: 'Primary Password',
                                       );
@@ -154,8 +153,8 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
   }
 
   Widget _buildBody() {
-    String? note = _secretDetailsModel.secret?.note;
-    String? code = _secretDetailsModel.secret?.code;
+    final String? note = _secretDetailsModel.secret?.note;
+    final String? code = _secretDetailsModel.secret?.code;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -185,7 +184,8 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
             ),
             onTap: _secretDetailsModel.secret?.note?.isNotEmpty == true
                 ? () async {
-                    bool isSuccess = await Utils.authViaBiometric();
+                    final bool isSuccess = await _secretDetailsPresenter.authenticate();
+
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,
@@ -204,7 +204,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
-                String? newCode = await Dialogs.showEditEntryBottomSheet(
+                final String? newCode = await Dialogs.showEditEntryBottomSheet(
                   context,
                   title: 'Update Code',
                   hintText: 'Enter new code',
@@ -223,7 +223,8 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
             ),
             onTap: _secretDetailsModel.secret?.code?.isNotEmpty == true
                 ? () async {
-                    bool isSuccess = await Utils.authViaBiometric();
+                    final bool isSuccess = await _secretDetailsPresenter.authenticate();
+
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,

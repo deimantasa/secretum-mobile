@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> implements View {
         onPressed: () => _showAddNewWalletBottomSheet(),
       ),
       drawer: _buildDrawer(),
-      body: _buildBodyWidget(),
+      body: _buildBody(),
     );
   }
 
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> implements View {
     if (mounted) setState(() {});
   }
 
-  Widget _buildBodyWidget() {
+  Widget _buildBody() {
     if (_homeModel.secrets.isEmpty) {
       return Center(
         child: ElevatedButton(

@@ -18,10 +18,14 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
   final PageController _pageController = PageController();
   final GlobalKey<FormState> _primaryPasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _primaryPasswordTEC = TextEditingController();
+  final FocusNode _primaryPasswordFocusNode = FocusNode();
   final TextEditingController _primaryPasswordConfirmationTEC = TextEditingController();
+  final FocusNode _primaryPasswordConfirmationFocusNode = FocusNode();
   final GlobalKey<FormState> _secondaryPasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _secondaryPasswordTEC = TextEditingController();
+  final FocusNode _secondaryPasswordFocusNode = FocusNode();
   final TextEditingController _secondaryPasswordConfirmationTEC = TextEditingController();
+  final FocusNode _secondaryPasswordConfirmationFocusNode = FocusNode();
 
   late final RegistrationModel _registrationModel;
   late final RegistrationPresenter _registrationPresenter;
@@ -32,6 +36,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
 
     _registrationModel = RegistrationModel();
     _registrationPresenter = RegistrationPresenter(this, _registrationModel);
+    _primaryPasswordFocusNode.requestFocus();
   }
 
   @override
@@ -54,7 +59,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
           SizedBox(width: 16),
         ],
       ),
-      body: _buildBodyWidget(),
+      body: _buildBody(),
     );
   }
 
@@ -68,13 +73,15 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
     if (mounted) setState(() {});
   }
 
-  Widget _buildBodyWidget() {
+  Widget _buildBody() {
     return PageView(
       controller: _pageController,
       physics: NeverScrollableScrollPhysics(),
       children: [
-        _buildPassword(
+        _buildPasswordsSection(
           formKey: _primaryPasswordFormKey,
+          primaryPasswordFocusNode: _primaryPasswordFocusNode,
+          confirmationPasswordFocusNode: _primaryPasswordConfirmationFocusNode,
           description: 'Primary Password is used to secure most important actions within the application.',
           passwordTEC: _primaryPasswordTEC,
           isPasswordObscured: _registrationModel.isPrimaryPasswordObscure,
@@ -83,14 +90,12 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
           passwordLength: 6,
           passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
           buttonText: 'Continue',
-          onTap: () async {
-            if (_primaryPasswordFormKey.currentState!.validate()) {
-              await _pageController.nextPage(duration: kTabScrollDuration, curve: Curves.easeOut);
-            }
-          },
+          onFinish: () => _goToNextPage(),
         ),
-        _buildPassword(
+        _buildPasswordsSection(
           formKey: _secondaryPasswordFormKey,
+          primaryPasswordFocusNode: _secondaryPasswordFocusNode,
+          confirmationPasswordFocusNode: _secondaryPasswordConfirmationFocusNode,
           description: 'Secondary Password is used to secure less important actions within the application.',
           passwordTEC: _secondaryPasswordTEC,
           isPasswordObscured: _registrationModel.isSecondaryPasswordObscure,
@@ -99,19 +104,16 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
           passwordLength: 3,
           passwordConfirmationTEC: _secondaryPasswordConfirmationTEC,
           buttonText: 'Finish',
-          onTap: () {
-            if (_secondaryPasswordFormKey.currentState!.validate()) {
-              _registrationPresenter.finishRegistration(
-                  _primaryPasswordConfirmationTEC.text, _secondaryPasswordConfirmationTEC.text);
-            }
-          },
+          onFinish: () => _finishRegistration(),
         )
       ],
     );
   }
 
-  Widget _buildPassword({
+  Widget _buildPasswordsSection({
     required GlobalKey<FormState> formKey,
+    required FocusNode primaryPasswordFocusNode,
+    required FocusNode confirmationPasswordFocusNode,
     required String description,
     required TextEditingController passwordTEC,
     required bool isPasswordObscured,
@@ -120,7 +122,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
     required int passwordLength,
     required TextEditingController passwordConfirmationTEC,
     required String buttonText,
-    required Function()? onTap,
+    required void Function()? onFinish,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -138,13 +140,14 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
               children: [
                 Expanded(
                   child: TextFormField(
-                    autofocus: true,
+                    focusNode: primaryPasswordFocusNode,
                     controller: passwordTEC,
                     obscureText: isPasswordObscured,
                     decoration: InputDecoration(hintText: passwordHint),
                     validator: (input) => input != null && input.length >= passwordLength
                         ? null
                         : 'Password must be at least $passwordLength characters',
+                    onEditingComplete: () => confirmationPasswordFocusNode.requestFocus(),
                   ),
                 ),
                 SizedBox(width: 4),
@@ -156,11 +159,12 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
             ),
             SizedBox(height: 16),
             TextFormField(
-              autofocus: true,
+              focusNode: confirmationPasswordFocusNode,
               controller: passwordConfirmationTEC,
               obscureText: true,
               decoration: InputDecoration(hintText: 'Confirm Password'),
               validator: (input) => input == passwordTEC.text ? null : "Passwords doesn't match",
+              onEditingComplete: onFinish,
             ),
             Spacer(flex: 2),
             Row(
@@ -168,7 +172,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
                 Expanded(
                   child: ElevatedButton(
                     child: Text(buttonText),
-                    onPressed: onTap,
+                    onPressed: onFinish,
                   ),
                 ),
               ],
@@ -189,5 +193,20 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
       ),
       (route) => false,
     );
+  }
+
+  Future<void> _goToNextPage() async {
+    if (_primaryPasswordFormKey.currentState!.validate()) {
+      await _pageController.nextPage(duration: kTabScrollDuration, curve: Curves.easeOut);
+      _secondaryPasswordFocusNode.requestFocus();
+    }
+  }
+
+  void _finishRegistration() {
+    FocusScope.of(context).unfocus();
+
+    if (_secondaryPasswordFormKey.currentState!.validate()) {
+      _registrationPresenter.finishRegistration(_primaryPasswordConfirmationTEC.text, _secondaryPasswordConfirmationTEC.text);
+    }
   }
 }
