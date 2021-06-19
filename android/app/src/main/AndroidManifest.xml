@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
    <application
-        android:label="Secretum"
+        android:label="@string/app_name"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

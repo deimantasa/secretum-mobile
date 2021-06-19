@@ -31,16 +31,24 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def envProperties = new Properties()
+def envPropertiesFile = rootProject.file('env.properties')
+if (envPropertiesFile.exists()) {
+    envProperties.load(new FileInputStream(envPropertiesFile))
+}
+
 android {
     compileSdkVersion 30
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.secretum"
+        applicationIdSuffix envProperties["appSuffix"]
+        resValue "string", "app_name", envProperties["appName"]
         minSdkVersion 23
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     signingConfigs {

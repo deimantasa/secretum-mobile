@@ -49,3 +49,7 @@ app.*.map.json
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 /secrets/
+
+# Environment generator
+/tools/environment-generator/google-services-*.json
+/tools/environment-generator/GoogleService-Info-*.plist
