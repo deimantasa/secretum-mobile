@@ -3,7 +3,9 @@ import 'package:secretum/models/log_type.dart';
 import 'package:logger/logger.dart';
 
 class LoggingService {
-  final Logger _logger = Logger(printer: PrettyPrinter(methodCount: 2));
+  final Logger _logger;
+
+  LoggingService({Logger? logger}) : this._logger = logger ?? Logger(printer: PrettyPrinter(methodCount: 2));
 
   void log(String message, {LogType logType = LogType.debug}) {
     if (!kReleaseMode) {

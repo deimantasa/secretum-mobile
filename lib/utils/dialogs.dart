@@ -25,7 +25,7 @@ class Dialogs {
       builder: (context) {
         String? password;
         return AlertDialog(
-          title: Text("Verify"),
+          title: Text('Verify'),
           content: TextFormField(
             autofocus: true,
             onChanged: (input) => password = input,
@@ -34,11 +34,11 @@ class Dialogs {
           ),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: Text('Cancel'),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-              child: Text("Confirm"),
+              child: Text('Confirm'),
               onPressed: () => Navigator.pop(context, password),
             ),
           ],
@@ -80,9 +80,9 @@ class Dialogs {
       builder: (context) {
         return EditEntryPage(
           title: title,
-          description: description ?? "",
+          description: description ?? '',
           hintText: hintText,
-          entry: entry ?? "",
+          entry: entry ?? '',
           buttonText: buttonText,
           textCapitalization: textCapitalization,
           validateWithPrimaryPassword: validateWithPrimaryPassword,
@@ -109,7 +109,7 @@ class Dialogs {
             left: 8,
             top: 0,
             right: 8,
-            //Use bottom padding to detect if keyboard is shown, so it'd not hide our rendered elements
+            // Use bottom padding to detect if keyboard is shown, so it'd not hide our rendered elements
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Column(

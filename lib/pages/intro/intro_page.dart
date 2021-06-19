@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:secretum/pages/home/home_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';
-import 'package:secretum/utils/secretum_assets.dart';
-import 'package:secretum/utils/secretum_colors.dart';
+import 'package:secretum/utils/app_assets.dart';
+import 'package:secretum/utils/app_colors.dart';
+import 'package:secretum/utils/dialogs.dart';
 
 import 'intro_contract.dart';
 import 'intro_model.dart';
@@ -20,11 +21,12 @@ class _IntroPageState extends State<IntroPage> implements View {
 
   @override
   void initState() {
+    super.initState();
+
     _introModel = IntroModel();
-    _introPresenter = IntroPresenter(this, context, _introModel);
+    _introPresenter = IntroPresenter(this, _introModel);
 
     _introPresenter.init(context);
-    super.initState();
   }
 
   @override
@@ -36,7 +38,7 @@ class _IntroPageState extends State<IntroPage> implements View {
 
   @override
   void showMessage(String message, {bool isSuccess = true}) {
-    //
+    Dialogs.showMessage(message: message, isSuccess: isSuccess);
   }
 
   @override
@@ -50,15 +52,15 @@ class _IntroPageState extends State<IntroPage> implements View {
         children: [
           Spacer(),
           SvgPicture.asset(
-            SecretumAssets.kSecretumLogo,
+            AppAssets.kSecretumLogo,
             height: 200,
             color: Colors.white,
           ),
           SizedBox(height: 24),
           Text(
-            "SECRETUM",
+            'SECRETUM',
             style: TextStyle(
-              color: SecretumColors.kMaterialColor1,
+              color: AppColors.kMaterialColor1,
               fontWeight: FontWeight.bold,
               fontSize: 40,
             ),

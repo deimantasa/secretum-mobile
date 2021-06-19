@@ -1,48 +1,48 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:secretum/main.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secretum/models/secret.dart';
+import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 import 'secret_details_contract.dart';
 import 'secret_details_model.dart';
 
 class SecretDetailsPresenter implements Presenter {
-  late final View _view;
-  late final SecretDetailsModel _secretDetailsModel;
+  final View _view;
+  final SecretDetailsModel _secretDetailsModel;
+  final EncryptionService _encryptionService;
+  final SecretsStore _secretsStore;
+  final UsersStore _usersStore;
+  final List<StreamSubscription?> _streamSubscriptions = [];
 
-  late final UsersStore _usersStore;
-  late final SecretsStore _secretsStore;
-
-  List<StreamSubscription?> _streamSubscriptions = [];
-
-  SecretDetailsPresenter(View view, BuildContext context, SecretDetailsModel secretDetailsModel) {
-    _view = view;
-    _secretDetailsModel = secretDetailsModel;
-
-    _usersStore = context.read<UsersStore>();
-    _secretsStore = context.read<SecretsStore>();
-  }
+  SecretDetailsPresenter(
+    this._view,
+    this._secretDetailsModel, {
+    EncryptionService? encryptionService,
+    SecretsStore? secretsStore,
+    UsersStore? usersStore,
+  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
+        this._secretsStore = secretsStore ?? GetIt.instance<SecretsStore>(),
+        this._usersStore = usersStore ?? GetIt.instance<UsersStore>();
 
   @override
   Future<void> updateSecret(Secret secret) async {
     if (_secretDetailsModel.secret != null) {
       _secretsStore
           .updateSecret(
-        _usersStore.user?.documentSnapshot?.id ?? "",
-        _secretDetailsModel.secret?.documentSnapshot?.id ?? "",
+        _usersStore.user?.documentSnapshot.id ?? '',
+        _secretDetailsModel.secret?.documentSnapshot.id ?? '',
         secret,
       )
           .then((isSuccess) {
         if (isSuccess) {
-          _view.showMessage("Secret updated");
+          _view.showMessage('Secret updated');
         } else {
-          _view.showMessage("Cannot update secret, something went wrong");
+          _view.showMessage('Cannot update secret, something went wrong');
         }
       });
     }
@@ -54,8 +54,8 @@ class SecretDetailsPresenter implements Presenter {
   }
 
   void _listenToSecretById() {
-    StreamSubscription streamSubscription = _secretsStore.listenToSecretById(
-      _usersStore.user!.documentSnapshot!.id,
+    final StreamSubscription streamSubscription = _secretsStore.listenToSecretById(
+      _usersStore.user!.documentSnapshot.id,
       _secretDetailsModel.secretId,
       onSecretChanged: (secret) {
         _secretDetailsModel.secret = secret;
@@ -68,19 +68,20 @@ class SecretDetailsPresenter implements Presenter {
 
   @override
   void deleteSecret(String password) async {
-    if (encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
-      bool isSuccess = await Utils.authViaBiometric();
+    if (_encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
+      final bool isSuccess = await Utils.authViaBiometric();
+
       if (isSuccess) {
         _secretsStore
             .deleteSecret(
-          _usersStore.user!.documentSnapshot!.id,
-          _secretDetailsModel.secret!.documentSnapshot!.id,
+          _usersStore.user!.documentSnapshot.id,
+          _secretDetailsModel.secret!.documentSnapshot.id,
         )
             .then((isSuccess) {
           if (isSuccess) {
-            _view.showMessage("${_secretDetailsModel.secret?.name} was deleted");
+            _view.showMessage('${_secretDetailsModel.secret?.name} was deleted');
           } else {
-            _view.showMessage("Cannot delete ${_secretDetailsModel.secret?.name}. Something went wrong");
+            _view.showMessage('Cannot delete ${_secretDetailsModel.secret?.name}. Something went wrong');
           }
         });
 
@@ -91,17 +92,15 @@ class SecretDetailsPresenter implements Presenter {
 
   @override
   void dispose() {
-    _streamSubscriptions.forEach(
-      (element) {
-        element?.cancel();
-      },
-    );
+    _streamSubscriptions.forEach((element) {
+      element?.cancel();
+    });
   }
 
   @override
   Future<void> copyText(String code) async {
     await Clipboard.setData(ClipboardData(text: code));
-    _view.showMessage("Code was copied to clipboard");
+    _view.showMessage('Code was copied to clipboard');
     _view.closePage();
   }
 }

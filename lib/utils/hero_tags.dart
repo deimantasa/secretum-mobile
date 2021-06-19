@@ -1,3 +1,3 @@
-class HeroTags{
-  static const String kFromWelcomeToRegistrationTag = "kFromWelcomeToRegistrationTag";
+class HeroTags {
+  static const String kFromWelcomeToRegistrationTag = 'kFromWelcomeToRegistrationTag';
 }

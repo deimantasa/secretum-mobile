@@ -8,7 +8,7 @@ part of 'secret.dart';
 
 Secret _$SecretFromJson(Map<String, dynamic> json) {
   return Secret(
-    json['addedBy'] as String?,
+    json['addedBy'] as String? ?? '',
     Utils.dateTimeFromTimestamp(json['createdAt'] as Timestamp?),
     json['name'] as String? ?? '',
     json['note'] as String? ?? '',

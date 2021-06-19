@@ -33,6 +33,7 @@
       prefer_is_not_empty: error
       prefer_null_aware_operators: error
       prefer_spread_collections: error
+      prefer_single_quotes: error
       unnecessary_await_in_return: error
       unnecessary_null_in_if_null_operators: error
 
@@ -70,5 +71,6 @@
       prefer_is_not_empty: true
       prefer_null_aware_operators: true
       prefer_spread_collections: true
+      prefer_single_quotes: true
       unnecessary_await_in_return: true
       unnecessary_null_in_if_null_operators: true

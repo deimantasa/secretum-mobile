@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:secretum/pages/home/home_page.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:secretum/utils/hero_tags.dart';
-import 'package:secretum/utils/secretum_assets.dart';
+import 'package:secretum/utils/app_assets.dart';
 
 import 'registration_contract.dart';
 import 'registration_model.dart';
@@ -16,11 +16,9 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> implements View {
   final PageController _pageController = PageController();
-
   final GlobalKey<FormState> _primaryPasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _primaryPasswordTEC = TextEditingController();
   final TextEditingController _primaryPasswordConfirmationTEC = TextEditingController();
-
   final GlobalKey<FormState> _secondaryPasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _secondaryPasswordTEC = TextEditingController();
   final TextEditingController _secondaryPasswordConfirmationTEC = TextEditingController();
@@ -28,33 +26,31 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
   late final RegistrationModel _registrationModel;
   late final RegistrationPresenter _registrationPresenter;
 
-  bool _isPrimaryPasswordObscure = true;
-  bool _isSecondaryPasswordObscure = true;
-
   @override
   void initState() {
-    _registrationModel = RegistrationModel();
-    _registrationPresenter = RegistrationPresenter(this, context, _registrationModel);
     super.initState();
+
+    _registrationModel = RegistrationModel();
+    _registrationPresenter = RegistrationPresenter(this, _registrationModel);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registration"),
+        title: Text('Registration'),
         actions: [
           Hero(
             tag: HeroTags.kFromWelcomeToRegistrationTag,
             child: SvgPicture.asset(
-              SecretumAssets.kSecretumLogo,
+              AppAssets.kSecretumLogo,
               width: 24,
               height: 24,
               color: Colors.white,
             ),
           ),
-          //Mock side padding, so SVGAsset wouldn't be so close
-          //to the edge
+          // Mock side padding, so SVGAsset wouldn't be so close
+          // to the edge
           SizedBox(width: 16),
         ],
       ),
@@ -79,14 +75,14 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
       children: [
         _buildPassword(
           formKey: _primaryPasswordFormKey,
-          description: "Primary Password is used to secure most important actions within the application.",
+          description: 'Primary Password is used to secure most important actions within the application.',
           passwordTEC: _primaryPasswordTEC,
-          isPasswordObscured: _isPrimaryPasswordObscure,
-          onObscureChanged: (isObscure) => setState(() => _isPrimaryPasswordObscure = isObscure),
-          passwordHint: "Primary Password",
+          isPasswordObscured: _registrationModel.isPrimaryPasswordObscure,
+          onObscureChanged: (isObscure) => setState(() => _registrationModel.isPrimaryPasswordObscure = isObscure),
+          passwordHint: 'Primary Password',
           passwordLength: 6,
           passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
-          buttonText: "Continue",
+          buttonText: 'Continue',
           onTap: () async {
             if (_primaryPasswordFormKey.currentState!.validate()) {
               await _pageController.nextPage(duration: kTabScrollDuration, curve: Curves.easeOut);
@@ -95,14 +91,14 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
         ),
         _buildPassword(
           formKey: _secondaryPasswordFormKey,
-          description: "Secondary Password is used to secure less important actions within the application.",
+          description: 'Secondary Password is used to secure less important actions within the application.',
           passwordTEC: _secondaryPasswordTEC,
-          isPasswordObscured: _isSecondaryPasswordObscure,
-          onObscureChanged: (isObscure) => setState(() => _isSecondaryPasswordObscure = isObscure),
-          passwordHint: "Secondary Password",
+          isPasswordObscured: _registrationModel.isSecondaryPasswordObscure,
+          onObscureChanged: (isObscure) => setState(() => _registrationModel.isSecondaryPasswordObscure = isObscure),
+          passwordHint: 'Secondary Password',
           passwordLength: 3,
           passwordConfirmationTEC: _secondaryPasswordConfirmationTEC,
-          buttonText: "Finish",
+          buttonText: 'Finish',
           onTap: () {
             if (_secondaryPasswordFormKey.currentState!.validate()) {
               _registrationPresenter.finishRegistration(
@@ -148,7 +144,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
                     decoration: InputDecoration(hintText: passwordHint),
                     validator: (input) => input != null && input.length >= passwordLength
                         ? null
-                        : "Password must be at least $passwordLength characters",
+                        : 'Password must be at least $passwordLength characters',
                   ),
                 ),
                 SizedBox(width: 4),
@@ -163,7 +159,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements View {
               autofocus: true,
               controller: passwordConfirmationTEC,
               obscureText: true,
-              decoration: InputDecoration(hintText: "Confirm Password"),
+              decoration: InputDecoration(hintText: 'Confirm Password'),
               validator: (input) => input == passwordTEC.text ? null : "Passwords doesn't match",
             ),
             Spacer(flex: 2),

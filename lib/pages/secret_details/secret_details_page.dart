@@ -24,16 +24,17 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
 
   @override
   void initState() {
-    _secretDetailsModel = SecretDetailsModel(widget.secretId);
-    _secretDetailsPresenter = SecretDetailsPresenter(this, context, _secretDetailsModel);
-    _secretDetailsPresenter.init();
-
     super.initState();
+
+    _secretDetailsModel = SecretDetailsModel(widget.secretId);
+    _secretDetailsPresenter = SecretDetailsPresenter(this, _secretDetailsModel);
+    _secretDetailsPresenter.init();
   }
 
   @override
   void dispose() {
     _secretDetailsPresenter.dispose();
+
     super.dispose();
   }
 
@@ -43,7 +44,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          "${_secretDetailsModel.secret?.name}",
+          '${_secretDetailsModel.secret?.name}',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
@@ -59,16 +60,16 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                     children: [
                       ListTile(
                         leading: Icon(Icons.edit),
-                        title: Text("Rename Secret"),
+                        title: Text('Rename Secret'),
                         onTap: () async {
                           Navigator.pop(context);
 
                           String? secretsName = await Dialogs.showEditEntryBottomSheet(
                             context,
                             title: "New Secret's Name",
-                            hintText: "Enter new name",
+                            hintText: 'Enter new name',
                             entry: _secretDetailsModel.secret!.name,
-                            buttonText: "Update",
+                            buttonText: 'Update',
                             textCapitalization: TextCapitalization.words,
                             validateWithPrimaryPassword: false,
                             validateWithSecondaryPassword: false,
@@ -83,7 +84,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                       Divider(height: 1),
                       ListTile(
                         leading: Icon(Icons.delete),
-                        title: Text("Delete Secret"),
+                        title: Text('Delete Secret'),
                         onTap: () {
                           //Close bottom sheet
                           Navigator.pop(context);
@@ -92,15 +93,15 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text("Are you sure want to delete everything?"),
+                                title: Text('Are you sure want to delete everything?'),
                                 actions: [
                                   TextButton(
-                                    child: Text("Cancel"),
+                                    child: Text('Cancel'),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
                                     child: Text(
-                                      "Delete",
+                                      'Delete',
                                       style: TextStyle(
                                         color: Colors.red,
                                       ),
@@ -111,7 +112,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
 
                                       String? password = await Dialogs.showPasswordConfirmationDialog(
                                         context,
-                                        hintText: "Primary Password",
+                                        hintText: 'Primary Password',
                                       );
 
                                       if (password != null) {
@@ -160,17 +161,17 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-            title: Text("Notes"),
-            subtitle: note == null || note.isEmpty ? null : Text("********"),
+            title: Text('Notes'),
+            subtitle: note == null || note.isEmpty ? null : Text('********'),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
                 String? newNote = await Dialogs.showEditEntryBottomSheet(
                   context,
-                  title: "Update Note",
+                  title: 'Update Note',
                   entry: _secretDetailsModel.secret?.note,
-                  hintText: "Enter some notes/hints about the secret",
-                  buttonText: "Update",
+                  hintText: 'Enter some notes/hints about the secret',
+                  buttonText: 'Update',
                   textCapitalization: TextCapitalization.sentences,
                   validateWithPrimaryPassword: true,
                   validateWithSecondaryPassword: false,
@@ -188,27 +189,27 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,
-                        title: "Note",
+                        title: 'Note',
                         content: _secretDetailsModel.secret!.note!,
-                        buttonText: "Close",
+                        buttonText: 'Close',
                         onPressed: () => Navigator.pop(context),
                       );
                     }
                   }
-                : () => showMessage("There is no note saved")),
+                : () => showMessage('There is no note saved')),
         Divider(height: 1),
         ListTile(
-            title: Text("Code"),
-            subtitle: code == null || code.isEmpty ? null : Text("********"),
+            title: Text('Code'),
+            subtitle: code == null || code.isEmpty ? null : Text('********'),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
                 String? newCode = await Dialogs.showEditEntryBottomSheet(
                   context,
-                  title: "Update Code",
-                  hintText: "Enter new code",
+                  title: 'Update Code',
+                  hintText: 'Enter new code',
                   entry: _secretDetailsModel.secret?.code,
-                  buttonText: "Update",
+                  buttonText: 'Update',
                   textCapitalization: TextCapitalization.none,
                   validateWithPrimaryPassword: true,
                   validateWithSecondaryPassword: false,
@@ -226,14 +227,14 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
                     if (isSuccess) {
                       Dialogs.showInformationBottomSheet(
                         context,
-                        title: "Code",
+                        title: 'Code',
                         content: _secretDetailsModel.secret!.code!,
-                        buttonText: "Copy",
+                        buttonText: 'Copy',
                         onPressed: () => _secretDetailsPresenter.copyText(_secretDetailsModel.secret!.code!),
                       );
                     }
                   }
-                : () => showMessage("There is no code saved")),
+                : () => showMessage('There is no code saved')),
         Divider(height: 1),
       ],
     );

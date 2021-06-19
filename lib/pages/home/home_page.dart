@@ -12,8 +12,8 @@ import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:provider/provider.dart';
-import 'package:secretum/utils/secretum_assets.dart';
-import 'package:secretum/utils/secretum_colors.dart';
+import 'package:secretum/utils/app_assets.dart';
+import 'package:secretum/utils/app_colors.dart';
 import 'package:secretum/utils/utils.dart';
 
 import 'home_contract.dart';
@@ -37,8 +37,10 @@ class _HomePageState extends State<HomePage> implements View {
 
   @override
   void initState() {
+    super.initState();
+
     _homeModel = HomeModel();
-    _homePresenter = HomePresenter(this, context, _homeModel);
+    _homePresenter = HomePresenter(this, _homeModel);
     _homePresenter.init();
 
     if (widget.isFirstTime) {
@@ -46,8 +48,6 @@ class _HomePageState extends State<HomePage> implements View {
         Dialogs.showSecretKeyBottomSheet(context);
       });
     }
-
-    super.initState();
   }
 
   @override
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> implements View {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Secretum"),
+        title: Text('Secretum'),
         actions: [],
       ),
       floatingActionButton: FloatingActionButton(
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> implements View {
     if (_homeModel.secrets.isEmpty) {
       return Center(
         child: ElevatedButton(
-          child: Text("Add new secret"),
+          child: Text('Add new secret'),
           onPressed: () => _showAddNewWalletBottomSheet(),
         ),
       );
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> implements View {
           Align(
             alignment: Alignment.topCenter,
             child: ListView.builder(
-              //Make sure ListView items are not hidden by FABs
+              // Make sure ListView items are not hidden by FABs
               padding: EdgeInsets.only(bottom: 90),
               itemCount: _homeModel.secrets.length,
               itemBuilder: (context, index) {
@@ -108,14 +108,14 @@ class _HomePageState extends State<HomePage> implements View {
                   children: [
                     ListTile(
                       title: Text(
-                        "${secret.name}",
+                        '${secret.name}',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                       onTap: () async {
                         String? password = await Dialogs.showPasswordConfirmationDialog(
                           context,
-                          hintText: "Secondary Password",
+                          hintText: 'Secondary Password',
                         );
 
                         if (password != null) {
@@ -123,11 +123,11 @@ class _HomePageState extends State<HomePage> implements View {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot!.id),
+                                builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot.id),
                               ),
                             );
                           } else {
-                            showMessage("Password is invalid", isSuccess: false);
+                            showMessage('Password is invalid', isSuccess: false);
                           }
                         }
                         //If password is null, then user just dismissed dialog themselves
@@ -149,9 +149,9 @@ class _HomePageState extends State<HomePage> implements View {
     String? secretsName = await Dialogs.showEditEntryBottomSheet(
       context,
       title: "Enter Secret's Name",
-      hintText: "eg. Binance Key",
-      entry: "",
-      buttonText: "Add",
+      hintText: 'eg. Binance Key',
+      entry: '',
+      buttonText: 'Add',
       textCapitalization: TextCapitalization.words,
       validateWithPrimaryPassword: false,
       validateWithSecondaryPassword: false,
@@ -178,11 +178,11 @@ class _HomePageState extends State<HomePage> implements View {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Export Success"),
-          content: Text("File location: $fileLocation"),
+          title: Text('Export Success'),
+          content: Text('File location: $fileLocation'),
           actions: [
             TextButton(
-              child: Text("OK"),
+              child: Text('OK'),
               onPressed: () => Navigator.pop(context),
             )
           ],
@@ -207,7 +207,7 @@ class _HomePageState extends State<HomePage> implements View {
                     children: [
                       Spacer(),
                       SvgPicture.asset(
-                        SecretumAssets.kSecretumLogo,
+                        AppAssets.kSecretumLogo,
                         width: kImageSize,
                         height: kImageSize,
                         color: Colors.white,
@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> implements View {
                       Text(
                         'SECRETUM',
                         style: TextStyle(
-                          color: SecretumColors.kMaterialColor1,
+                          color: AppColors.kMaterialColor1,
                           fontWeight: FontWeight.w600,
                           fontSize: 24,
                         ),
@@ -234,25 +234,25 @@ class _HomePageState extends State<HomePage> implements View {
           Divider(height: 1),
           ListTile(
             leading: Icon(Icons.backup),
-            title: Text("Backup"),
+            title: Text('Backup'),
             subtitle:
-                Text(dbBackup == null ? "Not backed up yet" : "Last backup: ${Utils.getFormattedDate(dbBackup.backupDate)}"),
+                Text(dbBackup == null ? 'Not backed up yet' : 'Last backup: ${Utils.getFormattedDate(dbBackup.backupDate)}'),
             onTap: () async {
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: Text("Save snapshot from DB locally"),
+                    title: Text('Save snapshot from DB locally'),
                     content: Text(
-                        "Once backed up, your database records will be saved into encrypted local database.\n\nBackups are stored only locally on your device."),
+                        'Once backed up, your database records will be saved into encrypted local database.\n\nBackups are stored only locally on your device.'),
                     actions: [
                       TextButton(
-                        child: Text("Cancel"),
+                        child: Text('Cancel'),
                         onPressed: () => Navigator.pop(context),
                       ),
                       TextButton(
                         child: Text(
-                          "Backup",
+                          'Backup',
                           style: TextStyle(
                             color: Colors.green,
                           ),
@@ -270,20 +270,20 @@ class _HomePageState extends State<HomePage> implements View {
               );
             },
           ),
-          //Only show local export if db backup is available
+          // Only show local export if db backup is available
           if (dbBackup != null) ...[
             Divider(height: 1),
             ListTile(
               leading: Icon(Icons.download_rounded),
-              title: Text("Export from Backup"),
+              title: Text('Export from Backup'),
               onTap: () async {
                 String? fileName = await Dialogs.showEditEntryBottomSheet(
                   context,
-                  title: "Export File",
-                  description: "All your secrets will be exported from backup to the text file in your phone.",
-                  hintText: "Enter file name",
-                  entry: "",
-                  buttonText: "Export",
+                  title: 'Export File',
+                  description: 'All your secrets will be exported from backup to the text file in your phone.',
+                  hintText: 'Enter file name',
+                  entry: '',
+                  buttonText: 'Export',
                   textCapitalization: TextCapitalization.none,
                   validateWithPrimaryPassword: false,
                   validateWithSecondaryPassword: false,
@@ -299,15 +299,15 @@ class _HomePageState extends State<HomePage> implements View {
           Divider(height: 1),
           ListTile(
             leading: Icon(Icons.download_rounded),
-            title: Text("Export from DB"),
+            title: Text('Export from DB'),
             onTap: () async {
               String? fileName = await Dialogs.showEditEntryBottomSheet(
                 context,
-                title: "Export File",
-                description: "All your secrets will be exported from the database to the text file in your phone.",
-                hintText: "Enter file name",
-                entry: "",
-                buttonText: "Export",
+                title: 'Export File',
+                description: 'All your secrets will be exported from the database to the text file in your phone.',
+                hintText: 'Enter file name',
+                entry: '',
+                buttonText: 'Export',
                 textCapitalization: TextCapitalization.none,
                 validateWithPrimaryPassword: false,
                 validateWithSecondaryPassword: false,
@@ -328,17 +328,17 @@ class _HomePageState extends State<HomePage> implements View {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text("Are you sure you want to log-out?"),
+                      title: Text('Are you sure you want to log-out?'),
                       content: Text(
-                          "Make sure you have your secret key saved. This will be the only way to log-in to your account again."),
+                          'Make sure you have your secret key saved. This will be the only way to log-in to your account again.'),
                       actions: [
                         TextButton(
-                          child: Text("Cancel"),
+                          child: Text('Cancel'),
                           onPressed: () => Navigator.pop(context),
                         ),
                         TextButton(
                           child: Text(
-                            "Log-Out",
+                            'Log-Out',
                             style: TextStyle(color: Colors.red),
                           ),
                           onPressed: () => _homePresenter.signOut(),

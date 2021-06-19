@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
 import 'package:secretum/models/user.dart';
 import 'package:secretum/models/users_sensitive_information.dart';
+import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/services/firestore/generic/firestore_generic_service.dart';
 
 enum UsersQueryType {
@@ -13,52 +14,62 @@ enum UsersQueryType {
 }
 
 class FireUsersService {
-  static const String kCollectionUsers = "users";
+  static const String kCollectionUsers = 'users';
 
-  final FireGenericService _fireGenericService = GetIt.instance<FireGenericService>();
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final EncryptionService _encryptionService;
+  final FirebaseFirestore _firebaseFirestore;
+  final FireGenericService _fireGenericService;
+
+  FireUsersService({
+    EncryptionService? encryptionService,
+    FirebaseFirestore? firebaseFirestore,
+    FireGenericService? fireGenericService,
+  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
+        this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        this._fireGenericService = fireGenericService ?? GetIt.instance<FireGenericService>();
 
   Future<User?> getUserBySecretKey(String secretKey) async {
-    String hashedSecretKey = encryptionService.getHashedText(secretKey);
+    final String hashedSecretKey = _encryptionService.getHashedText(secretKey);
 
-    loggingService.log("FireUsersService.getUserBySecretKey: SecretKey: $secretKey, Hashed: $hashedSecretKey");
+    loggingService.log('FireUsersService.getUserBySecretKey: SecretKey: $secretKey, Hashed: $hashedSecretKey');
 
-    QuerySnapshot querySnapshot = await _firebaseFirestore
+    final QuerySnapshot querySnapshot = await _firebaseFirestore
         .collection(kCollectionUsers)
         .where(
-          "${User.kMapSensitiveInformation}.${UsersSensitiveInformation.kFieldSecretKey}",
+          '${User.kMapSensitiveInformation}.${UsersSensitiveInformation.kFieldSecretKey}',
           isEqualTo: hashedSecretKey,
         )
         .limit(1)
         .get();
 
-    List<User?> users = querySnapshot.docs.map((e) {
-      if (e.data() != null) {
-        return User.fromFirestore(e, e.data()!);
+    final List<User?> users = querySnapshot.docs.map((queryDocumentSnapshot) {
+      if (queryDocumentSnapshot.data() != null) {
+        return User.fromFirestore(queryDocumentSnapshot);
       }
       return null;
     }).toList();
     users.removeWhere((element) => element == null);
 
     if (users.isNotEmpty) {
-      loggingService.log("FireUsersService.getUserBySecretKey: User retrieved");
+      loggingService.log('FireUsersService.getUserBySecretKey: User retrieved');
       return users.first;
     } else {
-      loggingService.log("FireUsersService.getUserBySecretKey: User is null");
+      loggingService.log('FireUsersService.getUserBySecretKey: User is null');
       return null;
     }
   }
 
   Future<String?> registerUser(User user) async {
-    Map<String, dynamic> dataMap = user.toJson();
+    final Map<String, dynamic> dataMap = user.toJson();
 
-    loggingService.log("FireUsersService.registerUser: Data: $dataMap");
-    String? documentId = await _fireGenericService.addDocument(kCollectionUsers, dataMap);
+    loggingService.log('FireUsersService.registerUser: Data: $dataMap');
+    final String? documentId = await _fireGenericService.addDocument(kCollectionUsers, dataMap);
+
     if (documentId != null) {
-      loggingService.log("FireUsersService.registerUser: User added. DocID: $documentId");
+      loggingService.log('FireUsersService.registerUser: User added. DocID: $documentId');
       return documentId;
     } else {
-      loggingService.log("FireUsersService.registerUser: User cannot be added: DocID: null");
+      loggingService.log('FireUsersService.registerUser: User cannot be added: DocID: null');
       return null;
     }
   }
@@ -67,13 +78,13 @@ class FireUsersService {
     String userId, {
     required ValueSetter<User> onUserChanged,
   }) {
-    StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToDocument(
+    final StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToDocument(
       kCollectionUsers,
       userId,
-      "FireUsersService.listenToUserById",
+      'FireUsersService.listenToUserById',
       onDocumentChange: (documentSnapshot) {
         if (documentSnapshot.data() != null) {
-          User user = User.fromFirestore(documentSnapshot, documentSnapshot.data()!);
+          User user = User.fromFirestore(documentSnapshot);
           onUserChanged(user);
         }
       },
@@ -83,13 +94,13 @@ class FireUsersService {
   }
 
   Future<User?> getUserById(String userId) async {
-    User? user = await _fireGenericService.getElement<User>(
+    final User? user = await _fireGenericService.getElement<User>(
       kCollectionUsers,
       userId,
-      "FireUsersService.getUserById:",
+      'FireUsersService.getUserById:',
       onDocumentSnapshot: (docSnapshot) {
         if (docSnapshot.data() != null) {
-          return User.fromFirestore(docSnapshot, docSnapshot.data()!);
+          return User.fromFirestore(docSnapshot);
         } else {
           return null;
         }

@@ -4,14 +4,19 @@ import 'package:secretum/models/db_backup.dart';
 import 'package:secretum/services/storage_service.dart';
 
 class DbBackupStore extends ChangeNotifier {
-  final StorageService _storageService = GetIt.instance<StorageService>();
+  final StorageService _storageService;
 
   DbBackup? _dbBackup;
 
   DbBackup? get dbBackup => _dbBackup;
 
+  DbBackupStore({
+    StorageService? storageService,
+  }) : this._storageService = storageService ?? GetIt.instance<StorageService>();
+
   Future<void> initDbBackup() async {
-    DbBackup? dbBackup = await _storageService.getDbBackup();
+    final DbBackup? dbBackup = await _storageService.getDbBackup();
+
     _updateDbBackup(dbBackup);
   }
 
@@ -25,7 +30,7 @@ class DbBackupStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetStore(){
+  void resetStore() {
     _dbBackup = null;
   }
 }

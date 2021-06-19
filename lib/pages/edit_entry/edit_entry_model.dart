@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 
 class EditEntryModel {
-  late final String title;
-  late final String description;
-  late final String hintText;
-  late final String entry;
-  late final String buttonText;
-  late final TextCapitalization textCapitalization;
-  late final bool validateWithPrimaryPassword;
-  late final bool validateWithSecondaryPassword;
-  late final bool validateWithBiometric;
+  final String title;
+  final String description;
+  final String hintText;
+  final String entry;
+  final String buttonText;
+  final TextCapitalization textCapitalization;
+  final bool validateWithPrimaryPassword;
+  final bool validateWithSecondaryPassword;
+  final bool validateWithBiometric;
 
   EditEntryModel(
     this.title,

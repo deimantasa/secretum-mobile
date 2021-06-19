@@ -6,9 +6,11 @@ import 'package:secretum/main.dart';
 import 'package:secretum/models/log_type.dart';
 
 class FireGenericService {
-  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firebaseFirestore;
+  final List<StreamSubscription?> _streamSubscriptions = [];
 
-  List<StreamSubscription?> _streamSubscriptions = [];
+  FireGenericService({FirebaseFirestore? firebaseFirestore})
+      : this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<String?> addDocument(
     String collection,
@@ -20,11 +22,11 @@ class FireGenericService {
       await documentReference.set(update);
 
       loggingService.log(
-          "FirestoreGenericService.setDocument: Set. Collection $collection, DocID: ${documentReference.id}, Update: $update");
+          'FirestoreGenericService.setDocument: Set. Collection $collection, DocID: ${documentReference.id}, Update: $update');
       return documentReference.id;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.setDocument: Set failed. Update: $update, Exception: ${e.toString()}",
+        'FirestoreGenericService.setDocument: Set failed. Update: $update, Exception: ${e.toString()}',
         logType: LogType.error,
       );
       return null;
@@ -44,11 +46,11 @@ class FireGenericService {
       await documentReference.set(update);
 
       loggingService.log(
-          "FirestoreGenericService.setDocument: Set. Collection $collection, DocID: ${documentReference.id}, Update: $update");
+          'FirestoreGenericService.setDocument: Set. Collection $collection, DocID: ${documentReference.id}, Update: $update');
       return documentReference.id;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.setDocument: Set failed. Update: $update, Exception: ${e.toString()}",
+        'FirestoreGenericService.setDocument: Set failed. Update: $update, Exception: ${e.toString()}',
         logType: LogType.error,
       );
       return null;
@@ -58,12 +60,12 @@ class FireGenericService {
   Future<bool> updateDocument(String collection, String documentId, Map<String, dynamic> update) async {
     try {
       await _firebaseFirestore.collection(collection).doc(documentId).update(update);
-      loggingService.log("FirestoreGenericService.setDocument: Update. Collection $collection,"
-          " DocID: $documentId, Update: $update");
+      loggingService.log('FirestoreGenericService.setDocument: Update. Collection $collection,'
+          ' DocID: $documentId, Update: $update');
       return true;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.setDocument: Update failed. Update: $update, Exception: ${e.toString()}",
+        'FirestoreGenericService.setDocument: Update failed. Update: $update, Exception: ${e.toString()}',
         logType: LogType.error,
       );
       return false;
@@ -84,14 +86,14 @@ class FireGenericService {
           .collection(subCollection)
           .doc(subCollectionDocId)
           .update(update);
-      loggingService.log("FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $collectionDocId,"
-          " SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocId, Update: $update");
+      loggingService.log('FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $collectionDocId,'
+          ' SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocId, Update: $update');
       return true;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $collectionDocId,"
-        " SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocId,"
-        " Update: $update, Exception: ${e.toString()}",
+        'FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $collectionDocId,'
+        ' SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocId,'
+        ' Update: $update, Exception: ${e.toString()}',
         logType: LogType.error,
       );
       return false;
@@ -100,13 +102,13 @@ class FireGenericService {
 
   Future<bool> deleteDocument(String collection, String documentId) async {
     try {
-      loggingService.log("FirestoreGenericService.deleteDocument: Deleting. Collection $collection, DocId: $documentId");
+      loggingService.log('FirestoreGenericService.deleteDocument: Deleting. Collection $collection, DocId: $documentId');
       await _firebaseFirestore.collection(collection).doc(documentId).delete();
-      loggingService.log("FirestoreGenericService.deleteDocument: Deleted. Collection $collection, DocId: $documentId");
+      loggingService.log('FirestoreGenericService.deleteDocument: Deleted. Collection $collection, DocId: $documentId');
       return true;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.deleteDocument: Exception: $e",
+        'FirestoreGenericService.deleteDocument: Exception: $e',
         logType: LogType.error,
       );
       return false;
@@ -120,19 +122,19 @@ class FireGenericService {
     required String subCollectionDocumentId,
   }) async {
     try {
-      loggingService.log("FirestoreGenericService.deleteDocument: Deleting. Collection $collection, DocId: $documentId"
-          " SubCollection $subCollection, SubCollectionDocId: $subCollectionDocumentId");
+      loggingService.log('FirestoreGenericService.deleteDocument: Deleting. Collection $collection, DocId: $documentId'
+          ' SubCollection $subCollection, SubCollectionDocId: $subCollectionDocumentId');
       await _firebaseFirestore
           .collection(collection)
           .doc(documentId)
           .collection(subCollection)
           .doc(subCollectionDocumentId)
           .delete();
-      loggingService.log("FirestoreGenericService.deleteDocument: Deleted. Collection $collection, DocId: $documentId");
+      loggingService.log('FirestoreGenericService.deleteDocument: Deleted. Collection $collection, DocId: $documentId');
       return true;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.deleteDocument: Exception: $e",
+        'FirestoreGenericService.deleteDocument: Exception: $e',
         logType: LogType.error,
       );
       return false;
@@ -159,7 +161,7 @@ class FireGenericService {
 
     Query currentQuery = isMoreQuery ? query.startAfterDocument(lastDocumentSnapshot) : query;
 
-    loggingService.log("FirestoreGenericService.getElements.$logReference: More: $isMoreQuery");
+    loggingService.log('FirestoreGenericService.getElements.$logReference: More: $isMoreQuery');
 
     try {
       QuerySnapshot querySnapshot = await currentQuery.get();
@@ -168,11 +170,11 @@ class FireGenericService {
         return element;
       }).toList();
 
-      loggingService.log("FirestoreGenericService.getElements.$logReference: Total: ${elements.length}");
+      loggingService.log('FirestoreGenericService.getElements.$logReference: Total: ${elements.length}');
       return elements;
     } catch (e) {
       loggingService.log(
-        "FirestoreTransactionsService.getElements: Exception: $e",
+        'FirestoreTransactionsService.getElements: Exception: $e',
         logType: LogType.error,
       );
       return null;
@@ -186,13 +188,13 @@ class FireGenericService {
     required T? Function(DocumentSnapshot documentSnapshot) onDocumentSnapshot,
   }) async {
     try {
-      loggingService.log("FirestoreGenericService.getElement.$logReference: Collection: $collection, DocId: $documentId");
+      loggingService.log('FirestoreGenericService.getElement.$logReference: Collection: $collection, DocId: $documentId');
       DocumentSnapshot documentSnapshot = await _firebaseFirestore.collection(collection).doc(documentId).get();
       T element = onDocumentSnapshot(documentSnapshot)!;
       return element;
     } catch (e) {
       loggingService.log(
-        "FirestoreGenericService.getElement.$logReference: Collection: $collection, DocId: $documentId, Exception: $e",
+        'FirestoreGenericService.getElement.$logReference: Collection: $collection, DocId: $documentId, Exception: $e',
         logType: LogType.error,
       );
       return null;
@@ -204,20 +206,20 @@ class FireGenericService {
     required DocumentSnapshot lastDocumentSnapshot,
     required T Function(DocumentSnapshot documentSnapshot) onDocumentSnapshot,
   }) async {
-    loggingService.log("FirestoreGenericService.areMoreElementsAvailable: Last Document ID: ${lastDocumentSnapshot.id}");
+    loggingService.log('FirestoreGenericService.areMoreElementsAvailable: Last Document ID: ${lastDocumentSnapshot.id}');
 
     List<T>? elements = await getElements<T>(
       query: query..limit(1),
-      logReference: "FirestoreGenericService.areMoreElementsAvailable",
+      logReference: 'FirestoreGenericService.areMoreElementsAvailable',
       onDocumentSnapshot: (documentSnapshot) => onDocumentSnapshot(documentSnapshot),
       lastDocumentSnapshot: lastDocumentSnapshot,
     );
 
     if (elements == null || elements.isEmpty) {
-      loggingService.log("FirestoreGenericService.areMoreElementsAvailable: No more elements");
+      loggingService.log('FirestoreGenericService.areMoreElementsAvailable: No more elements');
       return false;
     } else {
-      loggingService.log("FirestoreGenericService.areMoreElementsAvailable: More elements exists.");
+      loggingService.log('FirestoreGenericService.areMoreElementsAvailable: More elements exists.');
       return true;
     }
   }
@@ -239,11 +241,11 @@ class FireGenericService {
     Query currentQuery = isMoreQuery ? query.startAfterDocument(lastDocumentSnapshot) : query;
 
     loggingService.log(
-        "FirestoreGenericService.listenToElementsStream.$logReference: Query: ${query.parameters}, IsMoreQuery: $isMoreQuery");
+        'FirestoreGenericService.listenToElementsStream.$logReference: Query: ${query.parameters}, IsMoreQuery: $isMoreQuery');
     StreamSubscription<QuerySnapshot> streamSubscription = currentQuery.snapshots().listen((event) {
       event.docChanges.forEach((docChange) {
-        loggingService.log("FirestoreGenericService.listenToElementsStream.$logReference:"
-            " Type: ${docChange.type}. DocId: ${docChange.doc.id}");
+        loggingService.log('FirestoreGenericService.listenToElementsStream.$logReference:'
+            ' Type: ${docChange.type}. DocId: ${docChange.doc.id}');
         onDocumentChange(docChange);
       });
     });
@@ -256,10 +258,10 @@ class FireGenericService {
     required Query query,
     required ValueSetter<int> onCountChange,
   }) {
-    loggingService.log("FirestoreGenericService.listenToElementsCountStream.$logReference");
+    loggingService.log('FirestoreGenericService.listenToElementsCountStream.$logReference');
 
     StreamSubscription<QuerySnapshot> streamSubscription = query.snapshots().listen((event) {
-      loggingService.log("FirestoreGenericService.listenToElementsCountStream: Count:${event.size}");
+      loggingService.log('FirestoreGenericService.listenToElementsCountStream: Count:${event.size}');
       onCountChange(event.size);
     });
 
@@ -274,8 +276,8 @@ class FireGenericService {
   }) {
     StreamSubscription<DocumentSnapshot> streamSubscription =
         _firebaseFirestore.collection(collection).doc(documentId).snapshots().listen((event) {
-      loggingService.log("FirestoreGenericService.listenToDocument.$logReference: New event."
-          " Collection: $collection, DocId: $documentId");
+      loggingService.log('FirestoreGenericService.listenToDocument.$logReference: New event.'
+          ' Collection: $collection, DocId: $documentId');
       onDocumentChange(event);
     });
 
@@ -298,8 +300,8 @@ class FireGenericService {
         .snapshots()
         .listen((event) {
       loggingService
-          .log("FirestoreGenericService.listenToSubCollectionDocument.$logReference: New event. Collection: $collection, "
-              "DocId: $documentId, SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocumentId");
+          .log('FirestoreGenericService.listenToSubCollectionDocument.$logReference: New event. Collection: $collection, '
+              'DocId: $documentId, SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocumentId');
       onDocumentChange(event);
     });
 

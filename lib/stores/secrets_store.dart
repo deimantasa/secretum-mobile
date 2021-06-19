@@ -12,27 +12,33 @@ import 'package:secretum/services/firestore/generic/firestore_generic_service.da
 import 'package:secretum/utils/extensions.dart';
 
 class SecretsStore extends ChangeNotifier {
-  final FireGenericService _fireGenericService = GetIt.instance<FireGenericService>();
-  final FireSecretsService _fireSecretsService = GetIt.instance<FireSecretsService>();
+  final FireGenericService _fireGenericService;
+  final FireSecretsService _fireSecretsService;
+  final List<StreamSubscription?> _streamSubscriptions = [];
+  final List<Secret> secrets = [];
 
-  List<StreamSubscription?> _streamSubscriptions = [];
-  List<Secret> secrets = [];
+  SecretsStore({
+    FireGenericService? fireGenericService,
+    FireSecretsService? fireSecretsService,
+  })  : this._fireGenericService = fireGenericService ?? GetIt.instance<FireGenericService>(),
+        this._fireSecretsService = fireSecretsService ?? GetIt.instance<FireSecretsService>();
 
   void init(String userId) {
     _listenToAllSecrets(userId);
   }
 
   void _listenToAllSecrets(String userId) {
-    StreamSubscription streamSubscription = _fireGenericService.listenToElementsStream(
-      logReference: "UsersStore._listenToAllSecrets",
+    final StreamSubscription streamSubscription = _fireGenericService.listenToElementsStream(
+      logReference: 'UsersStore._listenToAllSecrets',
       query: _fireSecretsService.getQueryByType(SecretsQueryType.allSecrets, userId: userId),
       onDocumentChange: (docChange) {
         if (docChange.doc.data() != null) {
-          Secret secret = Secret.fromFirestoreChanged(docChange, docChange.doc.data()!);
+          final Secret secret = Secret.fromFirestoreChanged(docChange);
+
           _updateSecretsLocally(secret);
         } else {
           loggingService.log(
-            "UsersStore._listenToAllSecrets: DocChange.doc.data is null, docId: ${docChange.doc.id}",
+            'UsersStore._listenToAllSecrets: DocChange.doc.data is null, docId: ${docChange.doc.id}',
             logType: LogType.error,
           );
         }
@@ -47,7 +53,7 @@ class SecretsStore extends ChangeNotifier {
     String secretId, {
     required ValueSetter<Secret> onSecretChanged,
   }) {
-    StreamSubscription streamSubscription = _fireSecretsService.listenToSecretById(
+    final StreamSubscription streamSubscription = _fireSecretsService.listenToSecretById(
       userId,
       secretId,
       onSecretChanged: onSecretChanged,
@@ -56,7 +62,8 @@ class SecretsStore extends ChangeNotifier {
   }
 
   Future<bool> addNewSecret(String userId, Secret secret) async {
-    bool isSuccess = await _fireSecretsService.addNewSecret(userId, secret);
+    final bool isSuccess = await _fireSecretsService.addNewSecret(userId, secret);
+
     return isSuccess;
   }
 
@@ -65,7 +72,7 @@ class SecretsStore extends ChangeNotifier {
       case DocumentChangeType.added:
         secrets.onAdded<Secret>(
           secret,
-          logReference: "UsersStore._updateSecretsLocally",
+          logReference: 'UsersStore._updateSecretsLocally',
           onSort: (secrets) => _sortListByCreatedAtDesc(secrets),
           onViewUpdate: () => notifyListeners(),
         );
@@ -73,7 +80,7 @@ class SecretsStore extends ChangeNotifier {
       case DocumentChangeType.modified:
         secrets.onModified<Secret>(
           secret,
-          logReference: "UsersStore._updateSecretsLocally",
+          logReference: 'UsersStore._updateSecretsLocally',
           onSort: (secrets) => _sortListByCreatedAtDesc(secrets),
           onViewUpdate: () => notifyListeners(),
         );
@@ -81,7 +88,7 @@ class SecretsStore extends ChangeNotifier {
       case DocumentChangeType.removed:
         secrets.onRemoved<Secret>(
           secret,
-          logReference: "UsersStore._updateSecretsLocally",
+          logReference: 'UsersStore._updateSecretsLocally',
           onViewUpdate: () => notifyListeners(),
         );
         break;
@@ -108,7 +115,7 @@ class SecretsStore extends ChangeNotifier {
   }
 
   Future<bool> deleteSecret(String userId, String secretId) async {
-    bool isSuccess = await _fireGenericService.deleteSubCollectionDocument(
+    final bool isSuccess = await _fireGenericService.deleteSubCollectionDocument(
       collection: FireUsersService.kCollectionUsers,
       documentId: userId,
       subCollection: FireSecretsService.kSubCollectionSecrets,
@@ -119,7 +126,8 @@ class SecretsStore extends ChangeNotifier {
   }
 
   Future<bool> updateSecret(String userId, String secretId, Secret secret) async {
-    bool isSuccess = await _fireSecretsService.updateSecret(userId, secretId, secret);
+    final bool isSuccess = await _fireSecretsService.updateSecret(userId, secretId, secret);
+
     return isSuccess;
   }
 }

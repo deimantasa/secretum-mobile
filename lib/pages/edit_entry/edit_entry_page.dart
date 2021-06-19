@@ -20,7 +20,7 @@ class EditEntryPage extends StatefulWidget {
   const EditEntryPage({
     Key? key,
     required this.title,
-    this.description = "",
+    this.description = '',
     required this.hintText,
     required this.entry,
     required this.buttonText,
@@ -34,13 +34,14 @@ class EditEntryPage extends StatefulWidget {
 }
 
 class _EditEntryPageState extends State<EditEntryPage> implements View {
-  late TextEditingController _textEditingController;
-
+  late final TextEditingController _textEditingController;
   late final EditEntryModel _editEntryModel;
   late final EditEntryPresenter _editEntryPresenter;
 
   @override
   void initState() {
+    super.initState();
+
     _editEntryModel = EditEntryModel(
       widget.title,
       widget.description,
@@ -52,7 +53,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
       widget.validateWithSecondaryPassword,
       widget.validateWithBiometric,
     );
-    _editEntryPresenter = EditEntryPresenter(this, context, _editEntryModel);
+    _editEntryPresenter = EditEntryPresenter(this, _editEntryModel);
 
     _textEditingController = TextEditingController.fromValue(
       TextEditingValue(
@@ -62,7 +63,6 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
         ),
       ),
     );
-    super.initState();
   }
 
   @override
@@ -119,11 +119,11 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
                       if (_editEntryModel.validateWithPrimaryPassword) {
                         String? password = await Dialogs.showPasswordConfirmationDialog(
                           context,
-                          hintText: "Primary Password",
+                          hintText: 'Primary Password',
                         );
                         bool isPasswordValid = _editEntryPresenter.validatePrimaryPassword(password);
                         if (!isPasswordValid) {
-                          showMessage("Password is invalid", isSuccess: false);
+                          showMessage('Password is invalid', isSuccess: false);
                           return;
                         }
                       }
@@ -131,11 +131,11 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
                       if (_editEntryModel.validateWithSecondaryPassword) {
                         String? password = await Dialogs.showPasswordConfirmationDialog(
                           context,
-                          hintText: "Secondary Password",
+                          hintText: 'Secondary Password',
                         );
                         bool isPasswordValid = _editEntryPresenter.validateSecondaryPassword(password);
                         if (!isPasswordValid) {
-                          showMessage("Password is invalid", isSuccess: false);
+                          showMessage('Password is invalid', isSuccess: false);
                           return;
                         }
                       }
@@ -143,7 +143,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements View {
                       if (_editEntryModel.validateWithBiometric) {
                         bool isSuccess = await Utils.authViaBiometric();
                         if (!isSuccess) {
-                          showMessage("Authentication failed", isSuccess: false);
+                          showMessage('Authentication failed', isSuccess: false);
                           return;
                         }
                       }

@@ -5,19 +5,19 @@ part 'users_sensitive_information.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class UsersSensitiveInformation extends SensitiveInformation {
-  static const kFieldSecretKey = "secretKey";
+  static const kFieldSecretKey = 'secretKey';
 
-  ///User's Hashed Secret Key which is used for Encryption/Decryption
-  @JsonKey(defaultValue: "")
-  late String secretKey;
+  /// User's Hashed Secret Key which is used for Encryption/Decryption
+  @JsonKey(defaultValue: '')
+  final String secretKey;
 
-  ///[primaryPassword] is the main password. It's used to protect critical functionality.
-  @JsonKey(defaultValue: "")
-  late String primaryPassword;
+  /// [primaryPassword] is the main password. It's used to protect critical functionality.
+  @JsonKey(defaultValue: '')
+  final String primaryPassword;
 
-  ///[secondaryPassword] is helper password. It's used to protect other kinds of functionality.
-  @JsonKey(defaultValue: "")
-  late String secondaryPassword;
+  /// [secondaryPassword] is helper password. It's used to protect other kinds of functionality.
+  @JsonKey(defaultValue: '')
+  final String secondaryPassword;
 
   UsersSensitiveInformation(this.secretKey, this.primaryPassword, this.secondaryPassword);
 
@@ -26,7 +26,7 @@ class UsersSensitiveInformation extends SensitiveInformation {
   factory UsersSensitiveInformation.fromJson(Map<String, dynamic> json) => _$UsersSensitiveInformationFromJson(json);
 
   Map<String, dynamic> toJson({bool isHashed = true}) {
-    Map<String, dynamic> dataMap = _$UsersSensitiveInformationToJson(this);
+    final Map<String, dynamic> dataMap = _$UsersSensitiveInformationToJson(this);
 
     return getJson(dataMap, isHashed: isHashed);
   }

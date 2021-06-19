@@ -5,8 +5,8 @@ import 'package:secretum/pages/home/home_page.dart';
 import 'package:secretum/pages/registration/registration_page.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:secretum/utils/hero_tags.dart';
-import 'package:secretum/utils/secretum_assets.dart';
-import 'package:secretum/utils/secretum_colors.dart';
+import 'package:secretum/utils/app_assets.dart';
+import 'package:secretum/utils/app_colors.dart';
 
 import 'welcome_contract.dart';
 import 'welcome_model.dart';
@@ -23,9 +23,10 @@ class _WelcomePageState extends State<WelcomePage> implements View {
 
   @override
   void initState() {
-    _welcomeModel = WelcomeModel();
-    _welcomePresenter = WelcomePresenter(this, context, _welcomeModel);
     super.initState();
+
+    _welcomeModel = WelcomeModel();
+    _welcomePresenter = WelcomePresenter(this, _welcomeModel);
   }
 
   @override
@@ -57,16 +58,16 @@ class _WelcomePageState extends State<WelcomePage> implements View {
                 Hero(
                   tag: HeroTags.kFromWelcomeToRegistrationTag,
                   child: SvgPicture.asset(
-                    SecretumAssets.kSecretumLogo,
+                    AppAssets.kSecretumLogo,
                     height: 200,
                     color: Colors.white,
                   ),
                 ),
                 SizedBox(height: 24),
                 Text(
-                  "SECRETUM",
+                  'SECRETUM',
                   style: TextStyle(
-                    color: SecretumColors.kMaterialColor1,
+                    color: AppColors.kMaterialColor1,
                     fontWeight: FontWeight.bold,
                     fontSize: 40,
                   ),
@@ -76,7 +77,7 @@ class _WelcomePageState extends State<WelcomePage> implements View {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        child: Text("Existing User"),
+                        child: Text('Existing User'),
                         onPressed: () => _showExistingUserDialog(),
                       ),
                     ),
@@ -87,7 +88,7 @@ class _WelcomePageState extends State<WelcomePage> implements View {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        child: Text("New User"),
+                        child: Text('New User'),
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -126,17 +127,17 @@ class _WelcomePageState extends State<WelcomePage> implements View {
         builder: (context) {
           final TextEditingController textEditingController = TextEditingController();
           return AlertDialog(
-            title: Text("Enter your secret key"),
+            title: Text('Enter your secret key'),
             content: TextFormField(
               autofocus: true,
               controller: textEditingController,
-              decoration: InputDecoration(hintText: "Secret Key"),
+              decoration: InputDecoration(hintText: 'Secret Key'),
               minLines: 1,
               maxLines: 3,
             ),
             actions: [
               TextButton(
-                child: Text("Paste"),
+                child: Text('Paste'),
                 onPressed: () async {
                   ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
 
@@ -150,11 +151,11 @@ class _WelcomePageState extends State<WelcomePage> implements View {
                 },
               ),
               TextButton(
-                child: Text("Cancel"),
+                child: Text('Cancel'),
                 onPressed: () => Navigator.pop(context),
               ),
               TextButton(
-                child: Text("Confirm"),
+                child: Text('Confirm'),
                 onPressed: () => _welcomePresenter.confirmSecretKey(textEditingController.text),
               ),
             ],

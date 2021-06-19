@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:secretum/main.dart';
+import 'package:get_it/get_it.dart';
+import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/stores/users_store.dart';
 
 import 'edit_entry_contract.dart';
@@ -8,25 +7,26 @@ import 'edit_entry_model.dart';
 
 class EditEntryPresenter implements Presenter {
   //ignore: unused_field
-  late final View _view;
+  final View _view;
   //ignore: unused_field
-  late final EditEntryModel _editEntryModel;
+  final EditEntryModel _editEntryModel;
+  final EncryptionService _encryptionService;
+  final UsersStore _usersStore;
 
-  late final UsersStore _usersStore;
-
-  EditEntryPresenter(View view, BuildContext context, EditEntryModel editEntryModel) {
-    _view = view;
-    _editEntryModel = editEntryModel;
-
-    _usersStore = context.read<UsersStore>();
-  }
+  EditEntryPresenter(
+    this._view,
+    this._editEntryModel, {
+    EncryptionService? encryptionService,
+    UsersStore? usersStore,
+  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
+        this._usersStore = usersStore ?? GetIt.instance<UsersStore>();
 
   @override
   bool validatePrimaryPassword(String? password) {
     if (password == null) {
       return false;
     }
-    return _usersStore.user!.sensitiveInformation.primaryPassword == encryptionService.getHashedText(password);
+    return _usersStore.user!.sensitiveInformation.primaryPassword == _encryptionService.getHashedText(password);
   }
 
   @override
@@ -34,6 +34,6 @@ class EditEntryPresenter implements Presenter {
     if (password == null) {
       return false;
     }
-    return _usersStore.user!.sensitiveInformation.secondaryPassword == encryptionService.getHashedText(password);
+    return _usersStore.user!.sensitiveInformation.secondaryPassword == _encryptionService.getHashedText(password);
   }
 }

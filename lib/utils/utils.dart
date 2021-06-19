@@ -7,7 +7,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:secretum/main.dart';
 
 class Utils {
-  static Future<bool> authViaBiometric({String reason = "Verify"}) async {
+  static Future<bool> authViaBiometric({String reason = 'Verify'}) async {
     return true;
     final LocalAuthentication localAuthentication = LocalAuthentication();
     bool areBiometricsAvailable = await localAuthentication.canCheckBiometrics;
@@ -69,9 +69,9 @@ class Utils {
   ///More references for date formats - https://www.journaldev.com/17899/java-simpledateformat-java-date-format
   static String getFormattedDate(DateTime? dateTime) {
     if (dateTime == null) {
-      return "";
+      return '';
     } else {
-      String formattedDate = DateFormat("dd-MMM-yy HH:mm:ss").format(dateTime);
+      String formattedDate = DateFormat('dd-MMM-yy HH:mm:ss').format(dateTime);
       return formattedDate;
     }
   }

@@ -16,10 +16,11 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
 
   @override
   void initState() {
-    _secretKeyPreviewModel = SecretKeyPreviewModel();
-    _secretKeyPreviewPresenter = SecretKeyPreviewPresenter(this, context, _secretKeyPreviewModel);
-    _secretKeyPreviewPresenter.init();
     super.initState();
+
+    _secretKeyPreviewModel = SecretKeyPreviewModel();
+    _secretKeyPreviewPresenter = SecretKeyPreviewPresenter(this, _secretKeyPreviewModel);
+    _secretKeyPreviewPresenter.init();
   }
 
   @override
@@ -31,7 +32,7 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
           children: [
             Spacer(),
             Text(
-              "VERY IMPORTANT",
+              'VERY IMPORTANT',
               style: Theme.of(context).textTheme.headline3!.copyWith(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -40,13 +41,13 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
             ),
             SizedBox(height: 32),
             Text(
-              "Save below code. With only this code you will be able to recover your account if you delete the app or sign-out.",
+              'Save below code. With only this code you will be able to recover your account if you delete the app or sign-out.',
               style: Theme.of(context).textTheme.headline5,
               textAlign: TextAlign.center,
             ),
             Spacer(),
             Text(
-              "${_secretKeyPreviewModel.secretKey}",
+              '${_secretKeyPreviewModel.secretKey}',
               style: Theme.of(context).textTheme.headline6!.copyWith(decoration: TextDecoration.underline),
               textAlign: TextAlign.center,
             ),
@@ -55,7 +56,7 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    child: Text("Copy"),
+                    child: Text('Copy'),
                     onPressed: () => _secretKeyPreviewPresenter.copySecretKey(),
                   ),
                 ),
@@ -63,7 +64,7 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
                   SizedBox(width: 16),
                   Expanded(
                     child: ElevatedButton(
-                      child: Text("Finish"),
+                      child: Text('Finish'),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),

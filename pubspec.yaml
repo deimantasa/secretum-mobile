@@ -26,12 +26,12 @@ dependencies:
 
   #Core
   logger: ^1.0.0-nullsafety.0
-  get_it: ^6.0.0
+  get_it: ^7.1.3
   provider: ^5.0.0
   path_provider: ^2.0.1
 
   #Fire
-  cloud_firestore: ^1.0.1
+  cloud_firestore: ^2.2.2
   firebase_core: ^1.0.1
 
   #Security
@@ -44,7 +44,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   modal_bottom_sheet: ^2.0.0
   fluttertoast: ^8.0.1-nullsafety.0
-  flutter_svg: ^0.21.0-nullsafety.0
+  flutter_svg: ^0.22.0
 
   #Other
   json_annotation: ^4.0.0
@@ -55,8 +55,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.11.5
-  json_serializable: ^4.0.2
+  build_runner: ^2.0.4
+  json_serializable: ^4.1.3
   flutter_launcher_icons: ^0.9.0
 
 # Generating icons
