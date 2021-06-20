@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:secretum/main.dart';
-import 'package:secretum/models/log_type.dart';
+import 'package:secretum/models/enums/log_type.dart';
 
 class FireGenericService {
   final FirebaseFirestore _firebaseFirestore;
@@ -18,7 +18,7 @@ class FireGenericService {
     String? documentId,
   }) async {
     try {
-      DocumentReference documentReference = _firebaseFirestore.collection(collection).doc(documentId);
+      final DocumentReference documentReference = _firebaseFirestore.collection(collection).doc(documentId);
       await documentReference.set(update);
 
       loggingService.log(
@@ -41,10 +41,10 @@ class FireGenericService {
     String? subCollectionDocumentId,
   }) async {
     try {
-      DocumentReference documentReference =
+      final DocumentReference documentReference =
           _firebaseFirestore.collection(collection).doc(documentId).collection(subCollection).doc(subCollectionDocumentId);
-      await documentReference.set(update);
 
+      await documentReference.set(update);
       loggingService.log(
           'FirestoreGenericService.setDocument: Set. Collection $collection, DocID: ${documentReference.id}, Update: $update');
       return documentReference.id;
@@ -157,15 +157,13 @@ class FireGenericService {
     required T Function(DocumentSnapshot documentSnapshot) onDocumentSnapshot,
     DocumentSnapshot? lastDocumentSnapshot,
   }) async {
-    bool isMoreQuery = lastDocumentSnapshot != null;
-
-    Query currentQuery = isMoreQuery ? query.startAfterDocument(lastDocumentSnapshot) : query;
+    final bool isMoreQuery = lastDocumentSnapshot != null;
+    final Query currentQuery = isMoreQuery ? query.startAfterDocument(lastDocumentSnapshot) : query;
 
     loggingService.log('FirestoreGenericService.getElements.$logReference: More: $isMoreQuery');
-
     try {
-      QuerySnapshot querySnapshot = await currentQuery.get();
-      List<T> elements = querySnapshot.docs.map((e) {
+      final QuerySnapshot querySnapshot = await currentQuery.get();
+      final List<T> elements = querySnapshot.docs.map((e) {
         T element = onDocumentSnapshot(e);
         return element;
       }).toList();
@@ -189,8 +187,9 @@ class FireGenericService {
   }) async {
     try {
       loggingService.log('FirestoreGenericService.getElement.$logReference: Collection: $collection, DocId: $documentId');
-      DocumentSnapshot documentSnapshot = await _firebaseFirestore.collection(collection).doc(documentId).get();
-      T element = onDocumentSnapshot(documentSnapshot)!;
+      final DocumentSnapshot documentSnapshot = await _firebaseFirestore.collection(collection).doc(documentId).get();
+      final T element = onDocumentSnapshot(documentSnapshot)!;
+
       return element;
     } catch (e) {
       loggingService.log(
@@ -208,7 +207,7 @@ class FireGenericService {
   }) async {
     loggingService.log('FirestoreGenericService.areMoreElementsAvailable: Last Document ID: ${lastDocumentSnapshot.id}');
 
-    List<T>? elements = await getElements<T>(
+    final List<T>? elements = await getElements<T>(
       query: query..limit(1),
       logReference: 'FirestoreGenericService.areMoreElementsAvailable',
       onDocumentSnapshot: (documentSnapshot) => onDocumentSnapshot(documentSnapshot),
@@ -236,13 +235,13 @@ class FireGenericService {
     required ValueSetter<DocumentChange> onDocumentChange,
     DocumentSnapshot? lastDocumentSnapshot,
   }) {
-    bool isMoreQuery = lastDocumentSnapshot != null;
-
-    Query currentQuery = isMoreQuery ? query.startAfterDocument(lastDocumentSnapshot) : query;
+    final bool isMoreQuery = lastDocumentSnapshot != null;
+    final Query currentQuery = isMoreQuery ? query.startAfterDocument(lastDocumentSnapshot) : query;
 
     loggingService.log(
         'FirestoreGenericService.listenToElementsStream.$logReference: Query: ${query.parameters}, IsMoreQuery: $isMoreQuery');
-    StreamSubscription<QuerySnapshot> streamSubscription = currentQuery.snapshots().listen((event) {
+
+    final StreamSubscription<QuerySnapshot> streamSubscription = currentQuery.snapshots().listen((event) {
       event.docChanges.forEach((docChange) {
         loggingService.log('FirestoreGenericService.listenToElementsStream.$logReference:'
             ' Type: ${docChange.type}. DocId: ${docChange.doc.id}');
@@ -260,7 +259,7 @@ class FireGenericService {
   }) {
     loggingService.log('FirestoreGenericService.listenToElementsCountStream.$logReference');
 
-    StreamSubscription<QuerySnapshot> streamSubscription = query.snapshots().listen((event) {
+    final StreamSubscription<QuerySnapshot> streamSubscription = query.snapshots().listen((event) {
       loggingService.log('FirestoreGenericService.listenToElementsCountStream: Count:${event.size}');
       onCountChange(event.size);
     });
@@ -274,7 +273,7 @@ class FireGenericService {
     String logReference, {
     required ValueSetter<DocumentSnapshot> onDocumentChange,
   }) {
-    StreamSubscription<DocumentSnapshot> streamSubscription =
+    final StreamSubscription<DocumentSnapshot> streamSubscription =
         _firebaseFirestore.collection(collection).doc(documentId).snapshots().listen((event) {
       loggingService.log('FirestoreGenericService.listenToDocument.$logReference: New event.'
           ' Collection: $collection, DocId: $documentId');
@@ -292,7 +291,7 @@ class FireGenericService {
     String logReference, {
     required ValueSetter<DocumentSnapshot> onDocumentChange,
   }) {
-    StreamSubscription<DocumentSnapshot> streamSubscription = _firebaseFirestore
+    final StreamSubscription<DocumentSnapshot> streamSubscription = _firebaseFirestore
         .collection(collection)
         .doc(documentId)
         .collection(subCollection)

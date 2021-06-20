@@ -66,12 +66,15 @@ If you would like to have any topic covered of your choice, feel free to create 
 1. Clone the project
 2. Create a new Firebase Project
 3. Create Android and iOS apps. Within package/bundle id specify `com.secretum`
-4. Download `google-services.json` (Android) and put it to `../secretum/android/app` directory
+4. Download `google-services.json` (Android) rename it to `google-services-prod.json` and put it to `../secretum/tools/environment-generator/` directory
 5. Follow the guide of how to correctly reference `GoogleServices-Info.plist` for iOS (very important, drag-n-drop instead of copy-paste)
-6. Go to your Firebase project and enable Firestore
-7. Set up Firestore rules up your preference
-8. Delete existing `Secretum` app and build app from source
-9. Check logs after registration - make sure to create right index (URLs are provided in console from Firestore)
+6. Download second copy of `GoogleServices-Info.plist`, rename it to `GoogleServices-Info-prod.plist` and put it to `../secretum/tools/environment-generator/` directory
+7. Go to `../secretum/tools/environment-generator/` and run `node environment-generator prod`. Firebase configs (prod) will be copied into right places with additional parameters  
+if you'd like to have `dev` build too
+8. Go to your Firebase project and enable Firestore
+9. Set up Firestore rules up your preference
+10. Delete existing `Secretum` app and build app from source
+11. Check logs after registration - make sure to create right index (URLs are provided in console from Firestore)
 
 After you've set-up Firebase and linked its configuration - now you should be able to run the build locally. After you will create your user, all data will be linked to your Firestore.
 

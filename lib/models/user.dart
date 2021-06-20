@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secretum/models/firestore_metadata.dart';
 import 'package:secretum/models/users_sensitive_information.dart';
-import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/utils/extensions.dart';
 
 part 'user.g.dart';
@@ -24,8 +23,8 @@ class User extends FirestoreMetadata {
     data.decrypt();
 
     final User user = _$UserFromJson(data);
-    user.documentSnapshot = documentSnapshot;
 
+    user.documentSnapshot = documentSnapshot;
     return user;
   }
 
@@ -34,22 +33,19 @@ class User extends FirestoreMetadata {
     data.decrypt();
 
     final User user = _$UserFromJson(data);
+
     user.documentSnapshot = documentChange.doc;
     user.documentChangeType = documentChange.type;
-
     return user;
   }
 
-  factory User.fromJson(
-    Map<String, dynamic> json,
-    EncryptionService encryptionService, {
-    bool isEncrypted = true,
-  }) {
+  factory User.fromJson(Map<String, dynamic> json, {bool isEncrypted = true}) {
     if (isEncrypted) {
       json.decrypt();
     }
 
     final User user = _$UserFromJson(json);
+
     return user;
   }
 

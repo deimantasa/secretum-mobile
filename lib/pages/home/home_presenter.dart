@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:secretum/models/db_backup.dart';
-import 'package:secretum/models/export_from_type.dart';
+import 'package:secretum/models/enums/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/services/storage_service.dart';

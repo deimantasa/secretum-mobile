@@ -53,8 +53,10 @@ dependencies:
   intl: ^0.17.0
 
 dev_dependencies:
+#  flutter test --coverage && format_coverage --in=coverage && genhtml coverage/lcov.info -o coverage/html
   flutter_test:
     sdk: flutter
+  mockito: ^5.0.10
   build_runner: ^2.0.4
   json_serializable: ^4.1.3
   flutter_launcher_icons: ^0.9.0

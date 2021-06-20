@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';

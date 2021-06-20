@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
 import 'package:secretum/models/db_backup.dart';
-import 'package:secretum/models/log_type.dart';
+import 'package:secretum/models/enums/log_type.dart';
 import 'package:secretum/services/encryption_service.dart';
 
 class StorageService {

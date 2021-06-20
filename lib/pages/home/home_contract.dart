@@ -1,4 +1,4 @@
-import 'package:secretum/models/export_from_type.dart';
+import 'package:secretum/models/enums/export_from_type.dart';
 
 abstract class Presenter {
   void init();

@@ -20,8 +20,8 @@ class DbBackup {
   Map<String, dynamic> toJson() {
     // Nullify `createdAt` because we are parsing it to TimeStamp due to Firestore. However, when storing
     // locally, it won't accept `TimeStamp` and parsing crash.
-    this.secrets.forEach((element) {
-      element.createdAt = null;
+    this.secrets.forEach((secret) {
+      secret.createdAt = null;
     });
     final Map<String, dynamic> dbBackupMap = _$DbBackupToJson(this);
 

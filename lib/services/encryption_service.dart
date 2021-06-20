@@ -9,6 +9,7 @@ class EncryptionService {
 
   String generateSecretKey() {
     final String secretKey = Key.fromSecureRandom(24).base64;
+
     loggingService.log('EncryptionService.generateSecretKey: SecretKey: $secretKey');
     return secretKey;
   }
@@ -42,6 +43,7 @@ class EncryptionService {
   String getHashedText(String text) {
     final List<int> bytes = utf8.encode(text);
     final crypto.Digest digest = crypto.sha256.convert(bytes);
+
     return digest.toString();
   }
 }

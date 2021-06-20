@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
-import 'package:secretum/models/log_type.dart';
+import 'package:secretum/models/enums/log_type.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/services/firestore/fire_secrets_service.dart';
 import 'package:secretum/services/firestore/fire_users_service.dart';

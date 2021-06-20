@@ -39,8 +39,8 @@ class Secret extends FirestoreMetadata {
     data.decrypt();
 
     final Secret secret = _$SecretFromJson(data);
-    secret.documentSnapshot = documentSnapshot;
 
+    secret.documentSnapshot = documentSnapshot;
     return secret;
   }
 
@@ -49,9 +49,9 @@ class Secret extends FirestoreMetadata {
     data.decrypt();
 
     final Secret secret = _$SecretFromJson(data);
+
     secret.documentSnapshot = documentChange.doc;
     secret.documentChangeType = documentChange.type;
-
     return secret;
   }
 
@@ -61,6 +61,7 @@ class Secret extends FirestoreMetadata {
     }
 
     final Secret secret = _$SecretFromJson(json);
+
     return secret;
   }
 

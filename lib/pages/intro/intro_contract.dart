@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 abstract class Presenter {
   Future<void> init();
   void finishInit();

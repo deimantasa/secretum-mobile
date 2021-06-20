@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:secretum/main.dart';
-import 'package:secretum/models/log_type.dart';
+import 'package:secretum/models/enums/log_type.dart';
 
 class AuthenticationService {
   /// [isBiometricAuthShowing] is introduced to tackle different Biometrics behaviour within Android and iOS devices.

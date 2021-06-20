@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
 import 'package:secretum/models/db_backup.dart';
-import 'package:secretum/models/export_from_type.dart';
+import 'package:secretum/models/enums/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/pages/secret_details/secret_details_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';

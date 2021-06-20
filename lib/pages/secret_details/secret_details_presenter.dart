@@ -7,7 +7,6 @@ import 'package:secretum/services/authentication_service.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
-import 'package:secretum/utils/utils.dart';
 
 import 'secret_details_contract.dart';
 import 'secret_details_model.dart';

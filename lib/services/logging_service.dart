@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:secretum/models/log_type.dart';
+import 'package:secretum/models/enums/log_type.dart';
 import 'package:logger/logger.dart';
 
 class LoggingService {

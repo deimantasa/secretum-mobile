@@ -50,6 +50,9 @@ app.*.map.json
 /ios/Runner/GoogleService-Info.plist
 /secrets/
 
+# Test coverage
+/coverage/
+
 # Environment generator
 /tools/environment-generator/google-services-*.json
 /tools/environment-generator/GoogleService-Info-*.plist
