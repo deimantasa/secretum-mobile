@@ -85,9 +85,9 @@ class FireSecretsService {
   Future<bool> updateSecret(String userId, String secretId, Secret secretUpdate) async {
     final bool isSuccess = await _fireGenericService.updateSubCollectionsDocument(
       collection: FireUsersService.kCollectionUsers,
-      collectionDocId: userId,
+      documentId: userId,
       subCollection: FireSecretsService.kSubCollectionSecrets,
-      subCollectionDocId: secretId,
+      subCollectionDocumentId: secretId,
       update: secretUpdate.toJson(),
     );
     return isSuccess;

@@ -74,25 +74,25 @@ class FireGenericService {
 
   Future<bool> updateSubCollectionsDocument({
     required String collection,
-    required String collectionDocId,
+    required String documentId,
     required String subCollection,
-    required String subCollectionDocId,
+    required String subCollectionDocumentId,
     required Map<String, dynamic> update,
   }) async {
     try {
       await _firebaseFirestore
           .collection(collection)
-          .doc(collectionDocId)
+          .doc(documentId)
           .collection(subCollection)
-          .doc(subCollectionDocId)
+          .doc(subCollectionDocumentId)
           .update(update);
-      loggingService.log('FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $collectionDocId,'
-          ' SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocId, Update: $update');
+      loggingService.log('FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $documentId,'
+          ' SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocumentId, Update: $update');
       return true;
     } catch (e) {
       loggingService.log(
-        'FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $collectionDocId,'
-        ' SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocId,'
+        'FirestoreGenericService.setDocument: Update. Collection $collection, CollectionDocID: $documentId,'
+        ' SubCollection: $subCollection, SubCollectionDocId: $subCollectionDocumentId,'
         ' Update: $update, Exception: ${e.toString()}',
         logType: LogType.error,
       );
@@ -164,7 +164,8 @@ class FireGenericService {
     try {
       final QuerySnapshot querySnapshot = await currentQuery.get();
       final List<T> elements = querySnapshot.docs.map((e) {
-        T element = onDocumentSnapshot(e);
+        final T element = onDocumentSnapshot(e);
+
         return element;
       }).toList();
 
