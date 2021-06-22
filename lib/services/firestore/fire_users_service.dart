@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_helper/main/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
 import 'package:secretum/models/user.dart';
 import 'package:secretum/models/users_sensitive_information.dart';
 import 'package:secretum/services/encryption_service.dart';
-import 'package:secretum/services/firestore/generic/firestore_generic_service.dart';
 
 enum UsersQueryType {
   userBySecretKey,
@@ -18,15 +18,15 @@ class FireUsersService {
 
   final EncryptionService _encryptionService;
   final FirebaseFirestore _firebaseFirestore;
-  final FireGenericService _fireGenericService;
+  final FirestoreHelper _firestoreHelper;
 
   FireUsersService({
     EncryptionService? encryptionService,
     FirebaseFirestore? firebaseFirestore,
-    FireGenericService? fireGenericService,
+    FirestoreHelper? firestoreHelper,
   })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
         this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        this._fireGenericService = fireGenericService ?? GetIt.instance<FireGenericService>();
+        this._firestoreHelper = firestoreHelper ?? GetIt.instance<FirestoreHelper>();
 
   Future<User?> getUserBySecretKey(String secretKey) async {
     final String hashedSecretKey = _encryptionService.getHashedText(secretKey);
@@ -63,7 +63,7 @@ class FireUsersService {
     final Map<String, dynamic> dataMap = user.toJson();
 
     loggingService.log('FireUsersService.registerUser: Data: $dataMap');
-    final String? documentId = await _fireGenericService.addDocument(kCollectionUsers, dataMap);
+    final String? documentId = await _firestoreHelper.addDocument(kCollectionUsers, dataMap);
 
     if (documentId != null) {
       loggingService.log('FireUsersService.registerUser: User added. DocID: $documentId');
@@ -78,7 +78,7 @@ class FireUsersService {
     String userId, {
     required ValueSetter<User> onUserChanged,
   }) {
-    final StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToDocument(
+    final StreamSubscription<DocumentSnapshot> streamSubscription = _firestoreHelper.listenToDocument(
       kCollectionUsers,
       userId,
       'FireUsersService.listenToUserById',
@@ -94,7 +94,7 @@ class FireUsersService {
   }
 
   Future<User?> getUserById(String userId) async {
-    final User? user = await _fireGenericService.getElement<User>(
+    final User? user = await _firestoreHelper.getElement<User>(
       kCollectionUsers,
       userId,
       'FireUsersService.getUserById:',

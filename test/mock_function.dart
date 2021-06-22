@@ -1,3 +1,3 @@
-abstract class FunctionMock {
-  void call();
+abstract class FunctionMock<T> {
+  void call([T? object]);
 }

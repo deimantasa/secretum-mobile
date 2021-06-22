@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_helper/main/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/services/firestore/fire_users_service.dart';
-import 'package:secretum/services/firestore/generic/firestore_generic_service.dart';
 
 enum SecretsQueryType {
   allSecrets,
@@ -18,15 +18,15 @@ class FireSecretsService {
 
   final EncryptionService _encryptionService;
   final FirebaseFirestore _firebaseFirestore;
-  final FireGenericService _fireGenericService;
+  final FirestoreHelper _fireGenericService;
 
   FireSecretsService({
     EncryptionService? encryptionService,
     FirebaseFirestore? firebaseFirestore,
-    FireGenericService? fireGenericService,
+    FirestoreHelper? firestoreHelper,
   })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
         this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        this._fireGenericService = fireGenericService ?? GetIt.instance<FireGenericService>();
+        this._fireGenericService = firestoreHelper ?? GetIt.instance<FirestoreHelper>();
 
   StreamSubscription listenToSecretById(
     String userId,
@@ -34,11 +34,11 @@ class FireSecretsService {
     required ValueSetter<Secret> onSecretChanged,
   }) {
     final StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToSubCollectionDocument(
-      FireUsersService.kCollectionUsers,
-      userId,
-      kSubCollectionSecrets,
-      secretId,
-      'FireSecretsService.listenToSecretById',
+      collection: FireUsersService.kCollectionUsers,
+      documentId: userId,
+      subCollection: kSubCollectionSecrets,
+      subCollectionDocumentId: secretId,
+      logReference: 'FireSecretsService.listenToSecretById',
       onDocumentChange: (documentSnapshot) {
         if (documentSnapshot.data() != null) {
           Secret secret = Secret.fromFirestore(documentSnapshot);

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestore_helper/main/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
@@ -8,19 +9,18 @@ import 'package:secretum/models/enums/log_type.dart';
 import 'package:secretum/models/secret.dart';
 import 'package:secretum/services/firestore/fire_secrets_service.dart';
 import 'package:secretum/services/firestore/fire_users_service.dart';
-import 'package:secretum/services/firestore/generic/firestore_generic_service.dart';
 import 'package:secretum/utils/extensions.dart';
 
 class SecretsStore extends ChangeNotifier {
-  final FireGenericService _fireGenericService;
+  final FirestoreHelper _firestoreHelper;
   final FireSecretsService _fireSecretsService;
   final List<StreamSubscription?> _streamSubscriptions = [];
   final List<Secret> secrets = [];
 
   SecretsStore({
-    FireGenericService? fireGenericService,
+    FirestoreHelper? firestoreHelper,
     FireSecretsService? fireSecretsService,
-  })  : this._fireGenericService = fireGenericService ?? GetIt.instance<FireGenericService>(),
+  })  : this._firestoreHelper = firestoreHelper ?? GetIt.instance<FirestoreHelper>(),
         this._fireSecretsService = fireSecretsService ?? GetIt.instance<FireSecretsService>();
 
   void init(String userId) {
@@ -28,7 +28,7 @@ class SecretsStore extends ChangeNotifier {
   }
 
   void _listenToAllSecrets(String userId) {
-    final StreamSubscription streamSubscription = _fireGenericService.listenToElementsStream(
+    final StreamSubscription streamSubscription = _firestoreHelper.listenToElementsStream(
       logReference: 'UsersStore._listenToAllSecrets',
       query: _fireSecretsService.getQueryByType(SecretsQueryType.allSecrets, userId: userId),
       onDocumentChange: (docChange) {
@@ -115,7 +115,7 @@ class SecretsStore extends ChangeNotifier {
   }
 
   Future<bool> deleteSecret(String userId, String secretId) async {
-    final bool isSuccess = await _fireGenericService.deleteSubCollectionDocument(
+    final bool isSuccess = await _firestoreHelper.deleteSubCollectionDocument(
       collection: FireUsersService.kCollectionUsers,
       documentId: userId,
       subCollection: FireSecretsService.kSubCollectionSecrets,

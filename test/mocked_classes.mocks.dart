@@ -23,6 +23,8 @@ import 'package:secretum/models/secret.dart' as _i8;
 import 'package:secretum/models/users_sensitive_information.dart' as _i10;
 import 'package:secretum/services/logging_service.dart' as _i5;
 
+import 'mock_function.dart' as _i16;
+
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: comment_references
 // ignore_for_file: invalid_use_of_visible_for_testing_member
@@ -706,4 +708,61 @@ class MockQuerySnapshot<T extends Object?> extends _i1.Mock
   @override
   int get size =>
       (super.noSuchMethod(Invocation.getter(#size), returnValue: 0) as int);
+}
+
+/// A class which mocks [StreamSubscription].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStreamSubscription<T> extends _i1.Mock
+    implements _i11.StreamSubscription<T> {
+  MockStreamSubscription() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool get isPaused =>
+      (super.noSuchMethod(Invocation.getter(#isPaused), returnValue: false)
+          as bool);
+  @override
+  _i11.Future<void> cancel() =>
+      (super.noSuchMethod(Invocation.method(#cancel, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
+  @override
+  void onData(void Function(T)? handleData) =>
+      super.noSuchMethod(Invocation.method(#onData, [handleData]),
+          returnValueForMissingStub: null);
+  @override
+  void onError(Function? handleError) =>
+      super.noSuchMethod(Invocation.method(#onError, [handleError]),
+          returnValueForMissingStub: null);
+  @override
+  void onDone(void Function()? handleDone) =>
+      super.noSuchMethod(Invocation.method(#onDone, [handleDone]),
+          returnValueForMissingStub: null);
+  @override
+  void pause([_i11.Future<void>? resumeSignal]) =>
+      super.noSuchMethod(Invocation.method(#pause, [resumeSignal]),
+          returnValueForMissingStub: null);
+  @override
+  void resume() => super.noSuchMethod(Invocation.method(#resume, []),
+      returnValueForMissingStub: null);
+  @override
+  _i11.Future<E> asFuture<E>([E? futureValue]) =>
+      (super.noSuchMethod(Invocation.method(#asFuture, [futureValue]),
+          returnValue: Future<E>.value(null)) as _i11.Future<E>);
+}
+
+/// A class which mocks [FunctionMock].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFunction<T> extends _i1.Mock implements _i16.FunctionMock<T> {
+  MockFunction() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void call([T? object]) =>
+      super.noSuchMethod(Invocation.method(#call, [object]),
+          returnValueForMissingStub: null);
 }

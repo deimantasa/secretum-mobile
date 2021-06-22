@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firestore_helper/main/firestore_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -8,7 +10,6 @@ import 'package:secretum/services/authentication_service.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/services/firestore/fire_secrets_service.dart';
 import 'package:secretum/services/firestore/fire_users_service.dart';
-import 'package:secretum/services/firestore/generic/firestore_generic_service.dart';
 import 'package:secretum/services/logging_service.dart';
 import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/db_backup_store.dart';
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // Encryption is reusable within other services thus need to initialise it first
     serviceLocator.registerSingleton(EncryptionService());
     serviceLocator.registerSingleton(AuthenticationService());
-    serviceLocator.registerSingleton(FireGenericService());
+    serviceLocator.registerSingleton(FirestoreHelper(includeAdditionalFields: true, isLoggingEnabled: !kReleaseMode));
     serviceLocator.registerSingleton(FireSecretsService());
     serviceLocator.registerSingleton(FireUsersService());
     serviceLocator.registerSingleton(StorageService());
