@@ -10,7 +10,7 @@ class SecretKeyPreviewPage extends StatefulWidget {
   _SecretKeyPreviewPageState createState() => _SecretKeyPreviewPageState();
 }
 
-class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements View {
+class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements SecretKeyView {
   late final SecretKeyPreviewModel _secretKeyPreviewModel;
   late final SecretKeyPreviewPresenter _secretKeyPreviewPresenter;
 

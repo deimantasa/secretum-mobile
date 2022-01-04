@@ -12,7 +12,7 @@ class AuthenticationPage extends StatefulWidget {
   _AuthenticationPageState createState() => _AuthenticationPageState();
 }
 
-class _AuthenticationPageState extends State<AuthenticationPage> implements View {
+class _AuthenticationPageState extends State<AuthenticationPage> implements AuthenticationView {
   late final AuthenticationModel _authenticationModel;
   late final AuthenticationPresenter _authenticationPresenter;
 

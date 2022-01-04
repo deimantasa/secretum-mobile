@@ -8,23 +8,18 @@ import 'package:secretum/stores/users_store.dart';
 import 'registration_contract.dart';
 import 'registration_model.dart';
 
-class RegistrationPresenter implements Presenter {
-  final View _view;
+class RegistrationPresenter {
+  final RegistrationView _view;
   //ignore: unused_field
   final RegistrationModel _registrationModel;
   final EncryptionService _encryptionService;
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
-  RegistrationPresenter(
-    this._view,
-    this._registrationModel, {
-    EncryptionService? encryptionService,
-    SecretsStore? secretsStore,
-    UsersStore? usersStore,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
-        this._secretsStore = secretsStore ?? GetIt.instance<SecretsStore>(),
-        this._usersStore = usersStore ?? GetIt.instance<UsersStore>();
+  RegistrationPresenter(this._view, this._registrationModel)
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
+        this._secretsStore = GetIt.instance<SecretsStore>(),
+        this._usersStore = GetIt.instance<UsersStore>();
 
   Future<void> finishRegistration(String primaryPassword, String secondaryPassword) async {
     _view.showMessage('Registration in progress...');

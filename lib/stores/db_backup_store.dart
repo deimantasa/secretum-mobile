@@ -10,9 +10,7 @@ class DbBackupStore extends ChangeNotifier {
 
   DbBackup? get dbBackup => _dbBackup;
 
-  DbBackupStore({
-    StorageService? storageService,
-  }) : this._storageService = storageService ?? GetIt.instance<StorageService>();
+  DbBackupStore() : this._storageService = GetIt.instance<StorageService>();
 
   Future<void> initDbBackup() async {
     final DbBackup? dbBackup = await _storageService.getDbBackup();

@@ -24,7 +24,7 @@ extension MapExtension on Map<String, dynamic> {
     });
   }
 
-  void hash() {
+  void hashData() {
     this.forEach((key, value) {
       if (value is String && value.isNotEmpty) {
         this[key] = _encryptionService.getHashedText(value);

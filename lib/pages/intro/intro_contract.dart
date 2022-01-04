@@ -1,9 +1,4 @@
-abstract class Presenter {
-  Future<void> init();
-  void finishInit();
-}
-
-abstract class View {
+abstract class IntroView {
   void updateView();
   void showMessage(String message, {bool isSuccess});
   void goToWelcomePage();

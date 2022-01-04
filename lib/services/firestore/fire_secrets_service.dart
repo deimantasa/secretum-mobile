@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestore_helper/main/firestore_helper.dart';
+import 'package:firestore_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
@@ -20,24 +20,23 @@ class FireSecretsService {
   final FirebaseFirestore _firebaseFirestore;
   final FirestoreHelper _fireGenericService;
 
-  FireSecretsService({
-    EncryptionService? encryptionService,
-    FirebaseFirestore? firebaseFirestore,
-    FirestoreHelper? firestoreHelper,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
-        this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        this._fireGenericService = firestoreHelper ?? GetIt.instance<FirestoreHelper>();
+  FireSecretsService()
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
+        this._firebaseFirestore = FirebaseFirestore.instance,
+        this._fireGenericService = GetIt.instance<FirestoreHelper>();
 
   StreamSubscription listenToSecretById(
     String userId,
     String secretId, {
     required ValueSetter<Secret> onSecretChanged,
   }) {
-    final StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToSubCollectionDocument(
-      collection: FireUsersService.kCollectionUsers,
-      documentId: userId,
-      subCollection: kSubCollectionSecrets,
-      subCollectionDocumentId: secretId,
+    final StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToDocument(
+      [
+        FireUsersService.kCollectionUsers,
+        userId,
+        kSubCollectionSecrets,
+        secretId,
+      ],
       logReference: 'FireSecretsService.listenToSecretById',
       onDocumentChange: (documentSnapshot) {
         if (documentSnapshot.data() != null) {
@@ -51,10 +50,9 @@ class FireSecretsService {
   }
 
   Future<Secret?> getSecretById(String secretId) async {
-    final Secret? secret = await _fireGenericService.getElement<Secret>(
-      kSubCollectionSecrets,
-      secretId,
-      'FireSecretsService.getSecretById:',
+    final Secret? secret = await _fireGenericService.getDocument<Secret>(
+      [kSubCollectionSecrets, secretId],
+      logReference: 'FireSecretsService.getSecretById:',
       onDocumentSnapshot: (docSnapshot) {
         if (docSnapshot.data() != null) {
           return Secret.fromFirestore(docSnapshot);
@@ -72,23 +70,18 @@ class FireSecretsService {
 
     loggingService.log('FireSecretsService.addNewSecret: Data: $dataMap');
 
-    final String? documentId = await _fireGenericService.addSubCollectionDocument(
-      collection: FireUsersService.kCollectionUsers,
-      documentId: userId,
-      subCollection: kSubCollectionSecrets,
-      update: dataMap,
+    final String? documentId = await _fireGenericService.addDocument(
+      [FireUsersService.kCollectionUsers, userId, kSubCollectionSecrets],
+      dataMap,
     );
 
     return documentId != null;
   }
 
   Future<bool> updateSecret(String userId, String secretId, Secret secretUpdate) async {
-    final bool isSuccess = await _fireGenericService.updateSubCollectionsDocument(
-      collection: FireUsersService.kCollectionUsers,
-      documentId: userId,
-      subCollection: FireSecretsService.kSubCollectionSecrets,
-      subCollectionDocumentId: secretId,
-      update: secretUpdate.toJson(),
+    final bool isSuccess = await _fireGenericService.updateDocument(
+      [FireUsersService.kCollectionUsers, userId, FireSecretsService.kSubCollectionSecrets, secretId],
+      secretUpdate.toJson(),
     );
     return isSuccess;
   }

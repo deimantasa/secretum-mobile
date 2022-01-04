@@ -16,7 +16,7 @@ class IntroPage extends StatefulWidget {
   _IntroPageState createState() => _IntroPageState();
 }
 
-class _IntroPageState extends State<IntroPage> implements View {
+class _IntroPageState extends State<IntroPage> implements IntroView {
   late final IntroModel _introModel;
   late final IntroPresenter _introPresenter;
 

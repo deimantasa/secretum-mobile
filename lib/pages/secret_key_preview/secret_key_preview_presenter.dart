@@ -5,16 +5,12 @@ import 'package:secretum/services/storage_service.dart';
 import 'secret_key_preview_contract.dart';
 import 'secret_key_preview_model.dart';
 
-class SecretKeyPreviewPresenter implements Presenter {
-  final View _view;
+class SecretKeyPreviewPresenter {
+  final SecretKeyView _view;
   final SecretKeyPreviewModel _secretKeyPreviewModel;
   final StorageService _storageService;
 
-  SecretKeyPreviewPresenter(
-    this._view,
-    this._secretKeyPreviewModel, {
-    StorageService? storageService,
-  }) : _storageService = storageService ?? GetIt.instance<StorageService>();
+  SecretKeyPreviewPresenter(this._view, this._secretKeyPreviewModel) : _storageService = GetIt.instance<StorageService>();
 
   Future<void> init() async {
     _secretKeyPreviewModel.secretKey = await _storageService.getSecretKey();

@@ -1,8 +1,4 @@
-abstract class Presenter {
-  Future<void> confirmSecretKey(String secretKey);
-}
-
-abstract class View {
+abstract class WelcomeView {
   void updateView();
   void showMessage(String message, {bool isSuccess});
   void goToHomePage();

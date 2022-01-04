@@ -17,7 +17,7 @@ class SecretDetailsPage extends StatefulWidget {
   _SecretDetailsPageState createState() => _SecretDetailsPageState();
 }
 
-class _SecretDetailsPageState extends State<SecretDetailsPage> implements View {
+class _SecretDetailsPageState extends State<SecretDetailsPage> implements SecretDetailsView {
   late final SecretDetailsModel _secretDetailsModel;
   late final SecretDetailsPresenter _secretDetailsPresenter;
 

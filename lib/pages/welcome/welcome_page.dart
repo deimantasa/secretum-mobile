@@ -17,7 +17,7 @@ class WelcomePage extends StatefulWidget {
   _WelcomePageState createState() => _WelcomePageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> implements View {
+class _WelcomePageState extends State<WelcomePage> implements WelcomeView {
   late final WelcomeModel _welcomeModel;
   late final WelcomePresenter _welcomePresenter;
 

@@ -1,8 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firestore_helper/main/firestore_helper.dart';
+import 'package:firestore_helper/firestore_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/pages/authentication/authentication_page.dart';
 import 'package:secretum/pages/intro/intro_page.dart';

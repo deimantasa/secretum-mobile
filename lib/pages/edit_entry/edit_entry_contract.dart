@@ -1,10 +1,4 @@
-abstract class Presenter {
-  bool validatePrimaryPassword(String? password);
-  bool validateSecondaryPassword(String? password);
-  Future<bool> authenticate();
-}
-
-abstract class View {
+abstract class EditEntryView {
   void updateView();
   void showMessage(String message, {bool isSuccess});
 }

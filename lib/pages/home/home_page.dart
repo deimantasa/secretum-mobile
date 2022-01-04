@@ -31,7 +31,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> implements View {
+class _HomePageState extends State<HomePage> implements HomeView {
   late final HomeModel _homeModel;
   late final HomePresenter _homePresenter;
 

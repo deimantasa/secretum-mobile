@@ -14,7 +14,7 @@ abstract class SensitiveInformation {
     Map<String, dynamic> dataMap = sensitiveDataMap;
 
     if (isHashed) {
-      dataMap.hash();
+      dataMap.hashData();
     }
 
     return dataMap;

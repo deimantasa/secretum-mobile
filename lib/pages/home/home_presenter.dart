@@ -14,8 +14,8 @@ import 'package:path_provider/path_provider.dart';
 import 'home_contract.dart';
 import 'home_model.dart';
 
-class HomePresenter implements Presenter {
-  final View _view;
+class HomePresenter {
+  final HomeView _view;
   final HomeModel _homeModel;
   final EncryptionService _encryptionService;
   final StorageService _storageService;
@@ -23,21 +23,13 @@ class HomePresenter implements Presenter {
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
-  HomePresenter(
-    this._view,
-    this._homeModel, {
-    EncryptionService? encryptionService,
-    StorageService? storageService,
-    DbBackupStore? dbBackupStore,
-    SecretsStore? secretsStore,
-    UsersStore? usersStore,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
-        this._storageService = storageService ?? GetIt.instance<StorageService>(),
-        this._dbBackupStore = dbBackupStore ?? GetIt.instance<DbBackupStore>(),
-        this._secretsStore = secretsStore ?? GetIt.instance<SecretsStore>(),
-        this._usersStore = usersStore ?? GetIt.instance<UsersStore>();
+  HomePresenter(this._view, this._homeModel)
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
+        this._storageService = GetIt.instance<StorageService>(),
+        this._dbBackupStore = GetIt.instance<DbBackupStore>(),
+        this._secretsStore = GetIt.instance<SecretsStore>(),
+        this._usersStore = GetIt.instance<UsersStore>();
 
-  @override
   void addNewSecret(String secretName) {
     final String userId = _usersStore.user!.documentSnapshot.id;
     final Secret secret = Secret.newSecret(
@@ -55,7 +47,6 @@ class HomePresenter implements Presenter {
     });
   }
 
-  @override
   void init() {
     updateData();
   }
@@ -68,14 +59,12 @@ class HomePresenter implements Presenter {
     _homeModel.dbBackup = _dbBackupStore.dbBackup;
   }
 
-  @override
   void updateData() {
     _updateSecrets();
     _updateDbBackup();
     _view.updateView();
   }
 
-  @override
   bool isPasswordMatch(String password) {
     if (_usersStore.user != null) {
       return _encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.secondaryPassword;
@@ -84,7 +73,6 @@ class HomePresenter implements Presenter {
     }
   }
 
-  @override
   void signOut() {
     _usersStore.resetStore();
     _secretsStore.resetStore();
@@ -94,7 +82,6 @@ class HomePresenter implements Presenter {
     _view.goToWelcomePage();
   }
 
-  @override
   Future<void> exportSecrets(ExportFromType exportFromType, String fileName) async {
     if (fileName.isEmpty) {
       _view.showMessage('File name cannot be empty', isSuccess: false);
@@ -126,7 +113,6 @@ class HomePresenter implements Presenter {
     }
   }
 
-  @override
   Future<void> saveDbLocally() async {
     final DbBackup dbBackup = DbBackup(_homeModel.secrets, DateTime.now());
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestore_helper/main/firestore_helper.dart';
+import 'package:firestore_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
@@ -17,18 +17,16 @@ class SecretsStore extends ChangeNotifier {
   final List<StreamSubscription?> _streamSubscriptions = [];
   final List<Secret> secrets = [];
 
-  SecretsStore({
-    FirestoreHelper? firestoreHelper,
-    FireSecretsService? fireSecretsService,
-  })  : this._firestoreHelper = firestoreHelper ?? GetIt.instance<FirestoreHelper>(),
-        this._fireSecretsService = fireSecretsService ?? GetIt.instance<FireSecretsService>();
+  SecretsStore()
+      : this._firestoreHelper = GetIt.instance<FirestoreHelper>(),
+        this._fireSecretsService = GetIt.instance<FireSecretsService>();
 
   void init(String userId) {
     _listenToAllSecrets(userId);
   }
 
   void _listenToAllSecrets(String userId) {
-    final StreamSubscription streamSubscription = _firestoreHelper.listenToElementsStream(
+    final StreamSubscription streamSubscription = _firestoreHelper.listenToDocumentsStream(
       logReference: 'UsersStore._listenToAllSecrets',
       query: _fireSecretsService.getQueryByType(SecretsQueryType.allSecrets, userId: userId),
       onDocumentChange: (docChange) {
@@ -115,12 +113,12 @@ class SecretsStore extends ChangeNotifier {
   }
 
   Future<bool> deleteSecret(String userId, String secretId) async {
-    final bool isSuccess = await _firestoreHelper.deleteSubCollectionDocument(
-      collection: FireUsersService.kCollectionUsers,
-      documentId: userId,
-      subCollection: FireSecretsService.kSubCollectionSecrets,
-      subCollectionDocumentId: secretId,
-    );
+    final bool isSuccess = await _firestoreHelper.deleteDocument([
+      FireUsersService.kCollectionUsers,
+      userId,
+      FireSecretsService.kSubCollectionSecrets,
+      secretId,
+    ]);
 
     return isSuccess;
   }

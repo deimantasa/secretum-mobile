@@ -17,13 +17,10 @@ class UsersStore extends ChangeNotifier {
 
   User? user;
 
-  UsersStore({
-    EncryptionService? encryptionService,
-    FireUsersService? fireUsersService,
-    StorageService? storageService,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
-        this._fireUsersService = fireUsersService ?? GetIt.instance<FireUsersService>(),
-        this._storageService = storageService ?? GetIt.instance<StorageService>();
+  UsersStore()
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
+        this._fireUsersService = GetIt.instance<FireUsersService>(),
+        this._storageService = GetIt.instance<StorageService>();
 
   void updateUserLocally(User? user) {
     this.user = user;

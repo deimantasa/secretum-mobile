@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestore_helper/main/firestore_helper.dart';
+import 'package:firestore_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
@@ -20,13 +20,10 @@ class FireUsersService {
   final FirebaseFirestore _firebaseFirestore;
   final FirestoreHelper _firestoreHelper;
 
-  FireUsersService({
-    EncryptionService? encryptionService,
-    FirebaseFirestore? firebaseFirestore,
-    FirestoreHelper? firestoreHelper,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
+  FireUsersService({FirebaseFirestore? firebaseFirestore})
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
         this._firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        this._firestoreHelper = firestoreHelper ?? GetIt.instance<FirestoreHelper>();
+        this._firestoreHelper = GetIt.instance<FirestoreHelper>();
 
   Future<User?> getUserBySecretKey(String secretKey) async {
     final String hashedSecretKey = _encryptionService.getHashedText(secretKey);
@@ -63,7 +60,7 @@ class FireUsersService {
     final Map<String, dynamic> dataMap = user.toJson();
 
     loggingService.log('FireUsersService.registerUser: Data: $dataMap');
-    final String? documentId = await _firestoreHelper.addDocument(kCollectionUsers, dataMap);
+    final String? documentId = await _firestoreHelper.addDocument([kCollectionUsers], dataMap);
 
     if (documentId != null) {
       loggingService.log('FireUsersService.registerUser: User added. DocID: $documentId');
@@ -79,9 +76,8 @@ class FireUsersService {
     required ValueSetter<User> onUserChanged,
   }) {
     final StreamSubscription<DocumentSnapshot> streamSubscription = _firestoreHelper.listenToDocument(
-      kCollectionUsers,
-      userId,
-      'FireUsersService.listenToUserById',
+      [kCollectionUsers, userId],
+      logReference: 'FireUsersService.listenToUserById',
       onDocumentChange: (documentSnapshot) {
         if (documentSnapshot.data() != null) {
           User user = User.fromFirestore(documentSnapshot);
@@ -94,10 +90,9 @@ class FireUsersService {
   }
 
   Future<User?> getUserById(String userId) async {
-    final User? user = await _firestoreHelper.getElement<User>(
-      kCollectionUsers,
-      userId,
-      'FireUsersService.getUserById:',
+    final User? user = await _firestoreHelper.getDocument<User>(
+      [kCollectionUsers, userId],
+      logReference: 'FireUsersService.getUserById:',
       onDocumentSnapshot: (docSnapshot) {
         if (docSnapshot.data() != null) {
           return User.fromFirestore(docSnapshot);

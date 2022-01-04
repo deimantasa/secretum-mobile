@@ -13,10 +13,8 @@ class StorageService {
   final EncryptionService _encryptionService;
   final FlutterSecureStorage _flutterSecureStorage;
 
-  StorageService({
-    EncryptionService? encryptionService,
-    FlutterSecureStorage? flutterSecureStorage,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
+  StorageService({FlutterSecureStorage? flutterSecureStorage})
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
         this._flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
 
   /// Not hashed and not encrypted secretKey (raw)

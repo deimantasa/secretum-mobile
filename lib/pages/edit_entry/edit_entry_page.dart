@@ -32,7 +32,7 @@ class EditEntryPage extends StatefulWidget {
   _EditEntryPageState createState() => _EditEntryPageState();
 }
 
-class _EditEntryPageState extends State<EditEntryPage> implements View {
+class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView {
   late final TextEditingController _textEditingController;
   late final EditEntryModel _editEntryModel;
   late final EditEntryPresenter _editEntryPresenter;

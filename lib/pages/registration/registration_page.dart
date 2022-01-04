@@ -14,7 +14,7 @@ class RegistrationPage extends StatefulWidget {
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> implements View {
+class _RegistrationPageState extends State<RegistrationPage> implements RegistrationView {
   final PageController _pageController = PageController();
   final GlobalKey<FormState> _primaryPasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _primaryPasswordTEC = TextEditingController();

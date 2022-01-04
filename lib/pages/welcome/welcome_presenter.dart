@@ -7,8 +7,8 @@ import 'package:secretum/stores/users_store.dart';
 import 'welcome_contract.dart';
 import 'welcome_model.dart';
 
-class WelcomePresenter implements Presenter {
-  final View _view;
+class WelcomePresenter {
+  final WelcomeView _view;
   // ignore:unused_field
   final WelcomeModel _welcomeModel;
   final EncryptionService _encryptionService;
@@ -16,19 +16,12 @@ class WelcomePresenter implements Presenter {
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
-  WelcomePresenter(
-    this._view,
-    this._welcomeModel, {
-    EncryptionService? encryptionService,
-    DbBackupStore? dbBackupStore,
-    SecretsStore? secretsStore,
-    UsersStore? usersStore,
-  })  : this._encryptionService = encryptionService ?? GetIt.instance<EncryptionService>(),
-        this._dbBackupStore = dbBackupStore ?? GetIt.instance<DbBackupStore>(),
-        this._secretsStore = secretsStore ?? GetIt.instance<SecretsStore>(),
-        this._usersStore = usersStore ?? GetIt.instance<UsersStore>();
+  WelcomePresenter(this._view, this._welcomeModel)
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
+        this._dbBackupStore = GetIt.instance<DbBackupStore>(),
+        this._secretsStore = GetIt.instance<SecretsStore>(),
+        this._usersStore = GetIt.instance<UsersStore>();
 
-  @override
   Future<void> confirmSecretKey(String secretKey) async {
     // TODO anti-spam mechanism
     _view.showMessage('Verifying...');
