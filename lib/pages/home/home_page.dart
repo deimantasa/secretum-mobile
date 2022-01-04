@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
@@ -107,33 +106,12 @@ class _HomePageState extends State<HomePage> implements HomeView {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ListTile(
-                      title: Text(
-                        '${secret.name}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      onTap: () async {
-                        String? password = await Dialogs.showPasswordConfirmationDialog(
-                          context,
-                          hintText: 'Secondary Password',
-                        );
-
-                        if (password != null) {
-                          if (_homePresenter.isPasswordMatch(password)) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot.id),
-                              ),
-                            );
-                          } else {
-                            showMessage('Password is invalid', isSuccess: false);
-                          }
-                        }
-                        //If password is null, then user just dismissed dialog themselves
-                        //Do nothing
-                      },
-                    ),
+                        title: Text(
+                          '${secret.name}',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        onTap: () async => _goToSecretDetailsPage(secret)),
                     Divider(height: 1),
                   ],
                 );
@@ -370,6 +348,15 @@ class _HomePageState extends State<HomePage> implements HomeView {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  void _goToSecretDetailsPage(Secret secret) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot.id),
       ),
     );
   }

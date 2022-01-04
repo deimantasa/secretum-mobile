@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:secretum/main.dart';
 import 'package:secretum/utils/app_assets.dart';
 import 'package:secretum/utils/dialogs.dart';
 
@@ -13,24 +16,34 @@ class AuthenticationPage extends StatefulWidget {
 }
 
 class _AuthenticationPageState extends State<AuthenticationPage> implements AuthenticationView {
-  late final AuthenticationModel _authenticationModel;
-  late final AuthenticationPresenter _authenticationPresenter;
+  late final AuthenticationModel _model;
+  late final AuthenticationPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
+    isAuthenticationPageShown = true;
 
-    _authenticationModel = AuthenticationModel();
-    _authenticationPresenter = AuthenticationPresenter(this, _authenticationModel);
+    _model = AuthenticationModel();
+    _presenter = AuthenticationPresenter(this, _model);
 
     // Once page is opened, immediately fire authentication
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _authenticationPresenter.authenticate();
+      _presenter.authenticate();
     });
   }
 
   @override
   void dispose() {
+    // For iOS there is a infinite loop bug therefore delay flag setup for a while.
+    // If flag is reset immediately, `onResume` will trigger yet flag will be true and Auth will
+    // be shown again.
+    if (Platform.isIOS) {
+      Future.delayed(Duration(seconds: 1)).then((value) => isAuthenticationPageShown = false);
+    } else {
+      isAuthenticationPageShown = false;
+    }
+
     super.dispose();
   }
 
@@ -70,7 +83,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> implements Auth
                 Expanded(
                   child: ElevatedButton(
                     child: Text('Unlock'),
-                    onPressed: () => _authenticationPresenter.authenticate(),
+                    onPressed: () => _presenter.authenticate(),
                   ),
                 ),
               ],

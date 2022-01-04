@@ -14,13 +14,21 @@ import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
-import 'package:secretum/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 // Globals
 AppLifecycleState? appLifecycleState;
 late LoggingService loggingService;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+/// [isAuthenticationPageShown] is introduced to tackle different Biometrics behaviour within Android and iOS devices.
+///
+/// Android shows Fragment, and activity is not paused, while iOS pauses the app and shows Biometrics screen
+/// triggering AppLifecycleState to change. After iOS auth is success, [AppLifecycleState] becomes [AppLifecycleState.resumed] thus
+/// we are in the loop.
+/// Current way simply ensures that if [AuthenticationPage] is shown, bringing app from background won't
+/// trigger Biometrics.
+bool isAuthenticationPageShown = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,14 +75,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     loggingService.log('_MyAppState.didChangeAppLifecycleState: $state');
 
+    void _initBiometrics() {
+      final BuildContext? context = navigatorKey.currentContext;
+
+      // Make sure we don't show second Auth page on top when user is already in Auth page.
+      if (!isAuthenticationPageShown && context != null) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
+      }
+    }
+
     switch (state) {
       case AppLifecycleState.resumed:
-        final BuildContext? context = navigatorKey.currentContext;
-        final bool isBiometricAuthShowing = GetIt.instance<AuthenticationService>().isBiometricAuthShowing;
-
-        if (!isBiometricAuthShowing && context != null) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
-        }
+        _initBiometrics();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
@@ -102,10 +114,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       child: MaterialApp(
         title: 'Secretum',
         theme: ThemeData(
-          accentColor: Colors.white,
-          primarySwatch: AppColors.kMaterialColor1,
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          brightness: Brightness.dark,
+          colorScheme: ColorScheme.dark(),
           buttonTheme: Theme.of(context).buttonTheme.copyWith(),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(

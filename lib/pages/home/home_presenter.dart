@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:secretum/models/db_backup.dart';
 import 'package:secretum/models/enums/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
-import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
@@ -17,15 +16,13 @@ import 'home_model.dart';
 class HomePresenter {
   final HomeView _view;
   final HomeModel _homeModel;
-  final EncryptionService _encryptionService;
   final StorageService _storageService;
   final DbBackupStore _dbBackupStore;
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
   HomePresenter(this._view, this._homeModel)
-      : this._encryptionService = GetIt.instance<EncryptionService>(),
-        this._storageService = GetIt.instance<StorageService>(),
+      : this._storageService = GetIt.instance<StorageService>(),
         this._dbBackupStore = GetIt.instance<DbBackupStore>(),
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
@@ -63,14 +60,6 @@ class HomePresenter {
     _updateSecrets();
     _updateDbBackup();
     _view.updateView();
-  }
-
-  bool isPasswordMatch(String password) {
-    if (_usersStore.user != null) {
-      return _encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.secondaryPassword;
-    } else {
-      return false;
-    }
   }
 
   void signOut() {
