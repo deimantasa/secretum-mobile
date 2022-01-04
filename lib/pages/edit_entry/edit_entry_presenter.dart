@@ -27,13 +27,6 @@ class EditEntryPresenter {
     return _usersStore.user!.sensitiveInformation.primaryPassword == _encryptionService.getHashedText(password);
   }
 
-  bool validateSecondaryPassword(String? password) {
-    if (password == null) {
-      return false;
-    }
-    return _usersStore.user!.sensitiveInformation.secondaryPassword == _encryptionService.getHashedText(password);
-  }
-
   Future<bool> authenticate() async {
     final bool isSuccess = await _authenticationService.authViaBiometric();
 

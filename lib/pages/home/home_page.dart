@@ -111,6 +111,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
+                        subtitle: Text('${Utils.getFormattedDate(secret.createdAt)}'),
                         onTap: () async => _goToSecretDetailsPage(secret)),
                     Divider(height: 1),
                   ],
@@ -124,15 +125,15 @@ class _HomePageState extends State<HomePage> implements HomeView {
   }
 
   Future<void> _showAddNewWalletBottomSheet() async {
-    String? secretsName = await Dialogs.showEditEntryBottomSheet(
+    final String? secretsName = await Dialogs.showEditEntryBottomSheet(
       context,
       title: "Enter Secret's Name",
       hintText: 'eg. Binance Key',
       entry: '',
       buttonText: 'Add',
       textCapitalization: TextCapitalization.words,
+      validator: (text) => text != null && text.isNotEmpty ? null : 'Secret cannot be empty',
       validateWithPrimaryPassword: false,
-      validateWithSecondaryPassword: false,
       validateWithBiometric: true,
     );
 
@@ -255,7 +256,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
               leading: Icon(Icons.download_rounded),
               title: Text('Export from Backup'),
               onTap: () async {
-                String? fileName = await Dialogs.showEditEntryBottomSheet(
+                final String? fileName = await Dialogs.showEditEntryBottomSheet(
                   context,
                   title: 'Export File',
                   description: 'All your secrets will be exported from backup to the text file in your phone.',
@@ -263,8 +264,8 @@ class _HomePageState extends State<HomePage> implements HomeView {
                   entry: '',
                   buttonText: 'Export',
                   textCapitalization: TextCapitalization.none,
+                  validator: (text) => text != null && text.isNotEmpty ? null : 'File name cannot be empty',
                   validateWithPrimaryPassword: false,
-                  validateWithSecondaryPassword: false,
                   validateWithBiometric: true,
                 );
 
@@ -279,7 +280,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
             leading: Icon(Icons.download_rounded),
             title: Text('Export from DB'),
             onTap: () async {
-              String? fileName = await Dialogs.showEditEntryBottomSheet(
+              final String? fileName = await Dialogs.showEditEntryBottomSheet(
                 context,
                 title: 'Export File',
                 description: 'All your secrets will be exported from the database to the text file in your phone.',
@@ -287,8 +288,8 @@ class _HomePageState extends State<HomePage> implements HomeView {
                 entry: '',
                 buttonText: 'Export',
                 textCapitalization: TextCapitalization.none,
+                validator: (text) => text != null && text.isNotEmpty ? null : 'File name cannot be empty',
                 validateWithPrimaryPassword: false,
-                validateWithSecondaryPassword: false,
                 validateWithBiometric: true,
               );
 

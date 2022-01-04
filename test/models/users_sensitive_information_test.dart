@@ -20,19 +20,17 @@ void main() {
   });
 
   test('UsersSensitiveInformation', () {
-    final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation('a', 'b', 'c');
+    final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation('a', 'b');
 
     expect(usersSensitiveInformation.secretKey, 'a');
     expect(usersSensitiveInformation.primaryPassword, 'b');
-    expect(usersSensitiveInformation.secondaryPassword, 'c');
   });
 
   test('UsersSensitiveInformation.newUser', () {
-    final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation.newUser('a', 'b', 'c');
+    final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation.newUser('a', 'b');
 
     expect(usersSensitiveInformation.secretKey, 'a');
     expect(usersSensitiveInformation.primaryPassword, 'b');
-    expect(usersSensitiveInformation.secondaryPassword, 'c');
   });
 
   test('UsersSensitiveInformation.fromJson', () {
@@ -42,7 +40,6 @@ void main() {
 
     expect(usersSensitiveInformation.secretKey, 'a');
     expect(usersSensitiveInformation.primaryPassword, 'b');
-    expect(usersSensitiveInformation.secondaryPassword, 'c');
   });
 
   group('toJson', () {

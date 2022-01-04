@@ -21,11 +21,6 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
   final FocusNode _primaryPasswordFocusNode = FocusNode();
   final TextEditingController _primaryPasswordConfirmationTEC = TextEditingController();
   final FocusNode _primaryPasswordConfirmationFocusNode = FocusNode();
-  final GlobalKey<FormState> _secondaryPasswordFormKey = GlobalKey<FormState>();
-  final TextEditingController _secondaryPasswordTEC = TextEditingController();
-  final FocusNode _secondaryPasswordFocusNode = FocusNode();
-  final TextEditingController _secondaryPasswordConfirmationTEC = TextEditingController();
-  final FocusNode _secondaryPasswordConfirmationFocusNode = FocusNode();
 
   late final RegistrationModel _registrationModel;
   late final RegistrationPresenter _registrationPresenter;
@@ -89,23 +84,9 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
           passwordHint: 'Primary Password',
           passwordLength: 6,
           passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
-          buttonText: 'Continue',
-          onFinish: () => _goToNextPage(),
-        ),
-        _buildPasswordsSection(
-          formKey: _secondaryPasswordFormKey,
-          primaryPasswordFocusNode: _secondaryPasswordFocusNode,
-          confirmationPasswordFocusNode: _secondaryPasswordConfirmationFocusNode,
-          description: 'Secondary Password is used to secure less important actions within the application.',
-          passwordTEC: _secondaryPasswordTEC,
-          isPasswordObscured: _registrationModel.isSecondaryPasswordObscure,
-          onObscureChanged: (isObscure) => setState(() => _registrationModel.isSecondaryPasswordObscure = isObscure),
-          passwordHint: 'Secondary Password',
-          passwordLength: 3,
-          passwordConfirmationTEC: _secondaryPasswordConfirmationTEC,
           buttonText: 'Finish',
           onFinish: () => _finishRegistration(),
-        )
+        ),
       ],
     );
   }
@@ -195,18 +176,11 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
     );
   }
 
-  Future<void> _goToNextPage() async {
-    if (_primaryPasswordFormKey.currentState!.validate()) {
-      await _pageController.nextPage(duration: kTabScrollDuration, curve: Curves.easeOut);
-      _secondaryPasswordFocusNode.requestFocus();
-    }
-  }
-
   void _finishRegistration() {
     FocusScope.of(context).unfocus();
 
-    if (_secondaryPasswordFormKey.currentState!.validate()) {
-      _registrationPresenter.finishRegistration(_primaryPasswordConfirmationTEC.text, _secondaryPasswordConfirmationTEC.text);
+    if (_primaryPasswordFormKey.currentState!.validate()) {
+      _registrationPresenter.finishRegistration(_primaryPasswordConfirmationTEC.text);
     }
   }
 }

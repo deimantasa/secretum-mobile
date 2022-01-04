@@ -51,18 +51,13 @@ class TestUtils {
 
   /// UsersSensitiveInformation
   static UsersSensitiveInformation getUsersSensitiveInformation() {
-    return UsersSensitiveInformation(
-      'secretKey1',
-      'primaryPassword1',
-      'secondaryPassword1',
-    );
+    return UsersSensitiveInformation('secretKey1', 'primaryPassword1');
   }
 
   static Map<String, dynamic> getUsersSensitiveInformationHashedMap() {
     return {
       'secretKey': 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7',
       'primaryPassword': '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7',
-      'secondaryPassword': 'b58791e1c591b5debacfad1a10613335335174ca27c68effaf34995e74db0ef3',
     };
   }
 
@@ -70,7 +65,6 @@ class TestUtils {
     return {
       'secretKey': 'secretKey1',
       'primaryPassword': 'primaryPassword1',
-      'secondaryPassword': 'secondaryPassword1',
     };
   }
 }

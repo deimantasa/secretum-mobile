@@ -12,8 +12,8 @@ class EditEntryPage extends StatefulWidget {
   final String entry;
   final String buttonText;
   final TextCapitalization textCapitalization;
+  final String? Function(String?)? validator;
   final bool validateWithPrimaryPassword;
-  final bool validateWithSecondaryPassword;
   final bool validateWithBiometric;
 
   const EditEntryPage({
@@ -24,8 +24,8 @@ class EditEntryPage extends StatefulWidget {
     required this.entry,
     required this.buttonText,
     this.textCapitalization = TextCapitalization.none,
+    this.validator,
     required this.validateWithPrimaryPassword,
-    required this.validateWithSecondaryPassword,
     required this.validateWithBiometric,
   }) : super(key: key);
   @override
@@ -33,6 +33,7 @@ class EditEntryPage extends StatefulWidget {
 }
 
 class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _textEditingController;
   late final EditEntryModel _editEntryModel;
   late final EditEntryPresenter _editEntryPresenter;
@@ -49,7 +50,6 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
       widget.buttonText,
       widget.textCapitalization,
       widget.validateWithPrimaryPassword,
-      widget.validateWithSecondaryPassword,
       widget.validateWithBiometric,
     );
     _editEntryPresenter = EditEntryPresenter(this, _editEntryModel);
@@ -97,13 +97,17 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
             SizedBox(height: 16),
           ],
           Flexible(
-            child: TextFormField(
-              autofocus: true,
-              controller: _textEditingController,
-              decoration: InputDecoration.collapsed(hintText: _editEntryModel.hintText),
-              textCapitalization: widget.textCapitalization,
-              minLines: null,
-              maxLines: null,
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                autofocus: true,
+                controller: _textEditingController,
+                decoration: InputDecoration.collapsed(hintText: _editEntryModel.hintText),
+                textCapitalization: widget.textCapitalization,
+                validator: widget.validator,
+                minLines: null,
+                maxLines: null,
+              ),
             ),
           ),
           SizedBox(height: 16),
@@ -115,24 +119,17 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
                   child: ElevatedButton(
                     child: Text(_editEntryModel.buttonText),
                     onPressed: () async {
+                      // Make sure that validation passes before we execute further logic
+                      if (_formKey.currentState?.validate() != true) {
+                        return;
+                      }
+
                       if (_editEntryModel.validateWithPrimaryPassword) {
                         String? password = await Dialogs.showPasswordConfirmationDialog(
                           context,
                           hintText: 'Primary Password',
                         );
                         bool isPasswordValid = _editEntryPresenter.validatePrimaryPassword(password);
-                        if (!isPasswordValid) {
-                          showMessage('Password is invalid', isSuccess: false);
-                          return;
-                        }
-                      }
-
-                      if (_editEntryModel.validateWithSecondaryPassword) {
-                        String? password = await Dialogs.showPasswordConfirmationDialog(
-                          context,
-                          hintText: 'Secondary Password',
-                        );
-                        bool isPasswordValid = _editEntryPresenter.validateSecondaryPassword(password);
                         if (!isPasswordValid) {
                           showMessage('Password is invalid', isSuccess: false);
                           return;

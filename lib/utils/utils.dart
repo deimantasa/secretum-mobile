@@ -27,7 +27,7 @@ class Utils {
     if (dateTime == null) {
       return '';
     } else {
-      String formattedDate = DateFormat('dd-MMM-yy HH:mm:ss').format(dateTime);
+      final String formattedDate = DateFormat('dd-MMM-yy HH:mm:ss').format(dateTime);
       return formattedDate;
     }
   }

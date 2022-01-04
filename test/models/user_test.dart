@@ -55,7 +55,6 @@ void main() {
     expect(user.id, '1');
     expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
     expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
-    expect(user.sensitiveInformation.secondaryPassword, 'b58791e1c591b5debacfad1a10613335335174ca27c68effaf34995e74db0ef3');
   });
 
   test('User.fromFirestoreChanged', () {
@@ -73,7 +72,6 @@ void main() {
     expect(user.id, '1');
     expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
     expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
-    expect(user.sensitiveInformation.secondaryPassword, 'b58791e1c591b5debacfad1a10613335335174ca27c68effaf34995e74db0ef3');
   });
 
   group('User.fromJson', () {
@@ -82,14 +80,12 @@ void main() {
 
       expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
       expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
-      expect(user.sensitiveInformation.secondaryPassword, 'b58791e1c591b5debacfad1a10613335335174ca27c68effaf34995e74db0ef3');
     });
     test('!isEncrypted', () {
       final User user = User.fromJson(TestUtils.getUserEncryptedMap(), isEncrypted: false);
 
       expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
       expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
-      expect(user.sensitiveInformation.secondaryPassword, 'b58791e1c591b5debacfad1a10613335335174ca27c68effaf34995e74db0ef3');
     });
   });
 

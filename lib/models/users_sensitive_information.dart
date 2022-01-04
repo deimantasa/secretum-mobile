@@ -15,13 +15,9 @@ class UsersSensitiveInformation extends SensitiveInformation {
   @JsonKey(defaultValue: '')
   final String primaryPassword;
 
-  /// [secondaryPassword] is helper password. It's used to protect other kinds of functionality.
-  @JsonKey(defaultValue: '')
-  final String secondaryPassword;
+  UsersSensitiveInformation(this.secretKey, this.primaryPassword);
 
-  UsersSensitiveInformation(this.secretKey, this.primaryPassword, this.secondaryPassword);
-
-  UsersSensitiveInformation.newUser(this.secretKey, this.primaryPassword, this.secondaryPassword);
+  UsersSensitiveInformation.newUser(this.secretKey, this.primaryPassword);
 
   factory UsersSensitiveInformation.fromJson(Map<String, dynamic> json) => _$UsersSensitiveInformationFromJson(json);
 

@@ -63,15 +63,15 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                         onTap: () async {
                           Navigator.pop(context);
 
-                          String? secretsName = await Dialogs.showEditEntryBottomSheet(
+                          final String? secretsName = await Dialogs.showEditEntryBottomSheet(
                             context,
                             title: "New Secret's Name",
                             hintText: 'Enter new name',
                             entry: _secretDetailsModel.secret!.name,
                             buttonText: 'Update',
                             textCapitalization: TextCapitalization.words,
+                            validator: (text) => text != null && text.isNotEmpty ? null : 'Secret cannot be empty',
                             validateWithPrimaryPassword: false,
-                            validateWithSecondaryPassword: false,
                             validateWithBiometric: false,
                           );
 
@@ -101,12 +101,10 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                                   TextButton(
                                     child: Text(
                                       'Delete',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      ),
+                                      style: TextStyle(color: Colors.red),
                                     ),
                                     onPressed: () async {
-                                      //Close previous dialog
+                                      // Close previous dialog
                                       Navigator.pop(context);
 
                                       final String? password = await Dialogs.showPasswordConfirmationDialog(
@@ -161,20 +159,20 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
       children: [
         ListTile(
             title: Text('Notes'),
-            subtitle: note == null || note.isEmpty ? null : Text('********'),
+            subtitle: note == null || note.isEmpty ? null : Text(note),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
-                String? newNote = await Dialogs.showEditEntryBottomSheet(
+                final String? newNote = await Dialogs.showEditEntryBottomSheet(
                   context,
                   title: 'Update Note',
                   entry: _secretDetailsModel.secret?.note,
                   hintText: 'Enter some notes/hints about the secret',
                   buttonText: 'Update',
                   textCapitalization: TextCapitalization.sentences,
-                  validateWithPrimaryPassword: true,
-                  validateWithSecondaryPassword: false,
-                  validateWithBiometric: true,
+                  validator: (text) => null,
+                  validateWithPrimaryPassword: false,
+                  validateWithBiometric: false,
                 );
 
                 if (newNote != null) {
@@ -184,17 +182,13 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
             ),
             onTap: _secretDetailsModel.secret?.note?.isNotEmpty == true
                 ? () async {
-                    final bool isSuccess = await _secretDetailsPresenter.authenticate();
-
-                    if (isSuccess) {
-                      Dialogs.showInformationBottomSheet(
-                        context,
-                        title: 'Note',
-                        content: _secretDetailsModel.secret!.note!,
-                        buttonText: 'Close',
-                        onPressed: () => Navigator.pop(context),
-                      );
-                    }
+                    Dialogs.showInformationBottomSheet(
+                      context,
+                      title: 'Note',
+                      content: _secretDetailsModel.secret!.note!,
+                      buttonText: 'Close',
+                      onPressed: () => Navigator.pop(context),
+                    );
                   }
                 : () => showMessage('There is no note saved')),
         Divider(height: 1),
@@ -211,9 +205,9 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                   entry: _secretDetailsModel.secret?.code,
                   buttonText: 'Update',
                   textCapitalization: TextCapitalization.none,
+                  validator: (text) => null,
                   validateWithPrimaryPassword: true,
-                  validateWithSecondaryPassword: false,
-                  validateWithBiometric: true,
+                  validateWithBiometric: false,
                 );
 
                 if (newCode != null) {
@@ -223,17 +217,13 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
             ),
             onTap: _secretDetailsModel.secret?.code?.isNotEmpty == true
                 ? () async {
-                    final bool isSuccess = await _secretDetailsPresenter.authenticate();
-
-                    if (isSuccess) {
-                      Dialogs.showInformationBottomSheet(
-                        context,
-                        title: 'Code',
-                        content: _secretDetailsModel.secret!.code!,
-                        buttonText: 'Copy',
-                        onPressed: () => _secretDetailsPresenter.copyText(_secretDetailsModel.secret!.code!),
-                      );
-                    }
+                    Dialogs.showInformationBottomSheet(
+                      context,
+                      title: 'Code',
+                      content: _secretDetailsModel.secret!.code!,
+                      buttonText: 'Copy',
+                      onPressed: () => _secretDetailsPresenter.copyText(_secretDetailsModel.secret!.code!),
+                    );
                   }
                 : () => showMessage('There is no code saved')),
         Divider(height: 1),

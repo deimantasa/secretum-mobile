@@ -8,7 +8,6 @@ class EditEntryModel {
   final String buttonText;
   final TextCapitalization textCapitalization;
   final bool validateWithPrimaryPassword;
-  final bool validateWithSecondaryPassword;
   final bool validateWithBiometric;
 
   EditEntryModel(
@@ -19,7 +18,6 @@ class EditEntryModel {
     this.buttonText,
     this.textCapitalization,
     this.validateWithPrimaryPassword,
-    this.validateWithSecondaryPassword,
     this.validateWithBiometric,
   );
 }

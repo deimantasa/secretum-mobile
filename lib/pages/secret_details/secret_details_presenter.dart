@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/models/secret.dart';
-import 'package:secretum/services/authentication_service.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
@@ -14,15 +13,13 @@ import 'secret_details_model.dart';
 class SecretDetailsPresenter {
   final SecretDetailsView _view;
   final SecretDetailsModel _secretDetailsModel;
-  final AuthenticationService _authenticationService;
   final EncryptionService _encryptionService;
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
   final List<StreamSubscription?> _streamSubscriptions = [];
 
   SecretDetailsPresenter(this._view, this._secretDetailsModel)
-      : this._authenticationService = GetIt.instance<AuthenticationService>(),
-        this._encryptionService = GetIt.instance<EncryptionService>(),
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
@@ -62,25 +59,24 @@ class SecretDetailsPresenter {
   }
 
   void deleteSecret(String password) async {
-    if (_encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
-      final bool isSuccess = await authenticate();
+    final bool isPasswordCorrect =
+        _encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword;
+    if (isPasswordCorrect) {
+      final bool isSuccess = await _secretsStore.deleteSecret(
+        _usersStore.user!.documentSnapshot.id,
+        _secretDetailsModel.secret!.documentSnapshot.id,
+      );
+
+      final String? secretName = _secretDetailsModel.secret?.name;
 
       if (isSuccess) {
-        _secretsStore
-            .deleteSecret(
-          _usersStore.user!.documentSnapshot.id,
-          _secretDetailsModel.secret!.documentSnapshot.id,
-        )
-            .then((isSuccess) {
-          if (isSuccess) {
-            _view.showMessage('${_secretDetailsModel.secret?.name} was deleted');
-          } else {
-            _view.showMessage('Cannot delete ${_secretDetailsModel.secret?.name}. Something went wrong');
-          }
-        });
-
+        _view.showMessage('$secretName was deleted');
         _view.closePage();
+      } else {
+        _view.showMessage('Cannot delete $secretName. Something went wrong', isSuccess: false);
       }
+    } else {
+      _view.showMessage('Password is not correct', isSuccess: false);
     }
   }
 
@@ -92,13 +88,8 @@ class SecretDetailsPresenter {
 
   Future<void> copyText(String code) async {
     await Clipboard.setData(ClipboardData(text: code));
+
     _view.showMessage('Code was copied to clipboard');
     _view.closePage();
-  }
-
-  Future<bool> authenticate() async {
-    final bool isSuccess = await _authenticationService.authViaBiometric();
-
-    return isSuccess;
   }
 }

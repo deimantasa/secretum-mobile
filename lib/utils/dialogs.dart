@@ -31,6 +31,7 @@ class Dialogs {
             onChanged: (input) => password = input,
             obscureText: true,
             decoration: InputDecoration(hintText: hintText),
+            onEditingComplete: () => Navigator.pop(context, password),
           ),
           actions: [
             TextButton(
@@ -71,8 +72,8 @@ class Dialogs {
     required String? entry,
     required String buttonText,
     required TextCapitalization textCapitalization,
+    required String? Function(String?) validator,
     required bool validateWithPrimaryPassword,
-    required bool validateWithSecondaryPassword,
     required bool validateWithBiometric,
   }) async {
     String? newEntry = await showBarModalBottomSheet<String?>(
@@ -85,8 +86,8 @@ class Dialogs {
           entry: entry ?? '',
           buttonText: buttonText,
           textCapitalization: textCapitalization,
+          validator: validator,
           validateWithPrimaryPassword: validateWithPrimaryPassword,
-          validateWithSecondaryPassword: validateWithSecondaryPassword,
           validateWithBiometric: validateWithBiometric,
         );
       },

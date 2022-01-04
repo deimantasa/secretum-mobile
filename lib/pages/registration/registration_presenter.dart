@@ -21,15 +21,11 @@ class RegistrationPresenter {
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
-  Future<void> finishRegistration(String primaryPassword, String secondaryPassword) async {
+  Future<void> finishRegistration(String primaryPassword) async {
     _view.showMessage('Registration in progress...');
 
     final String secretKey = _encryptionService.generateSecretKey();
-    final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation.newUser(
-      secretKey,
-      primaryPassword,
-      secondaryPassword,
-    );
+    final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation.newUser(secretKey, primaryPassword);
     final User user = User.newUser(usersSensitiveInformation);
     final bool isSuccess = await _usersStore.registerUser(user);
 
