@@ -48,10 +48,7 @@ class StorageService {
         loggingService.log('StorageService.getDbBackup: DbBackup retrieved');
         return dbBackup;
       } catch (e) {
-        loggingService.log(
-          'StorageService.getDbBackup: DbBackup parsing failed. $e',
-          logType: LogType.error,
-        );
+        loggingService.log('StorageService.getDbBackup: DbBackup parsing failed. $e', logType: LogType.error);
         return null;
       }
     } else {
@@ -68,6 +65,7 @@ class StorageService {
   }
 
   Future<void> resetStorage() async {
+    //TODO delete everything from storage
     await _flutterSecureStorage.deleteAll();
     _encryptionService.updateSecretKey('');
 

@@ -48,6 +48,7 @@ dependencies:
   flutter_svg: ^1.0.0
 
   #Other
+  filesystem_picker: ^2.0.0
   json_annotation: ^4.0.0
   uuid: ^3.0.1
   package_info: ^2.0.0

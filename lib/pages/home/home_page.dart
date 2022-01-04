@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:filesystem_picker/filesystem_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:package_info/package_info.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:secretum/models/db_backup.dart';
 import 'package:secretum/models/enums/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
+import 'package:secretum/pages/backup_preview/backup_preview_page.dart';
 import 'package:secretum/pages/secret_details/secret_details_page.dart';
 import 'package:secretum/pages/welcome/welcome_page.dart';
 import 'package:secretum/stores/db_backup_store.dart';
@@ -65,7 +70,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
       floatingActionButton: FloatingActionButton(
         heroTag: null,
         child: Icon(Icons.add),
-        onPressed: () => _showAddNewWalletBottomSheet(),
+        onPressed: () => _showAddNewSecretBottomSheet(),
       ),
       drawer: _buildDrawer(),
       body: _buildBody(),
@@ -87,7 +92,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
       return Center(
         child: ElevatedButton(
           child: Text('Add new secret'),
-          onPressed: () => _showAddNewWalletBottomSheet(),
+          onPressed: () => _showAddNewSecretBottomSheet(),
         ),
       );
     } else {
@@ -124,7 +129,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
     }
   }
 
-  Future<void> _showAddNewWalletBottomSheet() async {
+  Future<void> _showAddNewSecretBottomSheet() async {
     final String? secretsName = await Dialogs.showEditEntryBottomSheet(
       context,
       title: "Enter Secret's Name",
@@ -295,6 +300,28 @@ class _HomePageState extends State<HomePage> implements HomeView {
 
               if (fileName != null && fileName.isNotEmpty) {
                 _homePresenter.exportSecrets(ExportFromType.database, fileName);
+              }
+            },
+          ),
+          Divider(height: 1),
+          ListTile(
+            leading: Icon(Icons.folder_rounded),
+            title: Text('Open Exported Backups'),
+            onTap: () async {
+              final Directory directory = await getApplicationDocumentsDirectory();
+
+              final String? path = await FilesystemPicker.open(
+                title: 'Exported Backups',
+                context: context,
+                rootDirectory: directory,
+                fsType: FilesystemType.file,
+                allowedExtensions: ['.txt'],
+                fileTileSelectMode: FileTileSelectMode.wholeTile,
+                folderIconColor: Colors.teal,
+              );
+
+              if (path != null) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => BackupPreviewPage(pathToFile: path)));
               }
             },
           ),

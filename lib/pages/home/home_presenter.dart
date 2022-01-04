@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:get_it/get_it.dart';
 import 'package:secretum/models/db_backup.dart';
 import 'package:secretum/models/enums/export_from_type.dart';
@@ -8,7 +6,7 @@ import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:secretum/utils/utils.dart';
 
 import 'home_contract.dart';
 import 'home_model.dart';
@@ -46,6 +44,9 @@ class HomePresenter {
 
   void init() {
     updateData();
+
+    // Export backup at app start
+    Utils.exportBackup(_secretsStore.secrets, 'secretum-backup-${DateTime.now().toIso8601String()}');
   }
 
   void _updateSecrets() {
@@ -75,30 +76,20 @@ class HomePresenter {
     if (fileName.isEmpty) {
       _view.showMessage('File name cannot be empty', isSuccess: false);
     } else {
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/$fileName.txt');
-
-      // Generate Text and write to file
-      final StringBuffer stringBuffer = StringBuffer();
-      stringBuffer.writeln('***************************');
-
+      final String? path;
       switch (exportFromType) {
         case ExportFromType.database:
-          _homeModel.secrets.forEach((secret) {
-            stringBuffer.writeln(secret.toJson(isEncrypted: false));
-          });
+          path = await Utils.exportBackup(_homeModel.secrets, fileName);
           break;
         case ExportFromType.backup:
-          _homeModel.dbBackup?.secrets.forEach((secret) {
-            stringBuffer.writeln(secret.toJson(isEncrypted: false));
-          });
+          path = await Utils.exportBackup(_homeModel.dbBackup?.secrets ?? [], fileName);
           break;
         case ExportFromType.unknown:
+          path = null;
           break;
       }
 
-      await file.writeAsString(stringBuffer.toString());
-      _view.showMessageDialog('${file.path}');
+      _view.showMessageDialog('${path}');
     }
   }
 

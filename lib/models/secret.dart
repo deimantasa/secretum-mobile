@@ -8,13 +8,12 @@ part 'secret.g.dart';
 
 @JsonSerializable(anyMap: false, explicitToJson: true)
 class Secret extends FirestoreMetadata {
-  static const String kFieldAddedBy = 'addedBy';
-  static const String kFieldCreatedAt = 'createdAt';
-
   String get id => this.documentSnapshot.id;
 
+  static const String kFieldAddedBy = 'addedBy';
   @JsonKey(defaultValue: '', includeIfNull: false)
   String? addedBy;
+  static const String kFieldCreatedAt = 'createdAt';
   @JsonKey(fromJson: Utils.dateTimeFromTimestamp, toJson: Utils.dateTimeToTimestamp, includeIfNull: false)
   DateTime? createdAt;
   @JsonKey(defaultValue: '', includeIfNull: false)
