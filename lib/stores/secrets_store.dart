@@ -46,6 +46,11 @@ class SecretsStore extends ChangeNotifier {
     _streamSubscriptions.add(streamSubscription);
   }
 
+  Future<List<Secret>> getAllSecrets(String userId) async {
+    final List<Secret> secrets = await _fireSecretsService.getAllSecrets(userId);
+    return secrets;
+  }
+
   StreamSubscription listenToSecretById(
     String userId,
     String secretId, {

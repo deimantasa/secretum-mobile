@@ -11,7 +11,6 @@ import 'package:secretum/services/firestore/fire_secrets_service.dart';
 import 'package:secretum/services/firestore/fire_users_service.dart';
 import 'package:secretum/services/logging_service.dart';
 import 'package:secretum/services/storage_service.dart';
-import 'package:secretum/stores/db_backup_store.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +65,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     serviceLocator.registerSingleton(StorageService());
 
     /// Stores
-    serviceLocator.registerSingleton(DbBackupStore());
     serviceLocator.registerSingleton(UsersStore());
     serviceLocator.registerSingleton(SecretsStore());
     super.initState();
@@ -108,7 +106,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => GetIt.instance<DbBackupStore>()),
         ChangeNotifierProvider(create: (_) => GetIt.instance<UsersStore>()),
         ChangeNotifierProvider(create: (_) => GetIt.instance<SecretsStore>()),
       ],

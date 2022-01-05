@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secretum/models/secret.dart';
 import 'package:secretum/utils/dialogs.dart';
 
 import 'backup_preview_contract.dart';
@@ -44,10 +45,19 @@ class _BackupPreviewPageState extends State<BackupPreviewPage> implements Backup
             Text('Backup Preview'),
             Text(
               fileName,
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 10),
             ),
           ],
         ),
+        actions: [
+          Tooltip(
+            message: 'Clear Clipboard',
+            child: IconButton(
+              icon: Icon(Icons.layers_clear_rounded),
+              onPressed: () => _presenter.clearClipboard(),
+            ),
+          )
+        ],
       ),
       body: _buildBody(),
     );
@@ -64,6 +74,22 @@ class _BackupPreviewPageState extends State<BackupPreviewPage> implements Backup
   }
 
   Widget _buildBody() {
-    return SelectableText('${_model.contentOfBackup}');
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _model.secrets.length,
+        itemBuilder: (context, index) {
+          final Secret secret = _model.secrets[index];
+
+          return Column(
+            children: [
+              ListTile(
+                title: Text(secret.name ?? ''),
+                subtitle: Text(secret.code ?? ''),
+                onTap: () => _presenter.copyCode(secret.code ?? ''),
+              ),
+              Divider(height: 1),
+            ],
+          );
+        });
   }
 }

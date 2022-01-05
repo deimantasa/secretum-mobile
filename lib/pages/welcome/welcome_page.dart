@@ -134,11 +134,12 @@ class _WelcomePageState extends State<WelcomePage> implements WelcomeView {
               TextButton(
                 child: Text('Paste'),
                 onPressed: () async {
-                  ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+                  final ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+                  final String? clipboardDataText = clipboardData?.text;
 
                   //If there is some data within clipboard - paste it
-                  if (clipboardData?.text != null) {
-                    textEditingController.text = clipboardData!.text!;
+                  if (clipboardDataText != null) {
+                    textEditingController.text = clipboardDataText;
                     textEditingController.selection = TextSelection.fromPosition(
                       TextPosition(offset: textEditingController.text.length),
                     );

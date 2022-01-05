@@ -81,10 +81,24 @@ class FireSecretsService {
     return isSuccess;
   }
 
+  Future<List<Secret>> getAllSecrets(String userId) async {
+    final List<Secret>? secrets = await _fireGenericService.getDocuments(
+      query: getQueryByType(SecretsQueryType.allSecrets, userId: userId),
+      logReference: 'FireSecretsService.getAllSecrets',
+      onDocumentSnapshot: (documentSnapshot) => Secret.fromFirestore(documentSnapshot),
+    );
+
+    return secrets ?? [];
+  }
+
   Query getQueryByType(SecretsQueryType secretsQueryType, {String? userId}) {
     switch (secretsQueryType) {
       case SecretsQueryType.allSecrets:
-        final String encryptedAddedBy = _encryptionService.getEncryptedText(userId!);
+        if (userId == null) {
+          throw AssertionError('userId cannot be null');
+        }
+
+        final String encryptedAddedBy = _encryptionService.getEncryptedText(userId);
 
         return _firebaseFirestore
             .collection(FireUsersService.kCollectionUsers)

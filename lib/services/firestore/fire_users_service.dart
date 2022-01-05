@@ -32,10 +32,7 @@ class FireUsersService {
 
     final QuerySnapshot querySnapshot = await _firebaseFirestore
         .collection(kCollectionUsers)
-        .where(
-          '${User.kMapSensitiveInformation}.${UsersSensitiveInformation.kFieldSecretKey}',
-          isEqualTo: hashedSecretKey,
-        )
+        .where('${User.kMapSensitiveInformation}.${UsersSensitiveInformation.kFieldSecretKey}', isEqualTo: hashedSecretKey)
         .limit(1)
         .get();
 

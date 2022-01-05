@@ -5,7 +5,10 @@ import 'package:secretum/pages/secret_key_preview/secret_key_preview_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class Dialogs {
-  static Future<void> showMessage({required String message, bool isSuccess = true}) async {
+  static Future<void> showMessage({
+    required String message,
+    bool isSuccess = true,
+  }) async {
     Fluttertoast.showToast(
       msg: message,
       backgroundColor: isSuccess ? Colors.green : Colors.red,
