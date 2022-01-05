@@ -35,14 +35,14 @@ class EditEntryPage extends StatefulWidget {
 class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _textEditingController;
-  late final EditEntryModel _editEntryModel;
-  late final EditEntryPresenter _editEntryPresenter;
+  late final EditEntryModel _model;
+  late final EditEntryPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _editEntryModel = EditEntryModel(
+    _model = EditEntryModel(
       widget.title,
       widget.description,
       widget.hintText,
@@ -52,13 +52,13 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
       widget.validateWithPrimaryPassword,
       widget.validateWithBiometric,
     );
-    _editEntryPresenter = EditEntryPresenter(this, _editEntryModel);
+    _presenter = EditEntryPresenter(this, _model);
 
     _textEditingController = TextEditingController.fromValue(
       TextEditingValue(
-        text: _editEntryModel.entry,
+        text: _model.entry,
         selection: TextSelection.fromPosition(
-          TextPosition(offset: _editEntryModel.entry.length),
+          TextPosition(offset: _model.entry.length),
         ),
       ),
     );
@@ -71,7 +71,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
         left: 8,
         top: 0,
         right: 8,
-        //Use bottom padding to detect if keyboard is shown, so it'd not hide our rendered elements
+        // Use bottom padding to detect if keyboard is shown, so it'd not hide our rendered elements
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Column(
@@ -83,7 +83,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                _editEntryModel.title,
+                _model.title,
                 style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
@@ -92,8 +92,8 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
           SizedBox(height: 16),
           Divider(height: 1),
           SizedBox(height: 16),
-          if (_editEntryModel.description.isNotEmpty) ...[
-            Text(_editEntryModel.description),
+          if (_model.description.isNotEmpty) ...[
+            Text(_model.description),
             SizedBox(height: 16),
           ],
           Flexible(
@@ -102,7 +102,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
               child: TextFormField(
                 autofocus: true,
                 controller: _textEditingController,
-                decoration: InputDecoration.collapsed(hintText: _editEntryModel.hintText),
+                decoration: InputDecoration.collapsed(hintText: _model.hintText),
                 textCapitalization: widget.textCapitalization,
                 validator: widget.validator,
                 minLines: null,
@@ -117,27 +117,27 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    child: Text(_editEntryModel.buttonText),
+                    child: Text(_model.buttonText),
                     onPressed: () async {
                       // Make sure that validation passes before we execute further logic
                       if (_formKey.currentState?.validate() != true) {
                         return;
                       }
 
-                      if (_editEntryModel.validateWithPrimaryPassword) {
-                        String? password = await Dialogs.showPasswordConfirmationDialog(
+                      if (_model.validateWithPrimaryPassword) {
+                        final String? password = await Dialogs.showPasswordConfirmationDialog(
                           context,
                           hintText: 'Primary Password',
                         );
-                        bool isPasswordValid = _editEntryPresenter.validatePrimaryPassword(password);
+                        final bool isPasswordValid = _presenter.validatePrimaryPassword(password);
                         if (!isPasswordValid) {
                           showMessage('Password is invalid', isSuccess: false);
                           return;
                         }
                       }
 
-                      if (_editEntryModel.validateWithBiometric) {
-                        final bool isSuccess = await _editEntryPresenter.authenticate();
+                      if (_model.validateWithBiometric) {
+                        final bool isSuccess = await _presenter.authenticate();
 
                         if (!isSuccess) {
                           showMessage('Authentication failed', isSuccess: false);

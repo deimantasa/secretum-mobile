@@ -33,7 +33,7 @@ class UsersStore extends ChangeNotifier {
     if (user != null) {
       updateUserLocally(user);
       await _storageService.initSecretKey(secretKey);
-      _listenToUserByUserId(user.documentSnapshot.id);
+      _listenToUserByUserId(user.id);
     }
   }
 
@@ -44,13 +44,13 @@ class UsersStore extends ChangeNotifier {
       final User? user = await _fireUsersService.getUserBySecretKey(secretKey);
       // If user exists, initialise listeners
       if (user != null) {
-        // SecretKey is already init'd in the StorageService. We need to make
+        // SecretKey is already initialised in the StorageService. We need to make
         // sure that EncryptionService `key` is also up to date
         _encryptionService.updateSecretKey(secretKey);
         // Update user immediately in Store, because listening might take 0.x second to retrieve the
         // user from stream
         updateUserLocally(user);
-        _listenToUserByUserId(user.documentSnapshot.id);
+        _listenToUserByUserId(user.id);
       }
       // If user doesn't exist, something went wrong, because SecretKey is in storage
       // yet there is no user found in Firestore. Investigate.

@@ -38,7 +38,6 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -59,7 +58,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     // Encryption is reusable within other services thus need to initialise it first
     serviceLocator.registerSingleton(EncryptionService());
     serviceLocator.registerSingleton(AuthenticationService());
-    serviceLocator.registerSingleton(FirestoreHelper(includeAdditionalFields: true, isLoggingEnabled: !kReleaseMode));
+    serviceLocator.registerSingleton(
+      FirestoreHelper(includeAdditionalFields: true, isLoggingEnabled: !kReleaseMode),
+    );
     serviceLocator.registerSingleton(FireSecretsService());
     serviceLocator.registerSingleton(FireUsersService());
     serviceLocator.registerSingleton(StorageService());

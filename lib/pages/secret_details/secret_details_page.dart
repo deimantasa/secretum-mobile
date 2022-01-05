@@ -18,21 +18,21 @@ class SecretDetailsPage extends StatefulWidget {
 }
 
 class _SecretDetailsPageState extends State<SecretDetailsPage> implements SecretDetailsView {
-  late final SecretDetailsModel _secretDetailsModel;
-  late final SecretDetailsPresenter _secretDetailsPresenter;
+  late final SecretDetailsModel _model;
+  late final SecretDetailsPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _secretDetailsModel = SecretDetailsModel(widget.secretId);
-    _secretDetailsPresenter = SecretDetailsPresenter(this, _secretDetailsModel);
-    _secretDetailsPresenter.init();
+    _model = SecretDetailsModel(widget.secretId);
+    _presenter = SecretDetailsPresenter(this, _model);
+    _presenter.init();
   }
 
   @override
   void dispose() {
-    _secretDetailsPresenter.dispose();
+    _presenter.dispose();
 
     super.dispose();
   }
@@ -43,7 +43,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          '${_secretDetailsModel.secret?.name}',
+          '${_model.secret?.name}',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
@@ -67,7 +67,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                             context,
                             title: "New Secret's Name",
                             hintText: 'Enter new name',
-                            entry: _secretDetailsModel.secret!.name,
+                            entry: _model.secret!.name,
                             buttonText: 'Update',
                             textCapitalization: TextCapitalization.words,
                             validator: (text) => text != null && text.isNotEmpty ? null : 'Secret cannot be empty',
@@ -76,7 +76,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                           );
 
                           if (secretsName != null) {
-                            _secretDetailsPresenter.updateSecret(Secret.update(name: secretsName));
+                            _presenter.updateSecret(Secret.update(name: secretsName));
                           }
                         },
                       ),
@@ -88,39 +88,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                           // Close bottom sheet
                           Navigator.pop(context);
 
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Are you sure want to delete everything?'),
-                                actions: [
-                                  TextButton(
-                                    child: Text('Cancel'),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                  TextButton(
-                                    child: Text(
-                                      'Delete',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                    onPressed: () async {
-                                      // Close previous dialog
-                                      Navigator.pop(context);
-
-                                      final String? password = await Dialogs.showPasswordConfirmationDialog(
-                                        context,
-                                        hintText: 'Primary Password',
-                                      );
-
-                                      if (password != null) {
-                                        _secretDetailsPresenter.deleteSecret(password);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          _showDeleteSecretDialog();
                         },
                       ),
                     ],
@@ -151,46 +119,47 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
   }
 
   Widget _buildBody() {
-    final String? note = _secretDetailsModel.secret?.note;
-    final String? code = _secretDetailsModel.secret?.code;
+    final String? note = _model.secret?.note;
+    final String? code = _model.secret?.code;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-            title: Text('Notes'),
-            subtitle: note == null || note.isEmpty ? null : Text(note),
-            trailing: IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () async {
-                final String? newNote = await Dialogs.showEditEntryBottomSheet(
-                  context,
-                  title: 'Update Note',
-                  entry: _secretDetailsModel.secret?.note,
-                  hintText: 'Enter some notes/hints about the secret',
-                  buttonText: 'Update',
-                  textCapitalization: TextCapitalization.sentences,
-                  validator: (text) => null,
-                  validateWithPrimaryPassword: false,
-                  validateWithBiometric: false,
-                );
+          title: Text('Notes'),
+          subtitle: note == null || note.isEmpty ? null : Text(note),
+          trailing: IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () async {
+              final String? newNote = await Dialogs.showEditEntryBottomSheet(
+                context,
+                title: 'Update Note',
+                entry: _model.secret?.note,
+                hintText: 'Enter some notes/hints about the secret',
+                buttonText: 'Update',
+                textCapitalization: TextCapitalization.sentences,
+                validator: (text) => null,
+                validateWithPrimaryPassword: false,
+                validateWithBiometric: false,
+              );
 
-                if (newNote != null) {
-                  _secretDetailsPresenter.updateSecret(Secret.update(note: newNote));
+              if (newNote != null) {
+                _presenter.updateSecret(Secret.update(note: newNote));
+              }
+            },
+          ),
+          onTap: _model.secret?.note?.isNotEmpty == true
+              ? () async {
+                  Dialogs.showInformationBottomSheet(
+                    context,
+                    title: 'Note',
+                    content: _model.secret!.note!,
+                    buttonText: 'Close',
+                    onPressed: () => Navigator.pop(context),
+                  );
                 }
-              },
-            ),
-            onTap: _secretDetailsModel.secret?.note?.isNotEmpty == true
-                ? () async {
-                    Dialogs.showInformationBottomSheet(
-                      context,
-                      title: 'Note',
-                      content: _secretDetailsModel.secret!.note!,
-                      buttonText: 'Close',
-                      onPressed: () => Navigator.pop(context),
-                    );
-                  }
-                : () => showMessage('There is no note saved')),
+              : () => showMessage('There is no note saved'),
+        ),
         Divider(height: 1),
         ListTile(
             title: Text('Code'),
@@ -202,7 +171,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                   context,
                   title: 'Update Code',
                   hintText: 'Enter new code',
-                  entry: _secretDetailsModel.secret?.code,
+                  entry: _model.secret?.code,
                   buttonText: 'Update',
                   textCapitalization: TextCapitalization.none,
                   validator: (text) => null,
@@ -211,23 +180,59 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                 );
 
                 if (newCode != null) {
-                  _secretDetailsPresenter.updateSecret(Secret.update(code: newCode));
+                  _presenter.updateSecret(Secret.update(code: newCode));
                 }
               },
             ),
-            onTap: _secretDetailsModel.secret?.code?.isNotEmpty == true
+            onTap: _model.secret?.code?.isNotEmpty == true
                 ? () async {
                     Dialogs.showInformationBottomSheet(
                       context,
                       title: 'Code',
-                      content: _secretDetailsModel.secret!.code!,
+                      content: _model.secret!.code!,
                       buttonText: 'Copy',
-                      onPressed: () => _secretDetailsPresenter.copyText(_secretDetailsModel.secret!.code!),
+                      onPressed: () => _presenter.copyText(_model.secret!.code!),
                     );
                   }
                 : () => showMessage('There is no code saved')),
         Divider(height: 1),
       ],
+    );
+  }
+
+  void _showDeleteSecretDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Are you sure want to delete everything?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () async {
+                // Close previous dialog
+                Navigator.pop(context);
+
+                final String? password = await Dialogs.showPasswordConfirmationDialog(
+                  context,
+                  hintText: 'Primary Password',
+                );
+
+                if (password != null) {
+                  _presenter.deleteSecret(password);
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

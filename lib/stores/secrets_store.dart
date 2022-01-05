@@ -70,7 +70,7 @@ class SecretsStore extends ChangeNotifier {
       case DocumentChangeType.added:
         secrets.onAdded<Secret>(
           secret,
-          logReference: 'UsersStore._updateSecretsLocally',
+          logReference: 'SecretsStore._updateSecretsLocally',
           onSort: (secrets) => _sortListByCreatedAtDesc(secrets),
           onViewUpdate: () => notifyListeners(),
         );
@@ -78,7 +78,7 @@ class SecretsStore extends ChangeNotifier {
       case DocumentChangeType.modified:
         secrets.onModified<Secret>(
           secret,
-          logReference: 'UsersStore._updateSecretsLocally',
+          logReference: 'SecretsStore._updateSecretsLocally',
           onSort: (secrets) => _sortListByCreatedAtDesc(secrets),
           onViewUpdate: () => notifyListeners(),
         );
@@ -86,7 +86,7 @@ class SecretsStore extends ChangeNotifier {
       case DocumentChangeType.removed:
         secrets.onRemoved<Secret>(
           secret,
-          logReference: 'UsersStore._updateSecretsLocally',
+          logReference: 'SecretsStore._updateSecretsLocally',
           onViewUpdate: () => notifyListeners(),
         );
         break;

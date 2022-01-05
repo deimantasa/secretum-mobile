@@ -25,13 +25,7 @@ class SecretDetailsPresenter {
 
   Future<void> updateSecret(Secret secret) async {
     if (_secretDetailsModel.secret != null) {
-      _secretsStore
-          .updateSecret(
-        _usersStore.user?.documentSnapshot.id ?? '',
-        _secretDetailsModel.secret?.documentSnapshot.id ?? '',
-        secret,
-      )
-          .then((isSuccess) {
+      _secretsStore.updateSecret(_usersStore.user!.id, _secretDetailsModel.secret!.id, secret).then((isSuccess) {
         if (isSuccess) {
           _view.showMessage('Secret updated');
         } else {
@@ -47,7 +41,7 @@ class SecretDetailsPresenter {
 
   void _listenToSecretById() {
     final StreamSubscription streamSubscription = _secretsStore.listenToSecretById(
-      _usersStore.user!.documentSnapshot.id,
+      _usersStore.user!.id,
       _secretDetailsModel.secretId,
       onSecretChanged: (secret) {
         _secretDetailsModel.secret = secret;
@@ -63,8 +57,8 @@ class SecretDetailsPresenter {
         _encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword;
     if (isPasswordCorrect) {
       final bool isSuccess = await _secretsStore.deleteSecret(
-        _usersStore.user!.documentSnapshot.id,
-        _secretDetailsModel.secret!.documentSnapshot.id,
+        _usersStore.user!.id,
+        _secretDetailsModel.secret!.id,
       );
 
       final String? secretName = _secretDetailsModel.secret?.name;

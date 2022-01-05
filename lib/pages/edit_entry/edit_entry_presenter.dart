@@ -7,15 +7,15 @@ import 'edit_entry_contract.dart';
 import 'edit_entry_model.dart';
 
 class EditEntryPresenter {
-  //ignore: unused_field
+  // ignore: unused_field
   final EditEntryView _view;
-  //ignore: unused_field
-  final EditEntryModel _editEntryModel;
+  // ignore: unused_field
+  final EditEntryModel _model;
   final AuthenticationService _authenticationService;
   final EncryptionService _encryptionService;
   final UsersStore _usersStore;
 
-  EditEntryPresenter(this._view, this._editEntryModel)
+  EditEntryPresenter(this._view, this._model)
       : this._authenticationService = GetIt.instance<AuthenticationService>(),
         this._encryptionService = GetIt.instance<EncryptionService>(),
         this._usersStore = GetIt.instance<UsersStore>();
@@ -24,6 +24,7 @@ class EditEntryPresenter {
     if (password == null) {
       return false;
     }
+
     return _usersStore.user!.sensitiveInformation.primaryPassword == _encryptionService.getHashedText(password);
   }
 

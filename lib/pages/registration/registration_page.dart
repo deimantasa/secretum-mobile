@@ -22,15 +22,15 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
   final TextEditingController _primaryPasswordConfirmationTEC = TextEditingController();
   final FocusNode _primaryPasswordConfirmationFocusNode = FocusNode();
 
-  late final RegistrationModel _registrationModel;
-  late final RegistrationPresenter _registrationPresenter;
+  late final RegistrationModel _model;
+  late final RegistrationPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _registrationModel = RegistrationModel();
-    _registrationPresenter = RegistrationPresenter(this, _registrationModel);
+    _model = RegistrationModel();
+    _presenter = RegistrationPresenter(this, _model);
     _primaryPasswordFocusNode.requestFocus();
   }
 
@@ -79,8 +79,8 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
           confirmationPasswordFocusNode: _primaryPasswordConfirmationFocusNode,
           description: 'Primary Password is used to secure most important actions within the application.',
           passwordTEC: _primaryPasswordTEC,
-          isPasswordObscured: _registrationModel.isPrimaryPasswordObscure,
-          onObscureChanged: (isObscure) => setState(() => _registrationModel.isPrimaryPasswordObscure = isObscure),
+          isPasswordObscured: _model.isPrimaryPasswordObscure,
+          onObscureChanged: (isObscure) => setState(() => _model.isPrimaryPasswordObscure = isObscure),
           passwordHint: 'Primary Password',
           passwordLength: 6,
           passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
@@ -180,7 +180,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
     FocusScope.of(context).unfocus();
 
     if (_primaryPasswordFormKey.currentState!.validate()) {
-      _registrationPresenter.finishRegistration(_primaryPasswordConfirmationTEC.text);
+      _presenter.finishRegistration(_primaryPasswordConfirmationTEC.text);
     }
   }
 }

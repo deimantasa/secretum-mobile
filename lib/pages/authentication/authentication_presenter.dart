@@ -7,11 +7,10 @@ import 'authentication_model.dart';
 class AuthenticationPresenter {
   final AuthenticationView _view;
   // ignore: unused_field
-  final AuthenticationModel _authenticationModel;
+  final AuthenticationModel _model;
   final AuthenticationService _authenticationService;
 
-  AuthenticationPresenter(this._view, this._authenticationModel)
-      : this._authenticationService = GetIt.instance<AuthenticationService>();
+  AuthenticationPresenter(this._view, this._model) : this._authenticationService = GetIt.instance<AuthenticationService>();
 
   Future<void> authenticate() async {
     final bool isSuccess = await _authenticationService.authViaBiometric();

@@ -18,15 +18,15 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> implements WelcomeView {
-  late final WelcomeModel _welcomeModel;
-  late final WelcomePresenter _welcomePresenter;
+  late final WelcomeModel _model;
+  late final WelcomePresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _welcomeModel = WelcomeModel();
-    _welcomePresenter = WelcomePresenter(this, _welcomeModel);
+    _model = WelcomeModel();
+    _presenter = WelcomePresenter(this, _model);
   }
 
   @override
@@ -89,12 +89,7 @@ class _WelcomePageState extends State<WelcomePage> implements WelcomeView {
                     Expanded(
                       child: ElevatedButton(
                         child: Text('New User'),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegistrationPage(),
-                          ),
-                        ),
+                        onPressed: () => _goToRegistrationPage(),
                       ),
                     ),
                   ],
@@ -156,10 +151,14 @@ class _WelcomePageState extends State<WelcomePage> implements WelcomeView {
               ),
               TextButton(
                 child: Text('Confirm'),
-                onPressed: () => _welcomePresenter.confirmSecretKey(textEditingController.text),
+                onPressed: () => _presenter.confirmSecretKey(textEditingController.text),
               ),
             ],
           );
         });
+  }
+
+  void _goToRegistrationPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()));
   }
 }

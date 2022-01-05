@@ -10,20 +10,20 @@ import 'welcome_model.dart';
 class WelcomePresenter {
   final WelcomeView _view;
   // ignore:unused_field
-  final WelcomeModel _welcomeModel;
+  final WelcomeModel _model;
   final EncryptionService _encryptionService;
   final DbBackupStore _dbBackupStore;
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
-  WelcomePresenter(this._view, this._welcomeModel)
+  WelcomePresenter(this._view, this._model)
       : this._encryptionService = GetIt.instance<EncryptionService>(),
         this._dbBackupStore = GetIt.instance<DbBackupStore>(),
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
   Future<void> confirmSecretKey(String secretKey) async {
-    // TODO anti-spam mechanism
+    // TODO: anti-spam mechanism
     _view.showMessage('Verifying...');
     // Make sure to update encryptionService for handling the key,
     // because if key is correct - then retrieved result will need to be decrypted,
@@ -32,7 +32,7 @@ class WelcomePresenter {
 
     await _usersStore.initUserViaSecretKey(secretKey);
     if (_usersStore.user != null) {
-      _secretsStore.init(_usersStore.user!.documentSnapshot.id);
+      _secretsStore.init(_usersStore.user!.id);
       await _dbBackupStore.initDbBackup();
 
       _view.showMessage('Account retrieved. Welcome back!');

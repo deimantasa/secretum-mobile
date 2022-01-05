@@ -43,8 +43,11 @@ class FireUsersService {
       if (queryDocumentSnapshot.data() != null) {
         return User.fromFirestore(queryDocumentSnapshot);
       }
+
       return null;
     }).toList();
+
+    // Remove all nulls to make sure list is non-nullable
     users.removeWhere((element) => element == null);
 
     if (users.isNotEmpty) {
@@ -80,7 +83,7 @@ class FireUsersService {
       logReference: 'FireUsersService.listenToUserById',
       onDocumentChange: (documentSnapshot) {
         if (documentSnapshot.data() != null) {
-          User user = User.fromFirestore(documentSnapshot);
+          final User user = User.fromFirestore(documentSnapshot);
           onUserChanged(user);
         }
       },

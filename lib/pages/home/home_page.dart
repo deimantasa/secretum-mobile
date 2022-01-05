@@ -36,16 +36,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> implements HomeView {
-  late final HomeModel _homeModel;
-  late final HomePresenter _homePresenter;
+  late final HomeModel _model;
+  late final HomePresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _homeModel = HomeModel();
-    _homePresenter = HomePresenter(this, _homeModel);
-    _homePresenter.init();
+    _model = HomeModel();
+    _presenter = HomePresenter(this, _model);
+    _presenter.init();
 
     if (widget.isFirstTime) {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
@@ -60,12 +60,11 @@ class _HomePageState extends State<HomePage> implements HomeView {
     context.watch<SecretsStore>();
     context.watch<DbBackupStore>();
 
-    _homePresenter.updateData();
+    _presenter.updateData();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Secretum'),
-        actions: [],
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
@@ -88,7 +87,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
   }
 
   Widget _buildBody() {
-    if (_homeModel.secrets.isEmpty) {
+    if (_model.secrets.isEmpty) {
       return Center(
         child: ElevatedButton(
           child: Text('Add new secret'),
@@ -103,9 +102,9 @@ class _HomePageState extends State<HomePage> implements HomeView {
             child: ListView.builder(
               // Make sure ListView items are not hidden by FABs
               padding: EdgeInsets.only(bottom: 90),
-              itemCount: _homeModel.secrets.length,
+              itemCount: _model.secrets.length,
               itemBuilder: (context, index) {
-                Secret secret = _homeModel.secrets[index];
+                final Secret secret = _model.secrets[index];
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,
@@ -116,8 +115,8 @@ class _HomePageState extends State<HomePage> implements HomeView {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        subtitle: Text('${Utils.getFormattedDate(secret.createdAt)}'),
-                        onTap: () async => _goToSecretDetailsPage(secret)),
+                        subtitle: Text(Utils.getFormattedDate(secret.createdAt)),
+                        onTap: () => _goToSecretDetailsPage(secret)),
                     Divider(height: 1),
                   ],
                 );
@@ -143,7 +142,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
     );
 
     if (secretsName != null && secretsName.isNotEmpty) {
-      _homePresenter.addNewSecret(secretsName);
+      _presenter.addNewSecret(secretsName);
     }
   }
 
@@ -177,7 +176,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
 
   Widget _buildDrawer() {
     const double kImageSize = 80;
-    final DbBackup? dbBackup = _homeModel.dbBackup;
+    final DbBackup? dbBackup = _model.dbBackup;
 
     return Drawer(
       child: Column(
@@ -237,15 +236,13 @@ class _HomePageState extends State<HomePage> implements HomeView {
                       TextButton(
                         child: Text(
                           'Backup',
-                          style: TextStyle(
-                            color: Colors.green,
-                          ),
+                          style: TextStyle(color: Colors.green),
                         ),
-                        onPressed: () async {
-                          //Close previous dialog
+                        onPressed: () {
+                          // Close previous dialog
                           Navigator.pop(context);
 
-                          _homePresenter.saveDbLocally();
+                          _presenter.saveDbLocally();
                         },
                       ),
                     ],
@@ -275,7 +272,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
                 );
 
                 if (fileName != null && fileName.isNotEmpty) {
-                  _homePresenter.exportSecrets(ExportFromType.backup, fileName);
+                  _presenter.exportSecrets(ExportFromType.backup, fileName);
                 }
               },
             ),
@@ -299,7 +296,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
               );
 
               if (fileName != null && fileName.isNotEmpty) {
-                _homePresenter.exportSecrets(ExportFromType.database, fileName);
+                _presenter.exportSecrets(ExportFromType.database, fileName);
               }
             },
           ),
@@ -329,30 +326,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Log-Out'),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('Are you sure you want to log-out?'),
-                      content: Text(
-                          'Make sure you have your secret key saved. This will be the only way to log-in to your account again.'),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        TextButton(
-                          child: Text(
-                            'Log-Out',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          onPressed: () => _homePresenter.signOut(),
-                        ),
-                      ],
-                    );
-                  });
-            },
+            onTap: () => _showLogOutDialog(),
           ),
           Divider(height: 1),
           SizedBox(height: 8),
@@ -366,9 +340,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
                   builder: (context, snapshot) {
                     return Text(
                       "App Version: ${snapshot.data != null ? snapshot.data!.version : ""}",
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                      ),
+                      style: TextStyle(color: Colors.white.withOpacity(0.5)),
                     );
                   },
                 ),
@@ -383,9 +355,31 @@ class _HomePageState extends State<HomePage> implements HomeView {
   void _goToSecretDetailsPage(Secret secret) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => SecretDetailsPage(secretId: secret.documentSnapshot.id),
-      ),
+      MaterialPageRoute(builder: (context) => SecretDetailsPage(secretId: secret.id)),
     );
+  }
+
+  void _showLogOutDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Are you sure you want to log-out?'),
+            content: Text('Make sure you have your secret key saved. This will be the only way to log-in to your account again.'),
+            actions: [
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                child: Text(
+                  'Log-Out',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: () => _presenter.signOut(),
+              ),
+            ],
+          );
+        });
   }
 }

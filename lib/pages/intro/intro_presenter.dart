@@ -10,20 +10,18 @@ import 'intro_model.dart';
 class IntroPresenter {
   final IntroView _view;
   //ignore: unused_field
-  final IntroModel _introModel;
+  final IntroModel _model;
   final AuthenticationService _authenticationService;
   final DbBackupStore _dbBackupStore;
   final UsersStore _usersStore;
   final SecretsStore _secretsStore;
 
-  IntroPresenter(this._view, this._introModel)
+  IntroPresenter(this._view, this._model)
       : this._authenticationService = GetIt.instance<AuthenticationService>(),
         this._dbBackupStore = GetIt.instance<DbBackupStore>(),
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
-  // TODO Never use Context in Presenter.
-  // But I'm feeling lazy to further decouple, therefore I'll allow it.
   Future<void> init() async {
     await Future.wait([
       Future.delayed(Duration(seconds: 2)),
@@ -33,29 +31,13 @@ class IntroPresenter {
     ]);
 
     if (_usersStore.user != null) {
-      // TODO
       _view.goToAuthenticationPage();
-      // final String? password = await Dialogs.showPasswordConfirmationDialog(context, hintText: 'Primary Password');
-      //
-      // if (password != null &&
-      //     _encryptionService.getHashedText(password) == _usersStore.user!.sensitiveInformation.primaryPassword) {
-      //   final bool isSuccess = await Utils.authViaBiometric();
-      //
-      //   if (isSuccess) {
-      //     _secretsStore.init(_usersStore.user!.documentSnapshot.id);
-      //     _view.goToHomePage();
-      //     return;
-      //   }
-      // }
-      // // Since user is identified but password or biometric doesn't match - close the app
-      // // to prevent from any potential data leak
-      // Utils.closeApp();
     } else {
       _view.goToWelcomePage();
     }
   }
 
   void finishInit() {
-    _secretsStore.init(_usersStore.user!.documentSnapshot.id);
+    _secretsStore.init(_usersStore.user!.id);
   }
 }

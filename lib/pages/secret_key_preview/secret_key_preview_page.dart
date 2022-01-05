@@ -11,16 +11,16 @@ class SecretKeyPreviewPage extends StatefulWidget {
 }
 
 class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements SecretKeyView {
-  late final SecretKeyPreviewModel _secretKeyPreviewModel;
-  late final SecretKeyPreviewPresenter _secretKeyPreviewPresenter;
+  late final SecretKeyPreviewModel _model;
+  late final SecretKeyPreviewPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _secretKeyPreviewModel = SecretKeyPreviewModel();
-    _secretKeyPreviewPresenter = SecretKeyPreviewPresenter(this, _secretKeyPreviewModel);
-    _secretKeyPreviewPresenter.init();
+    _model = SecretKeyPreviewModel();
+    _presenter = SecretKeyPreviewPresenter(this, _model);
+    _presenter.init();
   }
 
   @override
@@ -62,7 +62,7 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
           ),
           Spacer(),
           Text(
-            '${_secretKeyPreviewModel.secretKey}',
+            '${_model.secretKey}',
             style: Theme.of(context).textTheme.headline6!.copyWith(decoration: TextDecoration.underline),
             textAlign: TextAlign.center,
           ),
@@ -72,10 +72,10 @@ class _SecretKeyPreviewPageState extends State<SecretKeyPreviewPage> implements 
               Expanded(
                 child: ElevatedButton(
                   child: Text('Copy'),
-                  onPressed: () => _secretKeyPreviewPresenter.copySecretKey(),
+                  onPressed: () => _presenter.copySecretKey(),
                 ),
               ),
-              if (_secretKeyPreviewModel.isKeyCopied) ...[
+              if (_model.isKeyCopied) ...[
                 SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(

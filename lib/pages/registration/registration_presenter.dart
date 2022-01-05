@@ -11,12 +11,12 @@ import 'registration_model.dart';
 class RegistrationPresenter {
   final RegistrationView _view;
   //ignore: unused_field
-  final RegistrationModel _registrationModel;
+  final RegistrationModel _model;
   final EncryptionService _encryptionService;
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
-  RegistrationPresenter(this._view, this._registrationModel)
+  RegistrationPresenter(this._view, this._model)
       : this._encryptionService = GetIt.instance<EncryptionService>(),
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
@@ -30,8 +30,8 @@ class RegistrationPresenter {
     final bool isSuccess = await _usersStore.registerUser(user);
 
     if (isSuccess) {
-      // After success is returned, we already init'd user in Store
-      _secretsStore.init(_usersStore.user!.documentSnapshot.id);
+      // After success is returned, we already initialised user in the Store
+      _secretsStore.init(_usersStore.user!.id);
 
       _view.goToHomePage();
     } else {

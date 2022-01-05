@@ -17,16 +17,16 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> implements IntroView {
-  late final IntroModel _introModel;
-  late final IntroPresenter _introPresenter;
+  late final IntroModel _model;
+  late final IntroPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
 
-    _introModel = IntroModel();
-    _introPresenter = IntroPresenter(this, _introModel);
-    _introPresenter.init();
+    _model = IntroModel();
+    _presenter = IntroPresenter(this, _model);
+    _presenter.init();
   }
 
   @override
@@ -81,25 +81,21 @@ class _IntroPageState extends State<IntroPage> implements IntroView {
 
   @override
   void goToWelcomePage() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WelcomePage(),
-      ),
-    );
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WelcomePage()));
   }
 
   @override
   Future<void> goToAuthenticationPage() async {
-    final bool? isSuccess = await Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
+    final bool? isSuccess = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AuthenticationPage()),
+    );
 
     if (isSuccess == true) {
-      _introPresenter.finishInit();
+      _presenter.finishInit();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(isFirstTime: false),
-        ),
+        MaterialPageRoute(builder: (context) => HomePage(isFirstTime: false)),
       );
     }
   }

@@ -31,16 +31,11 @@ class FireSecretsService {
     required ValueSetter<Secret> onSecretChanged,
   }) {
     final StreamSubscription<DocumentSnapshot> streamSubscription = _fireGenericService.listenToDocument(
-      [
-        FireUsersService.kCollectionUsers,
-        userId,
-        kSubCollectionSecrets,
-        secretId,
-      ],
+      [FireUsersService.kCollectionUsers, userId, kSubCollectionSecrets, secretId],
       logReference: 'FireSecretsService.listenToSecretById',
       onDocumentChange: (documentSnapshot) {
         if (documentSnapshot.data() != null) {
-          Secret secret = Secret.fromFirestore(documentSnapshot);
+          final Secret secret = Secret.fromFirestore(documentSnapshot);
           onSecretChanged(secret);
         }
       },
