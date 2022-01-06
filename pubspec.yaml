@@ -33,6 +33,7 @@ dependencies:
 
   #Fire
   cloud_firestore: ^2.2.2
+  firebase_auth: ^3.3.4
   firebase_core: ^1.0.1
 
   #Security
