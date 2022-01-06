@@ -3,20 +3,22 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:secretum/models/firestore_metadata.dart';
 import 'package:secretum/models/users_sensitive_information.dart';
 import 'package:secretum/utils/extensions.dart';
+import 'package:secretum/utils/utils.dart';
 
 part 'user.g.dart';
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class User extends FirestoreMetadata {
-  static const String kMapSensitiveInformation = 'sensitiveInformation';
-
   String get id => this.documentSnapshot.id;
 
-  late UsersSensitiveInformation sensitiveInformation;
+  @JsonKey(fromJson: Utils.dateTimeFromInt, toJson: Utils.dateTimeToInt, includeIfNull: false)
+  DateTime createdAt;
+  static const String kMapSensitiveInformation = 'sensitiveInformation';
+  late final UsersSensitiveInformation sensitiveInformation;
 
-  User(this.sensitiveInformation);
+  User(this.sensitiveInformation, this.createdAt);
 
-  User.newUser(this.sensitiveInformation);
+  User.newUser(this.sensitiveInformation) : this.createdAt = DateTime.now();
 
   factory User.fromFirestore(DocumentSnapshot documentSnapshot) {
     final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;

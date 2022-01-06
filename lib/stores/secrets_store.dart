@@ -99,13 +99,7 @@ class SecretsStore extends ChangeNotifier {
   }
 
   void _sortListByCreatedAtDesc(List<Secret> secrets) {
-    secrets.sort((a, b) {
-      if (a.createdAt != null && b.createdAt != null) {
-        return b.createdAt!.compareTo(a.createdAt!);
-      } else {
-        return -1;
-      }
-    });
+    secrets.sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   void resetStore() {

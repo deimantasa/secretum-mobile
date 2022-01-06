@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     serviceLocator.registerSingleton(EncryptionService());
     serviceLocator.registerSingleton(AuthenticationService());
     serviceLocator.registerSingleton(
-      FirestoreHelper(includeAdditionalFields: true, isLoggingEnabled: !kReleaseMode),
+      FirestoreHelper(includeAdditionalFields: false, isLoggingEnabled: !kReleaseMode),
     );
     serviceLocator.registerSingleton(FireSecretsService());
     serviceLocator.registerSingleton(FireUsersService());

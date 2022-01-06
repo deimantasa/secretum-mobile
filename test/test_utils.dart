@@ -7,6 +7,10 @@ class TestUtils {
   static const String kLateInitializationErrorCaught = 'LateInitializationError caught';
   static const String kEncryptionSecretKey = 'gHgAe/qddTarEgNFcknw3DETxDlYiSRX';
 
+  /// 2020-01-01 00-00-00
+  static final DateTime createdAtDate = DateTime(2000, 1, 1, 0, 0, 0, 0, 0);
+  static const int kCreatedAtMillis = 946659600000;
+
   /// Secret
   static Secret getSecret(DateTime dateTime) {
     return Secret('addedBy1', dateTime, 'name1', 'note1', 'code1');
@@ -15,7 +19,7 @@ class TestUtils {
   static Map<String, dynamic> getSecretEncryptedMap(DateTime dateTime) {
     return {
       'addedBy': 'EwXRom7htzdBRerdld7PAA==',
-      'createdAt': Utils.dateTimeToTimestamp(dateTime),
+      'createdAt': Utils.dateTimeToInt(dateTime),
       'name': 'HADYojuoxQ1CRunelt3MAw==',
       'note': 'HA7BojuoxQ1CRunelt3MAw==',
       'code': 'EQ7RojuoxQ1CRunelt3MAw=='
@@ -23,28 +27,24 @@ class TestUtils {
   }
 
   static Map<String, dynamic> getSecretDecryptedMap(DateTime dateTime) {
-    return {
-      'addedBy': 'addedBy1',
-      'createdAt': Utils.dateTimeToTimestamp(dateTime),
-      'name': 'name1',
-      'note': 'note1',
-      'code': 'code1'
-    };
+    return {'addedBy': 'addedBy1', 'createdAt': Utils.dateTimeToInt(dateTime), 'name': 'name1', 'note': 'note1', 'code': 'code1'};
   }
 
   /// User
   static User getUser() {
-    return User(getUsersSensitiveInformation());
+    return User(getUsersSensitiveInformation(), createdAtDate);
   }
 
   static Map<String, dynamic> getUserEncryptedMap() {
     return {
+      'createdAt': kCreatedAtMillis,
       'sensitiveInformation': getUsersSensitiveInformationHashedMap(),
     };
   }
 
   static Map<String, dynamic> getUserDecryptedMap() {
     return {
+      'createdAt': kCreatedAtMillis,
       'sensitiveInformation': getUsersSensitiveInformationHashedMap(),
     };
   }

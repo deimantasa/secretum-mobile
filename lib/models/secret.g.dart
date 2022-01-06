@@ -7,15 +7,17 @@ part of 'secret.dart';
 // **************************************************************************
 
 Secret _$SecretFromJson(Map<String, dynamic> json) => Secret(
-      json['addedBy'] as String? ?? '',
-      Utils.dateTimeFromTimestamp(json['createdAt'] as Timestamp?),
-      json['name'] as String? ?? '',
-      json['note'] as String? ?? '',
-      json['code'] as String? ?? '',
+      json['addedBy'] as String,
+      Utils.dateTimeFromInt(json['createdAt'] as int),
+      json['name'] as String,
+      json['note'] as String,
+      json['code'] as String,
     );
 
 Map<String, dynamic> _$SecretToJson(Secret instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'addedBy': instance.addedBy,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -23,10 +25,9 @@ Map<String, dynamic> _$SecretToJson(Secret instance) {
     }
   }
 
-  writeNotNull('addedBy', instance.addedBy);
-  writeNotNull('createdAt', Utils.dateTimeToTimestamp(instance.createdAt));
-  writeNotNull('name', instance.name);
-  writeNotNull('note', instance.note);
-  writeNotNull('code', instance.code);
+  writeNotNull('createdAt', Utils.dateTimeToInt(instance.createdAt));
+  val['name'] = instance.name;
+  val['note'] = instance.note;
+  val['code'] = instance.code;
   return val;
 }

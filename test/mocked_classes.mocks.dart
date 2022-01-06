@@ -24,33 +24,35 @@ import 'mock_function.dart' as _i10;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeDocumentSnapshot_0<T extends Object?> extends _i1.Fake
+class _FakeDateTime_0 extends _i1.Fake implements DateTime {}
+
+class _FakeDocumentSnapshot_1<T extends Object?> extends _i1.Fake
     implements _i2.DocumentSnapshot<T> {}
 
-class _FakeDocumentReference_1<T extends Object?> extends _i1.Fake
+class _FakeDocumentReference_2<T extends Object?> extends _i1.Fake
     implements _i2.DocumentReference<T> {}
 
-class _FakeSnapshotMetadata_2 extends _i1.Fake implements _i2.SnapshotMetadata {
+class _FakeSnapshotMetadata_3 extends _i1.Fake implements _i2.SnapshotMetadata {
 }
 
-class _FakeFirebaseApp_3 extends _i1.Fake implements _i3.FirebaseApp {}
+class _FakeFirebaseApp_4 extends _i1.Fake implements _i3.FirebaseApp {}
 
-class _FakeSettings_4 extends _i1.Fake implements _i2.Settings {}
+class _FakeSettings_5 extends _i1.Fake implements _i2.Settings {}
 
-class _FakeCollectionReference_5<T extends Object?> extends _i1.Fake
+class _FakeCollectionReference_6<T extends Object?> extends _i1.Fake
     implements _i2.CollectionReference<T> {}
 
-class _FakeWriteBatch_6 extends _i1.Fake implements _i2.WriteBatch {}
+class _FakeWriteBatch_7 extends _i1.Fake implements _i2.WriteBatch {}
 
-class _FakeLoadBundleTask_7 extends _i1.Fake implements _i2.LoadBundleTask {}
+class _FakeLoadBundleTask_8 extends _i1.Fake implements _i2.LoadBundleTask {}
 
-class _FakeQuerySnapshot_8<T extends Object?> extends _i1.Fake
+class _FakeQuerySnapshot_9<T extends Object?> extends _i1.Fake
     implements _i2.QuerySnapshot<T> {}
 
-class _FakeQuery_9<T extends Object?> extends _i1.Fake implements _i2.Query<T> {
-}
+class _FakeQuery_10<T extends Object?> extends _i1.Fake
+    implements _i2.Query<T> {}
 
-class _FakeFirebaseFirestore_10 extends _i1.Fake
+class _FakeFirebaseFirestore_11 extends _i1.Fake
     implements _i2.FirebaseFirestore {}
 
 /// A class which mocks [LoggingService].
@@ -76,19 +78,27 @@ class MockSecret extends _i1.Mock implements _i6.Secret {
   }
 
   @override
-  set addedBy(String? _addedBy) =>
-      super.noSuchMethod(Invocation.setter(#addedBy, _addedBy),
-          returnValueForMissingStub: null);
+  String get addedBy =>
+      (super.noSuchMethod(Invocation.getter(#addedBy), returnValue: '')
+          as String);
   @override
-  set createdAt(DateTime? _createdAt) =>
-      super.noSuchMethod(Invocation.setter(#createdAt, _createdAt),
-          returnValueForMissingStub: null);
+  DateTime get createdAt => (super.noSuchMethod(Invocation.getter(#createdAt),
+      returnValue: _FakeDateTime_0()) as DateTime);
+  @override
+  String get name =>
+      (super.noSuchMethod(Invocation.getter(#name), returnValue: '') as String);
   @override
   set name(String? _name) => super.noSuchMethod(Invocation.setter(#name, _name),
       returnValueForMissingStub: null);
   @override
+  String get note =>
+      (super.noSuchMethod(Invocation.getter(#note), returnValue: '') as String);
+  @override
   set note(String? _note) => super.noSuchMethod(Invocation.setter(#note, _note),
       returnValueForMissingStub: null);
+  @override
+  String get code =>
+      (super.noSuchMethod(Invocation.getter(#code), returnValue: '') as String);
   @override
   set code(String? _code) => super.noSuchMethod(Invocation.setter(#code, _code),
       returnValueForMissingStub: null);
@@ -98,7 +108,7 @@ class MockSecret extends _i1.Mock implements _i6.Secret {
   @override
   _i2.DocumentSnapshot<Object?> get documentSnapshot =>
       (super.noSuchMethod(Invocation.getter(#documentSnapshot),
-              returnValue: _FakeDocumentSnapshot_0<Object?>())
+              returnValue: _FakeDocumentSnapshot_1<Object?>())
           as _i2.DocumentSnapshot<Object?>);
   @override
   set documentSnapshot(_i2.DocumentSnapshot<Object?>? _documentSnapshot) =>
@@ -130,11 +140,11 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
   @override
   _i2.DocumentReference<T> get reference => (super.noSuchMethod(
       Invocation.getter(#reference),
-      returnValue: _FakeDocumentReference_1<T>()) as _i2.DocumentReference<T>);
+      returnValue: _FakeDocumentReference_2<T>()) as _i2.DocumentReference<T>);
   @override
   _i2.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_2()) as _i2.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_3()) as _i2.SnapshotMetadata);
   @override
   bool get exists =>
       (super.noSuchMethod(Invocation.getter(#exists), returnValue: false)
@@ -169,7 +179,7 @@ class MockDocumentChange<T extends Object?> extends _i1.Mock
   @override
   _i2.DocumentSnapshot<T> get doc => (super.noSuchMethod(
       Invocation.getter(#doc),
-      returnValue: _FakeDocumentSnapshot_0<T>()) as _i2.DocumentSnapshot<T>);
+      returnValue: _FakeDocumentSnapshot_1<T>()) as _i2.DocumentSnapshot<T>);
 }
 
 /// A class which mocks [UsersSensitiveInformation].
@@ -212,7 +222,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
 
   @override
   _i3.FirebaseApp get app => (super.noSuchMethod(Invocation.getter(#app),
-      returnValue: _FakeFirebaseApp_3()) as _i3.FirebaseApp);
+      returnValue: _FakeFirebaseApp_4()) as _i3.FirebaseApp);
   @override
   set app(_i3.FirebaseApp? _app) =>
       super.noSuchMethod(Invocation.setter(#app, _app),
@@ -223,7 +233,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
           returnValueForMissingStub: null);
   @override
   _i2.Settings get settings => (super.noSuchMethod(Invocation.getter(#settings),
-      returnValue: _FakeSettings_4()) as _i2.Settings);
+      returnValue: _FakeSettings_5()) as _i2.Settings);
   @override
   Map<dynamic, dynamic> get pluginConstants =>
       (super.noSuchMethod(Invocation.getter(#pluginConstants),
@@ -232,11 +242,11 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
   _i2.CollectionReference<Map<String, dynamic>> collection(
           String? collectionPath) =>
       (super.noSuchMethod(Invocation.method(#collection, [collectionPath]),
-              returnValue: _FakeCollectionReference_5<Map<String, dynamic>>())
+              returnValue: _FakeCollectionReference_6<Map<String, dynamic>>())
           as _i2.CollectionReference<Map<String, dynamic>>);
   @override
   _i2.WriteBatch batch() => (super.noSuchMethod(Invocation.method(#batch, []),
-      returnValue: _FakeWriteBatch_6()) as _i2.WriteBatch);
+      returnValue: _FakeWriteBatch_7()) as _i2.WriteBatch);
   @override
   _i8.Future<void> clearPersistence() =>
       (super.noSuchMethod(Invocation.method(#clearPersistence, []),
@@ -252,7 +262,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
   @override
   _i2.LoadBundleTask loadBundle(_i9.Uint8List? bundle) =>
       (super.noSuchMethod(Invocation.method(#loadBundle, [bundle]),
-          returnValue: _FakeLoadBundleTask_7()) as _i2.LoadBundleTask);
+          returnValue: _FakeLoadBundleTask_8()) as _i2.LoadBundleTask);
   @override
   void useFirestoreEmulator(String? host, int? port,
           {bool? sslEnabled = false}) =>
@@ -267,12 +277,12 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
       (super.noSuchMethod(
           Invocation.method(#namedQueryGet, [name], {#options: options}),
           returnValue: Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
-              _FakeQuerySnapshot_8<Map<String, dynamic>>())) as _i8
+              _FakeQuerySnapshot_9<Map<String, dynamic>>())) as _i8
           .Future<_i2.QuerySnapshot<Map<String, dynamic>>>);
   @override
   _i2.Query<Map<String, dynamic>> collectionGroup(String? collectionPath) =>
       (super.noSuchMethod(Invocation.method(#collectionGroup, [collectionPath]),
-              returnValue: _FakeQuery_9<Map<String, dynamic>>())
+              returnValue: _FakeQuery_10<Map<String, dynamic>>())
           as _i2.Query<Map<String, dynamic>>);
   @override
   _i8.Future<void> disableNetwork() =>
@@ -282,7 +292,7 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
   @override
   _i2.DocumentReference<Map<String, dynamic>> doc(String? documentPath) =>
       (super.noSuchMethod(Invocation.method(#doc, [documentPath]),
-              returnValue: _FakeDocumentReference_1<Map<String, dynamic>>())
+              returnValue: _FakeDocumentReference_2<Map<String, dynamic>>())
           as _i2.DocumentReference<Map<String, dynamic>>);
   @override
   _i8.Future<void> enableNetwork() =>
@@ -331,7 +341,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
   @override
   _i2.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_10()) as _i2.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_11()) as _i2.FirebaseFirestore);
   @override
   Map<String, dynamic> get parameters =>
       (super.noSuchMethod(Invocation.getter(#parameters),
@@ -340,12 +350,12 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
   _i8.Future<_i2.DocumentReference<T>> add(T? data) =>
       (super.noSuchMethod(Invocation.method(#add, [data]),
               returnValue: Future<_i2.DocumentReference<T>>.value(
-                  _FakeDocumentReference_1<T>()))
+                  _FakeDocumentReference_2<T>()))
           as _i8.Future<_i2.DocumentReference<T>>);
   @override
   _i2.DocumentReference<T> doc([String? path]) => (super.noSuchMethod(
       Invocation.method(#doc, [path]),
-      returnValue: _FakeDocumentReference_1<T>()) as _i2.DocumentReference<T>);
+      returnValue: _FakeDocumentReference_2<T>()) as _i2.DocumentReference<T>);
   @override
   _i2.CollectionReference<R> withConverter<R extends Object?>(
           {_i2.FromFirestore<R>? fromFirestore,
@@ -353,40 +363,40 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(
               Invocation.method(#withConverter, [],
                   {#fromFirestore: fromFirestore, #toFirestore: toFirestore}),
-              returnValue: _FakeCollectionReference_5<R>())
+              returnValue: _FakeCollectionReference_6<R>())
           as _i2.CollectionReference<R>);
   @override
   _i2.Query<T> endAtDocument(_i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(Invocation.method(#endAtDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> endAt(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#endAt, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> endBeforeDocument(
           _i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(
           Invocation.method(#endBeforeDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> endBefore(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#endBefore, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i8.Future<_i2.QuerySnapshot<T>> get([_i2.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue:
-                  Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_8<T>()))
+                  Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_9<T>()))
           as _i8.Future<_i2.QuerySnapshot<T>>);
   @override
   _i2.Query<T> limit(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limit, [limit]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> limitToLast(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limitToLast, [limit]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i8.Stream<_i2.QuerySnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
@@ -399,27 +409,27 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
   _i2.Query<T> orderBy(Object? field, {bool? descending = false}) =>
       (super.noSuchMethod(
           Invocation.method(#orderBy, [field], {#descending: descending}),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAfterDocument(
           _i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(
           Invocation.method(#startAfterDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAfter(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#startAfter, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAtDocument(
           _i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(
           Invocation.method(#startAtDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAt(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#startAt, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> where(Object? field,
           {Object? isEqualTo,
@@ -449,7 +459,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
             #whereNotIn: whereNotIn,
             #isNull: isNull
           }),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
 }
 
 /// A class which mocks [DocumentReference].
@@ -465,14 +475,14 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
   @override
   _i2.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_10()) as _i2.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_11()) as _i2.FirebaseFirestore);
   @override
   String get id =>
       (super.noSuchMethod(Invocation.getter(#id), returnValue: '') as String);
   @override
   _i2.CollectionReference<T> get parent =>
       (super.noSuchMethod(Invocation.getter(#parent),
-              returnValue: _FakeCollectionReference_5<T>())
+              returnValue: _FakeCollectionReference_6<T>())
           as _i2.CollectionReference<T>);
   @override
   String get path =>
@@ -481,7 +491,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
   _i2.CollectionReference<Map<String, dynamic>> collection(
           String? collectionPath) =>
       (super.noSuchMethod(Invocation.method(#collection, [collectionPath]),
-              returnValue: _FakeCollectionReference_5<Map<String, dynamic>>())
+              returnValue: _FakeCollectionReference_6<Map<String, dynamic>>())
           as _i2.CollectionReference<Map<String, dynamic>>);
   @override
   _i8.Future<void> delete() =>
@@ -497,7 +507,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
   _i8.Future<_i2.DocumentSnapshot<T>> get([_i2.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue: Future<_i2.DocumentSnapshot<T>>.value(
-                  _FakeDocumentSnapshot_0<T>()))
+                  _FakeDocumentSnapshot_1<T>()))
           as _i8.Future<_i2.DocumentSnapshot<T>>);
   @override
   _i8.Stream<_i2.DocumentSnapshot<T>> snapshots(
@@ -519,7 +529,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(
               Invocation.method(#withConverter, [],
                   {#fromFirestore: fromFirestore, #toFirestore: toFirestore}),
-              returnValue: _FakeDocumentReference_1<R>())
+              returnValue: _FakeDocumentReference_2<R>())
           as _i2.DocumentReference<R>);
 }
 
@@ -535,7 +545,7 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
   @override
   _i2.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_10()) as _i2.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_11()) as _i2.FirebaseFirestore);
   @override
   Map<String, dynamic> get parameters =>
       (super.noSuchMethod(Invocation.getter(#parameters),
@@ -543,35 +553,35 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
   @override
   _i2.Query<T> endAtDocument(_i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(Invocation.method(#endAtDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> endAt(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#endAt, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> endBeforeDocument(
           _i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(
           Invocation.method(#endBeforeDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> endBefore(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#endBefore, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i8.Future<_i2.QuerySnapshot<T>> get([_i2.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue:
-                  Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_8<T>()))
+                  Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_9<T>()))
           as _i8.Future<_i2.QuerySnapshot<T>>);
   @override
   _i2.Query<T> limit(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limit, [limit]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> limitToLast(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limitToLast, [limit]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i8.Stream<_i2.QuerySnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
@@ -584,27 +594,27 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
   _i2.Query<T> orderBy(Object? field, {bool? descending = false}) =>
       (super.noSuchMethod(
           Invocation.method(#orderBy, [field], {#descending: descending}),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAfterDocument(
           _i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(
           Invocation.method(#startAfterDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAfter(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#startAfter, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAtDocument(
           _i2.DocumentSnapshot<Object?>? documentSnapshot) =>
       (super.noSuchMethod(
           Invocation.method(#startAtDocument, [documentSnapshot]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> startAt(List<Object?>? values) =>
       (super.noSuchMethod(Invocation.method(#startAt, [values]),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<T> where(Object? field,
           {Object? isEqualTo,
@@ -634,7 +644,7 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
             #whereNotIn: whereNotIn,
             #isNull: isNull
           }),
-          returnValue: _FakeQuery_9<T>()) as _i2.Query<T>);
+          returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
   _i2.Query<R> withConverter<R>(
           {_i2.FromFirestore<R>? fromFirestore,
@@ -642,7 +652,7 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
       (super.noSuchMethod(
           Invocation.method(#withConverter, [],
               {#fromFirestore: fromFirestore, #toFirestore: toFirestore}),
-          returnValue: _FakeQuery_9<R>()) as _i2.Query<R>);
+          returnValue: _FakeQuery_10<R>()) as _i2.Query<R>);
 }
 
 /// A class which mocks [QuerySnapshot].
@@ -666,7 +676,7 @@ class MockQuerySnapshot<T extends Object?> extends _i1.Mock
   @override
   _i2.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_2()) as _i2.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_3()) as _i2.SnapshotMetadata);
   @override
   int get size =>
       (super.noSuchMethod(Invocation.getter(#size), returnValue: 0) as int);

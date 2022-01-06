@@ -17,14 +17,7 @@ class BackupPreviewPresenter {
     final File file = File(_model.pathToBackup);
 
     final String contentOfBackup = await file.readAsString();
-    final List<dynamic> secretStrings = json.decode(contentOfBackup, reviver: (key, value) {
-      // Custom parsing of DateTime, because we previously encoded it as `millisecondsSinceEpoch`
-      if (key == Secret.kFieldCreatedAt && value is int) {
-        return DateTime.fromMillisecondsSinceEpoch(value);
-      }
-
-      return value;
-    });
+    final List<dynamic> secretStrings = json.decode(contentOfBackup);
     final List<Secret> secrets = secretStrings.map((e) => Secret.fromJson(e)).toList();
 
     _model.secrets.addAll(secrets);

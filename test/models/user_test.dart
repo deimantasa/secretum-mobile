@@ -31,12 +31,15 @@ void main() {
   });
 
   test('User', () {
-    final User user = User(mockUsersSensitiveInformation);
+    final DateTime dateTime = DateTime(2020);
+    final User user = User(mockUsersSensitiveInformation, dateTime);
 
     expect(user.sensitiveInformation, mockUsersSensitiveInformation);
+    expect(user.createdAt, dateTime);
   });
 
   test('User.newUser', () {
+    //TODO(aurimas): move `dateTime` to `clock`
     final User user = User.newUser(mockUsersSensitiveInformation);
 
     expect(user.sensitiveInformation, mockUsersSensitiveInformation);
@@ -55,6 +58,7 @@ void main() {
     expect(user.id, '1');
     expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
     expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
+    expect(user.createdAt, DateTime(2000, 1, 1));
   });
 
   test('User.fromFirestoreChanged', () {
@@ -72,6 +76,7 @@ void main() {
     expect(user.id, '1');
     expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
     expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
+    expect(user.createdAt, DateTime(2000, 1, 1));
   });
 
   group('User.fromJson', () {
@@ -80,12 +85,14 @@ void main() {
 
       expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
       expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
+      expect(user.createdAt, DateTime(2000, 1, 1));
     });
     test('!isEncrypted', () {
       final User user = User.fromJson(TestUtils.getUserEncryptedMap(), isEncrypted: false);
 
       expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
       expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
+      expect(user.createdAt, DateTime(2000, 1, 1));
     });
   });
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:secretum/models/secret.dart';
 import 'package:secretum/utils/dialogs.dart';
 
 import 'secret_details_contract.dart';
@@ -76,7 +75,7 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                           );
 
                           if (secretsName != null) {
-                            _presenter.updateSecret(Secret.update(name: secretsName));
+                            _presenter.updateSecretName(secretsName);
                           }
                         },
                       ),
@@ -144,16 +143,16 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
               );
 
               if (newNote != null) {
-                _presenter.updateSecret(Secret.update(note: newNote));
+                _presenter.updateSecretNote(newNote);
               }
             },
           ),
-          onTap: _model.secret?.note?.isNotEmpty == true
+          onTap: _model.secret?.note.isNotEmpty == true
               ? () async {
                   Dialogs.showInformationBottomSheet(
                     context,
                     title: 'Note',
-                    content: _model.secret!.note!,
+                    content: _model.secret!.note,
                     buttonText: 'Close',
                     onPressed: () => Navigator.pop(context),
                   );
@@ -180,18 +179,18 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
                 );
 
                 if (newCode != null) {
-                  _presenter.updateSecret(Secret.update(code: newCode));
+                  _presenter.updateSecretCode(newCode);
                 }
               },
             ),
-            onTap: _model.secret?.code?.isNotEmpty == true
+            onTap: _model.secret?.code.isNotEmpty == true
                 ? () async {
                     Dialogs.showInformationBottomSheet(
                       context,
                       title: 'Code',
-                      content: _model.secret!.code!,
+                      content: _model.secret!.code,
                       buttonText: 'Copy',
-                      onPressed: () => _presenter.copyText(_model.secret!.code!),
+                      onPressed: () => _presenter.copyText(_model.secret!.code),
                     );
                   }
                 : () => showMessage('There is no code saved')),

@@ -45,14 +45,7 @@ class StorageService {
     final Directory directory = await getApplicationDocumentsDirectory();
     final File file = File('${directory.path}/$fileName.txt');
     final List<Map<String, dynamic>> secretsJson = secrets.map((e) => e.toJson()).toList();
-    final String secretsJsonString = jsonEncode(secretsJson, toEncodable: (value) {
-      // Custom parsing of DateTime, because it cannot be encoded as DateTime
-      if (value is DateTime) {
-        return value.millisecondsSinceEpoch;
-      }
-
-      return null;
-    });
+    final String secretsJsonString = json.encode(secretsJson);
     await file.writeAsString(secretsJsonString);
 
     return file.path;

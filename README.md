@@ -24,7 +24,7 @@ I've combined [years of experience in Tech. land and Flutter](https://deimantas.
 At first `Secretum` started as a personal project, but with time, I've decided I want to do more. This application, `Secretum`, is created with the purpose to share with the community how scalable apps (in Flutter) can be written. It also tackled one of the most talked topic in Flutter - [State Management](https://flutter.dev/docs/development/data-and-backend/state-mgmt/options). Code itself covers many more topics (read below - [Topics](#topics)).
 
 ## Limitations
-Unfortunately I don't have iOS/Android device with Face Recognition therefore I was not able to test authentication flow with it. It might give some unexpected behaviour. Fingers crossed it does't!
+Unfortunately I don't have iOS/Android device with Face Recognition therefore I was not able to test authentication flow with it. It might give some unexpected behaviour. Fingers crossed it does not!
 
 ## Security
 Passwords are hashed using `SHA512`. All your other data is encrypted using `AES`.
@@ -71,10 +71,11 @@ If you would like to have any topic covered of your choice, feel free to create 
 6. Download second copy of `GoogleServices-Info.plist`, rename it to `GoogleServices-Info-prod.plist` and put it to `../secretum/tools/environment-generator/` directory
 7. Go to `../secretum/tools/environment-generator/` and run `node environment-generator prod`. Firebase configs (prod) will be copied into right places with additional parameters  
 if you'd like to have `dev` build too
-8. Go to your Firebase project and enable Firestore
-9. Set up Firestore rules up your preference
-10. Delete existing `Secretum` app and build app from source
-11. Check logs after registration - make sure to create right index (URLs are provided in console from Firestore)
+8. Go to your Firebase project and enable `anonymous authentication` within `Authentication`
+9. Go to your Firebase project and enable `Firestore Database`
+10. Set up Firestore rules up your preference
+11. Delete existing `Secretum` app and build app from source
+12. Check logs after registration - make sure to create right indexes (URLs are provided in console from Firestore)
 
 After you've set-up Firebase and linked its configuration - now you should be able to run the build locally. After you will create your user, all data will be linked to your Firestore.
 

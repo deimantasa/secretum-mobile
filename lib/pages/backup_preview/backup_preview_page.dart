@@ -83,9 +83,9 @@ class _BackupPreviewPageState extends State<BackupPreviewPage> implements Backup
           return Column(
             children: [
               ListTile(
-                title: Text(secret.name ?? ''),
-                subtitle: Text(secret.code ?? ''),
-                onTap: () => _presenter.copyCode(secret.code ?? ''),
+                title: Text(secret.name),
+                subtitle: Text(secret.code),
+                onTap: () => _presenter.copyCode(secret.code),
               ),
               Divider(height: 1),
             ],
