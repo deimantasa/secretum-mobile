@@ -14,9 +14,9 @@ class Secret extends FirestoreMetadata {
   static const String kFieldAddedBy = 'addedBy';
   final String addedBy;
   static const String kFieldCreatedAt = 'createdAt';
-  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO, includeIfNull: false)
+  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO)
   final DateTime createdAt;
-  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO, includeIfNull: false)
+  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO)
   DateTime updatedAt;
   String name;
   String note;

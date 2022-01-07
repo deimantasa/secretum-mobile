@@ -76,7 +76,7 @@ class Dialogs {
     required bool validateWithPrimaryPassword,
     required bool validateWithBiometric,
   }) async {
-    String? newEntry = await showBarModalBottomSheet<String?>(
+    final String? newEntry = await showBarModalBottomSheet<String?>(
       context: context,
       builder: (context) {
         return EditEntryPage(

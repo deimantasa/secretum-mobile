@@ -22,17 +22,23 @@ class HomePresenter {
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
-  void addNewSecret(String secretName) {
+  Future<void> addNewSecret(String secretName) async {
+    _model.loadingState.isLoading = true;
+    _view.updateView();
+
     final String userId = _usersStore.user!.id;
     final Secret secret = Secret.newSecret(clock.now(), addedBy: userId, name: secretName);
 
-    _secretsStore.addNewSecret(userId, secret).then((isSuccess) {
-      if (isSuccess) {
-        _view.showMessage('$secretName added');
-      } else {
-        _view.showMessage('Cannot add $secretName, something went wrong', isSuccess: false);
-      }
-    });
+    final bool isSuccess = await _secretsStore.addNewSecret(userId, secret);
+
+    _model.loadingState.isLoading = false;
+    _view.updateView();
+
+    if (isSuccess) {
+      _view.showMessage('$secretName added');
+    } else {
+      _view.showMessage('Cannot add $secretName, something went wrong', isSuccess: false);
+    }
   }
 
   void init() {

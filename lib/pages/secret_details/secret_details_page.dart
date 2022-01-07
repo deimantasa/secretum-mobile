@@ -118,85 +118,89 @@ class _SecretDetailsPageState extends State<SecretDetailsPage> implements Secret
   }
 
   Widget _buildBody() {
-    final String? note = _model.secret?.note;
-    final String? code = _model.secret?.code;
+    if (_model.loadingState.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      final String? note = _model.secret?.note;
+      final String? code = _model.secret?.code;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          title: Text('Notes'),
-          subtitle: note == null || note.isEmpty ? null : Text(note),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () async {
-              final String? newNote = await Dialogs.showEditEntryBottomSheet(
-                context,
-                title: 'Update Note',
-                entry: _model.secret?.note,
-                hintText: 'Enter some notes/hints about the secret',
-                buttonText: 'Update',
-                textCapitalization: TextCapitalization.sentences,
-                validator: (text) => null,
-                validateWithPrimaryPassword: false,
-                validateWithBiometric: false,
-              );
-
-              if (newNote != null) {
-                _presenter.updateSecretNote(newNote);
-              }
-            },
-          ),
-          onTap: _model.secret?.note.isNotEmpty == true
-              ? () async {
-                  Dialogs.showInformationBottomSheet(
-                    context,
-                    title: 'Note',
-                    content: _model.secret!.note,
-                    buttonText: 'Close',
-                    onPressed: () => Navigator.pop(context),
-                  );
-                }
-              : () => showMessage('There is no note saved'),
-        ),
-        Divider(height: 1),
-        ListTile(
-            title: Text('Code'),
-            subtitle: code == null || code.isEmpty ? null : Text('********'),
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: Text('Notes'),
+            subtitle: note == null || note.isEmpty ? null : Text(note),
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () async {
-                final String? newCode = await Dialogs.showEditEntryBottomSheet(
+                final String? newNote = await Dialogs.showEditEntryBottomSheet(
                   context,
-                  title: 'Update Code',
-                  hintText: 'Enter new code',
-                  entry: _model.secret?.code,
+                  title: 'Update Note',
+                  entry: _model.secret?.note,
+                  hintText: 'Enter some notes/hints about the secret',
                   buttonText: 'Update',
-                  textCapitalization: TextCapitalization.none,
+                  textCapitalization: TextCapitalization.sentences,
                   validator: (text) => null,
-                  validateWithPrimaryPassword: true,
+                  validateWithPrimaryPassword: false,
                   validateWithBiometric: false,
                 );
 
-                if (newCode != null) {
-                  _presenter.updateSecretCode(newCode);
+                if (newNote != null) {
+                  _presenter.updateSecretNote(newNote);
                 }
               },
             ),
-            onTap: _model.secret?.code.isNotEmpty == true
+            onTap: _model.secret?.note.isNotEmpty == true
                 ? () async {
                     Dialogs.showInformationBottomSheet(
                       context,
-                      title: 'Code',
-                      content: _model.secret!.code,
-                      buttonText: 'Copy',
-                      onPressed: () => _presenter.copyText(_model.secret!.code),
+                      title: 'Note',
+                      content: _model.secret!.note,
+                      buttonText: 'Close',
+                      onPressed: () => Navigator.pop(context),
                     );
                   }
-                : () => showMessage('There is no code saved')),
-        Divider(height: 1),
-      ],
-    );
+                : () => showMessage('There is no note saved'),
+          ),
+          Divider(height: 1),
+          ListTile(
+              title: Text('Code'),
+              subtitle: code == null || code.isEmpty ? null : Text('********'),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () async {
+                  final String? newCode = await Dialogs.showEditEntryBottomSheet(
+                    context,
+                    title: 'Update Code',
+                    hintText: 'Enter new code',
+                    entry: _model.secret?.code,
+                    buttonText: 'Update',
+                    textCapitalization: TextCapitalization.none,
+                    validator: (text) => null,
+                    validateWithPrimaryPassword: true,
+                    validateWithBiometric: false,
+                  );
+
+                  if (newCode != null) {
+                    _presenter.updateSecretCode(newCode);
+                  }
+                },
+              ),
+              onTap: _model.secret?.code.isNotEmpty == true
+                  ? () async {
+                      Dialogs.showInformationBottomSheet(
+                        context,
+                        title: 'Code',
+                        content: _model.secret!.code,
+                        buttonText: 'Copy',
+                        onPressed: () => _presenter.copyText(_model.secret!.code),
+                      );
+                    }
+                  : () => showMessage('There is no code saved')),
+          Divider(height: 1),
+        ],
+      );
+    }
   }
 
   void _showDeleteSecretDialog() {

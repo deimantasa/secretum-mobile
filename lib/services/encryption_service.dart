@@ -37,6 +37,7 @@ class EncryptionService {
     final IV iv = IV.fromLength(16);
     final Encrypter encrypter = Encrypter(AES(key));
 
+    print(text);
     return encrypter.decrypt64(text, iv: iv);
   }
 

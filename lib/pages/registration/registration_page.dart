@@ -116,10 +116,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
         child: Column(
           children: [
             Spacer(),
-            Text(
-              description,
-              textAlign: TextAlign.center,
-            ),
+            Text(description, textAlign: TextAlign.center),
             SizedBox(height: 32),
             Row(
               children: [
@@ -171,6 +168,7 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
 
   @override
   void goToHomePage() {
+    // Remove all pages from the stack and push Home as a very first page
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(

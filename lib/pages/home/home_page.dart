@@ -84,7 +84,9 @@ class _HomePageState extends State<HomePage> implements HomeView {
   }
 
   Widget _buildBody() {
-    if (_model.secrets.isEmpty) {
+    if (_model.loadingState.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else if (_model.secrets.isEmpty) {
       return Center(
         child: ElevatedButton(
           child: Text('Add new secret'),

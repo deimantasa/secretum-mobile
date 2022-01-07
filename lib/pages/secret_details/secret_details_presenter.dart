@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/main.dart';
@@ -25,62 +26,13 @@ class SecretDetailsPresenter {
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
-  void updateSecretName(String name) {
-    final Secret? secret = _model.secret;
-    if (secret == null) {
-      loggingService.log('SecretDetailsPresenter.updateSecretName: Secret is null', logType: LogType.error);
-      return;
-    }
-
-    secret.name = name;
-    _secretsStore.updateSecret(_usersStore.user!.id, _model.secret!.id, secret).then((isSuccess) {
-      if (isSuccess) {
-        _view.showMessage('Name has been updated');
-      } else {
-        _view.showMessage('Cannot update name, something went wrong', isSuccess: false);
-      }
-    });
-  }
-
-  void updateSecretNote(String note) {
-    final Secret? secret = _model.secret;
-    if (secret == null) {
-      loggingService.log('SecretDetailsPresenter.updateSecretNote: Secret is null', logType: LogType.error);
-      return;
-    }
-
-    secret.note = note;
-    _secretsStore.updateSecret(_usersStore.user!.id, _model.secret!.id, secret).then((isSuccess) {
-      if (isSuccess) {
-        _view.showMessage('Note has been updated');
-      } else {
-        _view.showMessage('Cannot update note, something went wrong', isSuccess: false);
-      }
-    });
-  }
-
-  void updateSecretCode(String code) {
-    final Secret? secret = _model.secret;
-    if (secret == null) {
-      loggingService.log('SecretDetailsPresenter.updateSecretCode: Secret is null', logType: LogType.error);
-      return;
-    }
-
-    secret.code = code;
-    _secretsStore.updateSecret(_usersStore.user!.id, _model.secret!.id, secret).then((isSuccess) {
-      if (isSuccess) {
-        _view.showMessage('Code has been updated');
-      } else {
-        _view.showMessage('Cannot update code, something went wrong', isSuccess: false);
-      }
-    });
-  }
-
   void init() {
-    _listenToSecretById();
+    listenToSecretById();
+    updateData();
   }
 
-  void _listenToSecretById() {
+  @visibleForTesting
+  void listenToSecretById() {
     final StreamSubscription streamSubscription = _secretsStore.listenToSecretById(
       _usersStore.user!.id,
       _model.secretId,
@@ -91,6 +43,82 @@ class SecretDetailsPresenter {
     );
 
     _streamSubscriptions.add(streamSubscription);
+  }
+
+  void updateData() {
+    _model.user = _usersStore.user!;
+    _view.updateView();
+  }
+
+  Future<void> updateSecretName(String name) async {
+    final Secret? secret = _model.secret;
+    if (secret == null) {
+      loggingService.log('SecretDetailsPresenter.updateSecretName: Secret is null', logType: LogType.error);
+      return;
+    }
+
+    secret.name = name;
+
+    _model.loadingState.isLoading = true;
+    _view.updateView();
+
+    final bool isSuccess = await _secretsStore.updateSecret(_model.user.id, secret.id, secret);
+
+    _model.loadingState.isLoading = false;
+    _view.updateView();
+
+    if (isSuccess) {
+      _view.showMessage('Name has been updated');
+    } else {
+      _view.showMessage('Cannot update name, something went wrong', isSuccess: false);
+    }
+  }
+
+  Future<void> updateSecretNote(String note) async {
+    final Secret? secret = _model.secret;
+    if (secret == null) {
+      loggingService.log('SecretDetailsPresenter.updateSecretNote: Secret is null', logType: LogType.error);
+      return;
+    }
+
+    secret.note = note;
+    _model.loadingState.isLoading = true;
+    _view.updateView();
+
+    final bool isSuccess = await _secretsStore.updateSecret(_model.user.id, secret.id, secret);
+
+    _model.loadingState.isLoading = false;
+    _view.updateView();
+
+    if (isSuccess) {
+      _view.showMessage('Note has been updated');
+    } else {
+      _view.showMessage('Cannot update note, something went wrong', isSuccess: false);
+    }
+  }
+
+  Future<void> updateSecretCode(String code) async {
+    final Secret? secret = _model.secret;
+    if (secret == null) {
+      loggingService.log('SecretDetailsPresenter.updateSecretCode: Secret is null', logType: LogType.error);
+      return;
+    }
+
+    secret.code = code;
+
+    _model.loadingState.isLoading = true;
+    _view.updateView();
+
+    final bool isSuccess = await _secretsStore.updateSecret(_model.user.id, secret.id, secret);
+
+    _model.loadingState.isLoading = false;
+    _view.updateView();
+
+    if (isSuccess) {
+      _view.showMessage('Code has been updated');
+    } else {
+      _view.showMessage('Cannot update code, something went wrong', isSuccess: false);
+    }
   }
 
   void deleteSecret(String password) async {
