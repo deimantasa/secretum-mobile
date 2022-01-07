@@ -74,22 +74,28 @@ class _BackupPreviewPageState extends State<BackupPreviewPage> implements Backup
   }
 
   Widget _buildBody() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: _model.secrets.length,
-        itemBuilder: (context, index) {
-          final Secret secret = _model.secrets[index];
+    if (_model.secrets.isEmpty) {
+      return Center(
+        child: Text('You have no exported backups'),
+      );
+    } else {
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: _model.secrets.length,
+          itemBuilder: (context, index) {
+            final Secret secret = _model.secrets[index];
 
-          return Column(
-            children: [
-              ListTile(
-                title: Text(secret.name),
-                subtitle: Text(secret.code),
-                onTap: () => _presenter.copyCode(secret.code),
-              ),
-              Divider(height: 1),
-            ],
-          );
-        });
+            return Column(
+              children: [
+                ListTile(
+                  title: Text(secret.name),
+                  subtitle: Text(secret.code),
+                  onTap: () => _presenter.copyCode(secret.code),
+                ),
+                Divider(height: 1),
+              ],
+            );
+          });
+    }
   }
 }

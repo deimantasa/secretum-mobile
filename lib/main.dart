@@ -117,13 +117,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           buttonTheme: Theme.of(context).buttonTheme.copyWith(),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
               onPrimary: Colors.white.withOpacity(0.8),
               padding: EdgeInsets.all(12),
             ),
           ),
+          bottomSheetTheme: BottomSheetThemeData(
+              shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+          )),
           // Cannot use GoogleFonts because it will completely override colors
           // Ignoring `brightness` setting. Therefore use manual font selection
           fontFamily: 'Montserrat',

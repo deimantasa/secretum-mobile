@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secretum/models/firestore_metadata.dart';
@@ -13,19 +14,23 @@ class Secret extends FirestoreMetadata {
   static const String kFieldAddedBy = 'addedBy';
   final String addedBy;
   static const String kFieldCreatedAt = 'createdAt';
-  @JsonKey(fromJson: Utils.dateTimeFromInt, toJson: Utils.dateTimeToInt, includeIfNull: false)
+  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO, includeIfNull: false)
   final DateTime createdAt;
+  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO, includeIfNull: false)
+  DateTime updatedAt;
   String name;
   String note;
   String code;
 
-  Secret(this.addedBy, this.createdAt, this.name, this.note, this.code);
+  Secret(this.addedBy, this.createdAt, this.updatedAt, this.name, this.note, this.code);
 
-  Secret.newSecret({
+  Secret.newSecret(
+    DateTime dateTime, {
     required this.addedBy,
-    required this.createdAt,
     required this.name,
-  })  : this.note = '',
+  })  : this.createdAt = dateTime,
+        this.updatedAt = dateTime,
+        this.note = '',
         this.code = '';
 
   factory Secret.fromFirestore(DocumentSnapshot documentSnapshot) {

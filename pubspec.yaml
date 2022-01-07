@@ -49,6 +49,7 @@ dependencies:
   flutter_svg: ^1.0.0
 
   #Other
+  clock: ^1.1.0
   filesystem_picker: ^2.0.0
   json_annotation: ^4.0.0
   uuid: ^3.0.1

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/models/enums/export_from_type.dart';
@@ -23,11 +24,7 @@ class HomePresenter {
 
   void addNewSecret(String secretName) {
     final String userId = _usersStore.user!.id;
-    final Secret secret = Secret.newSecret(
-      addedBy: userId,
-      createdAt: DateTime.now(),
-      name: secretName,
-    );
+    final Secret secret = Secret.newSecret(clock.now(), addedBy: userId, name: secretName);
 
     _secretsStore.addNewSecret(userId, secret).then((isSuccess) {
       if (isSuccess) {

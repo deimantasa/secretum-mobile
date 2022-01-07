@@ -7,9 +7,8 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map json) => User(
-      UsersSensitiveInformation.fromJson(
-          Map<String, dynamic>.from(json['sensitiveInformation'] as Map)),
-      Utils.dateTimeFromInt(json['createdAt'] as int),
+      UsersSensitiveInformation.fromJson(Map<String, dynamic>.from(json['sensitiveInformation'] as Map)),
+      Utils.dateTimeFromISO(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$UserToJson(User instance) {
@@ -21,7 +20,7 @@ Map<String, dynamic> _$UserToJson(User instance) {
     }
   }
 
-  writeNotNull('createdAt', Utils.dateTimeToInt(instance.createdAt));
+  writeNotNull('createdAt', Utils.dateTimeToISO(instance.createdAt));
   val['sensitiveInformation'] = instance.sensitiveInformation.toJson();
   return val;
 }

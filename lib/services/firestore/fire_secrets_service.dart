@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firestore_helper/firestore_helper.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +75,7 @@ class FireSecretsService {
   }
 
   Future<bool> updateSecret(String userId, String secretId, Secret secretUpdate) async {
+    secretUpdate.updatedAt = clock.now();
     final bool isSuccess = await _fireGenericService.updateDocument(
       [FireUsersService.kCollectionUsers, userId, FireSecretsService.kSubCollectionSecrets, secretId],
       secretUpdate.toJson(),

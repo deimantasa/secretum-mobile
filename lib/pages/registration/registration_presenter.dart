@@ -22,12 +22,18 @@ class RegistrationPresenter {
         this._usersStore = GetIt.instance<UsersStore>();
 
   Future<void> finishRegistration(String primaryPassword) async {
+    _model.registrationLoadingState.isLoading = true;
+    _view.updateView();
+
     _view.showMessage('Registration in progress...');
 
     final String secretKey = _encryptionService.generateSecretKey();
     final UsersSensitiveInformation usersSensitiveInformation = UsersSensitiveInformation.newUser(secretKey, primaryPassword);
     final User user = User.newUser(usersSensitiveInformation);
     final bool isSuccess = await _usersStore.registerUser(user);
+
+    _model.registrationLoadingState.isLoading = false;
+    _view.updateView();
 
     if (isSuccess) {
       // After success is returned, we already initialised user in the Store

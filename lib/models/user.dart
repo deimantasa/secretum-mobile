@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secretum/models/firestore_metadata.dart';
@@ -11,14 +12,14 @@ part 'user.g.dart';
 class User extends FirestoreMetadata {
   String get id => this.documentSnapshot.id;
 
-  @JsonKey(fromJson: Utils.dateTimeFromInt, toJson: Utils.dateTimeToInt, includeIfNull: false)
+  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO, includeIfNull: false)
   DateTime createdAt;
   static const String kMapSensitiveInformation = 'sensitiveInformation';
   late final UsersSensitiveInformation sensitiveInformation;
 
   User(this.sensitiveInformation, this.createdAt);
 
-  User.newUser(this.sensitiveInformation) : this.createdAt = DateTime.now();
+  User.newUser(this.sensitiveInformation) : this.createdAt = clock.now();
 
   factory User.fromFirestore(DocumentSnapshot documentSnapshot) {
     final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;

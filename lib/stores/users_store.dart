@@ -76,15 +76,18 @@ class UsersStore extends ChangeNotifier {
       return false;
     }
 
-    final User? user = await _getUserById(userId);
+    // Sign in immediately because we need to query for exact user
+    await _firebaseAuth.signInAnonymously();
+    final User? user = await _fireUsersService.getUserById(userId);
     if (user == null) {
+      // If user does not exist - sign user out immediately
+      await _firebaseAuth.signOut();
       loggingService.log('UsersStore.registerUser: User is null from Firestore', logType: LogType.error);
       return false;
     }
 
     loggingService.log('UsersStore.registerUser: User registered. UserId: $userId');
 
-    await _firebaseAuth.signInAnonymously();
     updateUserLocally(user);
     _listenToUserByUserId(userId);
 
@@ -98,12 +101,6 @@ class UsersStore extends ChangeNotifier {
     );
 
     _streamSubscriptions.add(streamSubscription);
-  }
-
-  Future<User?> _getUserById(String userId) async {
-    final User? user = await _fireUsersService.getUserById(userId);
-
-    return user;
   }
 
   void resetStore() {

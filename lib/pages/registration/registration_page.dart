@@ -69,26 +69,30 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
   }
 
   Widget _buildBody() {
-    return PageView(
-      controller: _pageController,
-      physics: NeverScrollableScrollPhysics(),
-      children: [
-        _buildPasswordsSection(
-          formKey: _primaryPasswordFormKey,
-          primaryPasswordFocusNode: _primaryPasswordFocusNode,
-          confirmationPasswordFocusNode: _primaryPasswordConfirmationFocusNode,
-          description: 'Primary Password is used to secure most important actions within the application.',
-          passwordTEC: _primaryPasswordTEC,
-          isPasswordObscured: _model.isPrimaryPasswordObscure,
-          onObscureChanged: (isObscure) => setState(() => _model.isPrimaryPasswordObscure = isObscure),
-          passwordHint: 'Primary Password',
-          passwordLength: 6,
-          passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
-          buttonText: 'Finish',
-          onFinish: () => _finishRegistration(),
-        ),
-      ],
-    );
+    if (_model.registrationLoadingState.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else {
+      return PageView(
+        controller: _pageController,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          _buildPasswordsSection(
+            formKey: _primaryPasswordFormKey,
+            primaryPasswordFocusNode: _primaryPasswordFocusNode,
+            confirmationPasswordFocusNode: _primaryPasswordConfirmationFocusNode,
+            description: 'Primary Password is used to secure most important actions within the application.',
+            passwordTEC: _primaryPasswordTEC,
+            isPasswordObscured: _model.isPrimaryPasswordObscure,
+            onObscureChanged: (isObscure) => setState(() => _model.isPrimaryPasswordObscure = isObscure),
+            passwordHint: 'Primary Password',
+            passwordLength: 6,
+            passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
+            buttonText: 'Finish',
+            onFinish: () => _finishRegistration(),
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildPasswordsSection({

@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 
 class Utils {
-  static DateTime dateTimeFromInt(int millis) {
-    return DateTime.fromMillisecondsSinceEpoch(millis);
+  static DateTime dateTimeFromISO(String dateTimeInISO) {
+    return DateTime.parse(dateTimeInISO);
   }
 
-  static int dateTimeToInt(DateTime dateTime) {
-    return dateTime.millisecondsSinceEpoch;
+  static String dateTimeToISO(DateTime dateTime) {
+    return dateTime.toIso8601String();
   }
 
   /// Custom Date Format.

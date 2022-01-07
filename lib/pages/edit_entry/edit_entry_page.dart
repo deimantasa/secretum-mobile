@@ -129,6 +129,7 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
                           context,
                           hintText: 'Primary Password',
                         );
+
                         final bool isPasswordValid = _presenter.validatePrimaryPassword(password);
                         if (!isPasswordValid) {
                           showMessage('Password is invalid', isSuccess: false);
