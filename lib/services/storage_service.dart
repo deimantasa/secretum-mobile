@@ -42,7 +42,7 @@ class StorageService {
   }
 
   Future<String> exportBackup(List<Secret> secrets, String fileName) async {
-    final Directory directory = await getApplicationDocumentsDirectory();
+    final Directory directory = await getBackupsDirectory();
     final File file = File('${directory.path}/$fileName.txt');
     final List<Map<String, dynamic>> secretsJson = secrets.map((e) => e.toJson()).toList();
     final String secretsJsonString = json.encode(secretsJson);
@@ -60,7 +60,7 @@ class StorageService {
   }
 
   Future<bool> deleteBackupFiles() async {
-    final Directory directory = await getApplicationDocumentsDirectory();
+    final Directory directory = await getBackupsDirectory();
     try {
       await directory.delete(recursive: true);
       return true;
@@ -68,5 +68,19 @@ class StorageService {
       loggingService.log('StorageService.deleteBackupFiles: Cannot delete backups. Exception: $e', logType: LogType.error);
       return false;
     }
+  }
+
+  Future<Directory> getBackupsDirectory() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    // Cannot simply use root, because if we try to delete it, iOS throws an error
+    final Directory backupsDirectory = Directory('${directory.path}/backups');
+    final bool doesDirectoryExists = await backupsDirectory.exists();
+
+    // Very first time directory does not exist, therefore create it
+    if (!doesDirectoryExists) {
+      await backupsDirectory.create();
+    }
+
+    return backupsDirectory;
   }
 }

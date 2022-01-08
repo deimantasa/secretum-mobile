@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:secretum/services/authentication_service.dart';
 import 'package:secretum/services/encryption_service.dart';
 import 'package:secretum/stores/users_store.dart';
 
@@ -11,13 +10,11 @@ class EditEntryPresenter {
   final EditEntryView _view;
   // ignore: unused_field
   final EditEntryModel _model;
-  final AuthenticationService _authenticationService;
   final EncryptionService _encryptionService;
   final UsersStore _usersStore;
 
   EditEntryPresenter(this._view, this._model)
-      : this._authenticationService = GetIt.instance<AuthenticationService>(),
-        this._encryptionService = GetIt.instance<EncryptionService>(),
+      : this._encryptionService = GetIt.instance<EncryptionService>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
   bool validatePrimaryPassword(String? password) {
@@ -26,11 +23,5 @@ class EditEntryPresenter {
     }
 
     return _usersStore.user!.sensitiveInformation.primaryPassword == _encryptionService.getHashedText(password);
-  }
-
-  Future<bool> authenticate() async {
-    final bool isSuccess = await _authenticationService.authViaBiometric();
-
-    return isSuccess;
   }
 }

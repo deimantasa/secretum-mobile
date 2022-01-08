@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
             onTap: () async {
               final String? fileName = await Dialogs.showEditEntryBottomSheet(
                 context,
-                title: 'Export File',
+                title: 'Export to File',
                 description:
                     'All your secrets will be exported from the database to the text file in your phone. Text file is fully encrypted.',
                 hintText: 'Enter file name',
@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
             leading: Icon(Icons.folder_rounded),
             title: Text('Open Exported Backups'),
             onTap: () async {
-              final Directory directory = await getApplicationDocumentsDirectory();
+              final Directory directory = await _presenter.getBackupsDirectory();
 
               final String? path = await FilesystemPicker.open(
                 title: 'Exported Backups',

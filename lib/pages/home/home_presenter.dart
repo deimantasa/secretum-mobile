@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clock/clock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
@@ -96,5 +98,9 @@ class HomePresenter {
   Future<void> exportSecretsLocally() async {
     final List<Secret> secrets = await _secretsStore.getAllSecrets(_model.user!.id);
     await _storageService.exportBackup(secrets, 'secretum-backup-${DateTime.now().toIso8601String()}');
+  }
+
+  Future<Directory> getBackupsDirectory() async {
+    return _storageService.getBackupsDirectory();
   }
 }

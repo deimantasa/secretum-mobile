@@ -39,7 +39,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> implements Auth
     // If flag is reset immediately, `onResume` will trigger yet flag will be true and Auth will
     // be shown again.
     if (Platform.isIOS) {
-      Future.delayed(Duration(seconds: 1)).then((value) => isAuthenticationPageShown = false);
+      Future.delayed(Duration(seconds: 1)).then((_) => isAuthenticationPageShown = false);
     } else {
       isAuthenticationPageShown = false;
     }

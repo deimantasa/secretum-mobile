@@ -79,6 +79,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
       // Make sure we don't show second Auth page on top when user is already in Auth page.
       if (!isAuthenticationPageShown && context != null) {
+        print('push auth');
         Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
       }
     }

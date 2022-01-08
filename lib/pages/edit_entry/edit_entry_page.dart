@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secretum/pages/authentication/authentication_page.dart';
 import 'package:secretum/utils/dialogs.dart';
 
 import 'edit_entry_contract.dart';
@@ -138,9 +139,12 @@ class _EditEntryPageState extends State<EditEntryPage> implements EditEntryView 
                       }
 
                       if (_model.validateWithBiometric) {
-                        final bool isSuccess = await _presenter.authenticate();
+                        final bool? isSuccess = await Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AuthenticationPage()),
+                        );
 
-                        if (!isSuccess) {
+                        if (isSuccess == null || !isSuccess) {
                           showMessage('Authentication failed', isSuccess: false);
                           return;
                         }

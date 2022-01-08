@@ -25,6 +25,11 @@ class BackupPreviewPresenter {
   }
 
   Future<void> copyCode(String code) async {
+    if (code.isEmpty) {
+      _view.showMessage('Nothing to copy, code is empty', isSuccess: false);
+      return;
+    }
+
     await Clipboard.setData(ClipboardData(text: code));
 
     _view.showMessage('Code was copied to clipboard. Do not forget to clear your clipboard once you will use the code');

@@ -45,7 +45,8 @@ class _BackupPreviewPageState extends State<BackupPreviewPage> implements Backup
             Text('Backup Preview'),
             Text(
               fileName,
-              style: TextStyle(fontSize: 10),
+              // 10 size is too big for iPhone 6
+              style: TextStyle(fontSize: 9),
             ),
           ],
         ),
@@ -76,7 +77,7 @@ class _BackupPreviewPageState extends State<BackupPreviewPage> implements Backup
   Widget _buildBody() {
     if (_model.secrets.isEmpty) {
       return Center(
-        child: Text('You have no exported backups'),
+        child: Text('You have no secrets in the backup'),
       );
     } else {
       return ListView.builder(
