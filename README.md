@@ -59,10 +59,14 @@ At first `Secretum` started as a personal project, but with time, I've decided I
 Unfortunately I don't have iOS/Android device with Face Recognition therefore I was not able to test authentication flow with it. It might give some unexpected behaviour. Fingers crossed it does not!
 
 ## Security
-`Secret Key` and a `Password` are hashed using `SHA512`. All other data is encrypted using `AES`.
+`Secret Key` and a `Password` are hashed using `SHA512`. All other data is encrypted using `AES`.  
 Decryption key (`Secret Key`) is stored locally using [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) and it used for encrypting/descrypting data.
 
-Backups are created on demand and they are also automatically created on app start and stored locally. All content of the file are encrypted/hashed (same as data in Firestore).
+Backups are created on demand and they are also automatically created on app start and stored locally. All content of the file are encrypted/hashed (same as data in Firestore).  
+
+Once user logs out - local storage is fully wiped out, not leaving any backed up files.  
+
+Account recovery only possible by knowing `secret key` which was generated and given within account creation process.
 
 
 ## Guidance
