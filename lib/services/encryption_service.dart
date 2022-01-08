@@ -20,6 +20,7 @@ class EncryptionService {
   }
 
   void resetSecretKey() {
+    loggingService.log('EncryptionService.resetSecretKey: resetting key');
     _key = '';
   }
 
@@ -37,8 +38,6 @@ class EncryptionService {
     final IV iv = IV.fromLength(16);
     final Encrypter encrypter = Encrypter(AES(key));
 
-    print('decrypting: $text ; key: $_key');
-    print('decrypted text: ${encrypter.decrypt64(text, iv: iv)}');
     return encrypter.decrypt64(text, iv: iv);
   }
 

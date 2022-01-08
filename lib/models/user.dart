@@ -40,6 +40,9 @@ class User extends FirestoreMetadata {
     return user;
   }
 
+  // FIXME(aurimas): there is a slight glitch - we cannot not decrypt our data, because then
+  // [createdAt] is returned as a not ISO compatible string which will fail parsing.
+  // Many different ways of how to handle it - leave it for now.
   factory User.fromJson(Map<String, dynamic> json, {bool isEncrypted = true}) {
     if (isEncrypted) {
       json.decrypt();

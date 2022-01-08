@@ -9,17 +9,19 @@ class TestUtils {
 
   /// 2020-01-01 00-00-00
   static final DateTime createdAtDate = DateTime(2000, 1, 1, 0, 0, 0, 0, 0);
-  static const int kCreatedAtMillis = 946659600000;
+  static const String kCreatedAtISO = '2000-01-01T00:00:00.000';
+  static const String kCreatedAtEncrypted = 'QFGF9yeT/yt5fLblrez3OKqSc0zCEzvxTogsTlYDSGY=';
 
   /// Secret
   static Secret getSecret(DateTime dateTime) {
     return Secret('addedBy1', dateTime, 'name1', 'note1', 'code1');
   }
 
-  static Map<String, dynamic> getSecretEncryptedMap(DateTime dateTime) {
+  static Map<String, dynamic> getSecretEncryptedMap() {
     return {
       'addedBy': 'EwXRom7htzdBRerdld7PAA==',
-      'createdAt': Utils.dateTimeToInt(dateTime),
+      'createdAt': kCreatedAtEncrypted,
+      'updatedAt': kCreatedAtEncrypted,
       'name': 'HADYojuoxQ1CRunelt3MAw==',
       'note': 'HA7BojuoxQ1CRunelt3MAw==',
       'code': 'EQ7RojuoxQ1CRunelt3MAw=='
@@ -27,24 +29,31 @@ class TestUtils {
   }
 
   static Map<String, dynamic> getSecretDecryptedMap(DateTime dateTime) {
-    return {'addedBy': 'addedBy1', 'createdAt': Utils.dateTimeToInt(dateTime), 'name': 'name1', 'note': 'note1', 'code': 'code1'};
+    return {
+      'addedBy': 'addedBy1',
+      'createdAt': Utils.dateTimeToISO(dateTime),
+      'updatedAt': Utils.dateTimeToISO(dateTime),
+      'name': 'name1',
+      'note': 'note1',
+      'code': 'code1',
+    };
   }
 
   /// User
   static User getUser() {
-    return User(getUsersSensitiveInformation(), createdAtDate);
+    return User(getUsersSensitiveInformation());
   }
 
   static Map<String, dynamic> getUserEncryptedMap() {
     return {
-      'createdAt': kCreatedAtMillis,
+      'createdAt': kCreatedAtEncrypted,
       'sensitiveInformation': getUsersSensitiveInformationHashedMap(),
     };
   }
 
   static Map<String, dynamic> getUserDecryptedMap() {
     return {
-      'createdAt': kCreatedAtMillis,
+      'createdAt': kCreatedAtISO,
       'sensitiveInformation': getUsersSensitiveInformationHashedMap(),
     };
   }
