@@ -37,7 +37,8 @@ class EncryptionService {
     final IV iv = IV.fromLength(16);
     final Encrypter encrypter = Encrypter(AES(key));
 
-    print(text);
+    print('decrypting: $text ; key: $_key');
+    print('decrypted text: ${encrypter.decrypt64(text, iv: iv)}');
     return encrypter.decrypt64(text, iv: iv);
   }
 

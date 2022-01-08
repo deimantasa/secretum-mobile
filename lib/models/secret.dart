@@ -15,23 +15,21 @@ class Secret extends FirestoreMetadata {
   final String addedBy;
   static const String kFieldCreatedAt = 'createdAt';
   @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO)
-  final DateTime createdAt;
-  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO)
   DateTime updatedAt;
   String name;
   String note;
   String code;
 
-  Secret(this.addedBy, this.createdAt, this.updatedAt, this.name, this.note, this.code);
+  Secret(this.addedBy, this.updatedAt, this.name, this.note, this.code) : super(createdAt: updatedAt);
 
   Secret.newSecret(
     DateTime dateTime, {
     required this.addedBy,
     required this.name,
-  })  : this.createdAt = dateTime,
-        this.updatedAt = dateTime,
+  })  : this.updatedAt = dateTime,
         this.note = '',
-        this.code = '';
+        this.code = '',
+        super(createdAt: dateTime);
 
   factory Secret.fromFirestore(DocumentSnapshot documentSnapshot) {
     final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;

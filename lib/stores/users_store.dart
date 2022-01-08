@@ -48,6 +48,10 @@ class UsersStore extends ChangeNotifier {
       return;
     }
 
+    // SecretKey is already initialised in the StorageService. We need to make
+    // sure that EncryptionService `key` is also up to date so that we can decrypt returned user
+    _encryptionService.updateSecretKey(secretKey);
+
     final User? user = await _fireUsersService.getUserBySecretKey(secretKey);
     // If user doesn't exist, something went wrong, because SecretKey is in storage
     // yet there is no user found in Firestore. Investigate.
@@ -57,9 +61,6 @@ class UsersStore extends ChangeNotifier {
     }
 
     await _firebaseAuth.signInAnonymously();
-    // SecretKey is already initialised in the StorageService. We need to make
-    // sure that EncryptionService `key` is also up to date
-    _encryptionService.updateSecretKey(secretKey);
     // Update user immediately in Store, because listening might take 0.x second to retrieve the
     // user from stream
     updateUserLocally(user);

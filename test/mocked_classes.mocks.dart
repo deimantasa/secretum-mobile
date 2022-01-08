@@ -82,8 +82,12 @@ class MockSecret extends _i1.Mock implements _i6.Secret {
       (super.noSuchMethod(Invocation.getter(#addedBy), returnValue: '')
           as String);
   @override
-  DateTime get createdAt => (super.noSuchMethod(Invocation.getter(#createdAt),
+  DateTime get updatedAt => (super.noSuchMethod(Invocation.getter(#updatedAt),
       returnValue: _FakeDateTime_0()) as DateTime);
+  @override
+  set updatedAt(DateTime? _updatedAt) =>
+      super.noSuchMethod(Invocation.setter(#updatedAt, _updatedAt),
+          returnValueForMissingStub: null);
   @override
   String get name =>
       (super.noSuchMethod(Invocation.getter(#name), returnValue: '') as String);
@@ -118,6 +122,13 @@ class MockSecret extends _i1.Mock implements _i6.Secret {
   @override
   set documentChangeType(_i2.DocumentChangeType? _documentChangeType) => super
       .noSuchMethod(Invocation.setter(#documentChangeType, _documentChangeType),
+          returnValueForMissingStub: null);
+  @override
+  DateTime get createdAt => (super.noSuchMethod(Invocation.getter(#createdAt),
+      returnValue: _FakeDateTime_0()) as DateTime);
+  @override
+  set createdAt(DateTime? _createdAt) =>
+      super.noSuchMethod(Invocation.setter(#createdAt, _createdAt),
           returnValueForMissingStub: null);
   @override
   Map<String, dynamic> toJson({bool? isEncrypted = true}) => (super

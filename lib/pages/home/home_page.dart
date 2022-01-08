@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> implements HomeView {
                   children: [
                     ListTile(
                       title: Text(
-                        '${secret.name}',
+                        secret.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

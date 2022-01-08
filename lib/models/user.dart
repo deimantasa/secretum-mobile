@@ -12,14 +12,12 @@ part 'user.g.dart';
 class User extends FirestoreMetadata {
   String get id => this.documentSnapshot.id;
 
-  @JsonKey(fromJson: Utils.dateTimeFromISO, toJson: Utils.dateTimeToISO)
-  final DateTime createdAt;
   static const String kMapSensitiveInformation = 'sensitiveInformation';
   late final UsersSensitiveInformation sensitiveInformation;
 
-  User(this.sensitiveInformation, this.createdAt);
+  User(this.sensitiveInformation) : super(createdAt: clock.now());
 
-  User.newUser(this.sensitiveInformation) : this.createdAt = clock.now();
+  User.newUser(this.sensitiveInformation) : super(createdAt: clock.now());
 
   factory User.fromFirestore(DocumentSnapshot documentSnapshot) {
     final Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
