@@ -45,7 +45,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-#Private Files
+# Private Files
 /android/app/google-services.json
 /ios/Runner/GoogleService-Info.plist
 /secrets/
@@ -54,5 +54,7 @@ app.*.map.json
 /coverage/
 
 # Environment generator
+/android/env.properties
+/ios/Flutter/env.xcconfig
 /tools/environment-generator/google-services-*.json
 /tools/environment-generator/GoogleService-Info-*.plist
