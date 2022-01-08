@@ -96,7 +96,7 @@ void main() {
       });
     });
 
-    // FIXME(aurimas): there is a slight glitch - we cannot not decrypt our data, because then
+    // There is a slight glitch - we cannot not decrypt our data, because then
     // [createdAt] is returned as a not ISO compatible string which will fail parsing thus throwing exception
     // because date is random string.
     test('!isEncrypted', () {

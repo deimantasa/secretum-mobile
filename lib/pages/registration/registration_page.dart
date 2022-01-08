@@ -72,98 +72,80 @@ class _RegistrationPageState extends State<RegistrationPage> implements Registra
     if (_model.registrationLoadingState.isLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
+      final bool isPasswordObscured = _model.isPrimaryPasswordObscure;
+      const int kPasswordLength = 6;
+
       return PageView(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          _buildPasswordsSection(
-            formKey: _primaryPasswordFormKey,
-            primaryPasswordFocusNode: _primaryPasswordFocusNode,
-            confirmationPasswordFocusNode: _primaryPasswordConfirmationFocusNode,
-            description: 'Primary Password is used to secure most important actions within the application.',
-            passwordTEC: _primaryPasswordTEC,
-            isPasswordObscured: _model.isPrimaryPasswordObscure,
-            onObscureChanged: (isObscure) => setState(() => _model.isPrimaryPasswordObscure = isObscure),
-            passwordHint: 'Primary Password',
-            passwordLength: 6,
-            passwordConfirmationTEC: _primaryPasswordConfirmationTEC,
-            buttonText: 'Finish',
-            onFinish: () => _finishRegistration(),
-          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            child: Form(
+              key: _primaryPasswordFormKey,
+              child: Column(
+                children: [
+                  Spacer(),
+                  Text(
+                    'Primary Password is used to secure most important actions within the application.',
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 32),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          focusNode: _primaryPasswordFocusNode,
+                          controller: _primaryPasswordTEC,
+                          obscureText: isPasswordObscured,
+                          // Update UI on every single entry. Needed in order to show enable/disable `finish` button
+                          onChanged: (_) => setState(() {}),
+                          decoration: InputDecoration(hintText: 'Primary Password'),
+                          validator: (input) => input != null && input.length >= kPasswordLength
+                              ? null
+                              : 'Password must be at least $kPasswordLength characters',
+                          onEditingComplete: () => _primaryPasswordConfirmationFocusNode.requestFocus(),
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      IconButton(
+                        icon: Icon(isPasswordObscured ? Icons.remove_red_eye : Icons.remove_red_eye_outlined),
+                        onPressed: () => _presenter.toggleObscurity(),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    focusNode: _primaryPasswordConfirmationFocusNode,
+                    controller: _primaryPasswordConfirmationTEC,
+                    obscureText: true,
+                    // Update UI on every single entry. Needed in order to show enable/disable `finish` button
+                    onChanged: (_) => setState(() {}),
+                    decoration: InputDecoration(hintText: 'Confirm Password'),
+                    validator: (input) => _presenter.validatePassword(_primaryPasswordTEC.text, input),
+                    onEditingComplete: _finishRegistration,
+                  ),
+                  Spacer(flex: 2),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          child: Text('Finish'),
+                          onPressed: _primaryPasswordTEC.text.isEmpty || _primaryPasswordConfirmationTEC.text.isEmpty
+                              ? null
+                              : _finishRegistration,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ),
+            ),
+          )
         ],
       );
     }
-  }
-
-  Widget _buildPasswordsSection({
-    required GlobalKey<FormState> formKey,
-    required FocusNode primaryPasswordFocusNode,
-    required FocusNode confirmationPasswordFocusNode,
-    required String description,
-    required TextEditingController passwordTEC,
-    required bool isPasswordObscured,
-    required ValueSetter<bool> onObscureChanged,
-    required String passwordHint,
-    required int passwordLength,
-    required TextEditingController passwordConfirmationTEC,
-    required String buttonText,
-    required void Function()? onFinish,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            Spacer(),
-            Text(description, textAlign: TextAlign.center),
-            SizedBox(height: 32),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    focusNode: primaryPasswordFocusNode,
-                    controller: passwordTEC,
-                    obscureText: isPasswordObscured,
-                    decoration: InputDecoration(hintText: passwordHint),
-                    validator: (input) => input != null && input.length >= passwordLength
-                        ? null
-                        : 'Password must be at least $passwordLength characters',
-                    onEditingComplete: () => confirmationPasswordFocusNode.requestFocus(),
-                  ),
-                ),
-                SizedBox(width: 4),
-                IconButton(
-                  icon: Icon(isPasswordObscured ? Icons.remove_red_eye : Icons.remove_red_eye_outlined),
-                  onPressed: () => onObscureChanged(!isPasswordObscured),
-                )
-              ],
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              focusNode: confirmationPasswordFocusNode,
-              controller: passwordConfirmationTEC,
-              obscureText: true,
-              decoration: InputDecoration(hintText: 'Confirm Password'),
-              validator: (input) => input == passwordTEC.text ? null : "Passwords doesn't match",
-              onEditingComplete: onFinish,
-            ),
-            Spacer(flex: 2),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    child: Text(buttonText),
-                    onPressed: onFinish,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-          ],
-        ),
-      ),
-    );
   }
 
   @override

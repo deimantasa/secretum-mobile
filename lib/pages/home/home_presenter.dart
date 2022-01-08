@@ -22,13 +22,34 @@ class HomePresenter {
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
+  void init() {
+    updateData();
+    exportSecretsLocally();
+
+    _view.updateView();
+  }
+
+  void updateData() {
+    // Cannot force non-nullable because it's null after logging out
+    _model.user = _usersStore.user;
+    _model.secrets = List.of(_secretsStore.secrets);
+    _view.updateView();
+  }
+
+  void signOut() {
+    _usersStore.resetStore();
+    _secretsStore.resetStore();
+    _storageService.resetStorage();
+
+    _view.goToWelcomePage();
+  }
+
   Future<void> addNewSecret(String secretName) async {
     _model.loadingState.isLoading = true;
     _view.updateView();
 
-    final String userId = _usersStore.user!.id;
+    final String userId = _model.user!.id;
     final Secret secret = Secret.newSecret(clock.now(), addedBy: userId, name: secretName);
-
     final bool isSuccess = await _secretsStore.addNewSecret(userId, secret);
 
     _model.loadingState.isLoading = false;
@@ -39,29 +60,6 @@ class HomePresenter {
     } else {
       _view.showMessage('Cannot add $secretName, something went wrong', isSuccess: false);
     }
-  }
-
-  void init() {
-    updateData();
-
-    exportSecretsLocally();
-  }
-
-  void _updateSecrets() {
-    _model.secrets = List.of(_secretsStore.secrets);
-  }
-
-  void updateData() {
-    _updateSecrets();
-    _view.updateView();
-  }
-
-  void signOut() {
-    _usersStore.resetStore();
-    _secretsStore.resetStore();
-    _storageService.resetStorage();
-
-    _view.goToWelcomePage();
   }
 
   Future<void> exportSecrets(ExportFromType exportFromType, String fileName) async {
@@ -96,7 +94,7 @@ class HomePresenter {
   /// goes wrong in the database.
   @visibleForTesting
   Future<void> exportSecretsLocally() async {
-    final List<Secret> secrets = await _secretsStore.getAllSecrets(_usersStore.user!.id);
+    final List<Secret> secrets = await _secretsStore.getAllSecrets(_model.user!.id);
     await _storageService.exportBackup(secrets, 'secretum-backup-${DateTime.now().toIso8601String()}');
   }
 }

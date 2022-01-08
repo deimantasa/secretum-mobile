@@ -44,4 +44,13 @@ class RegistrationPresenter {
       _view.showMessage('Cannot register. Something went wrong', isSuccess: false);
     }
   }
+
+  void toggleObscurity() {
+    _model.isPrimaryPasswordObscure = !_model.isPrimaryPasswordObscure;
+    _view.updateView();
+  }
+
+  String? validatePassword(String password, String? confirmationPassword) {
+    return password == confirmationPassword ? null : 'Passwords does not match';
+  }
 }

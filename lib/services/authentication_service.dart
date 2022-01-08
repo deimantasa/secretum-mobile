@@ -12,7 +12,7 @@ class AuthenticationService {
 
   bool _areBiometricsAvailable = false;
 
-  // TODO: implement code for devices which does not have biometrics enabled
+  // TODO(aurimas): implement code for devices which does not have biometrics enabled
   bool get areBiometricsAvailable => _areBiometricsAvailable;
 
   Future<void> init() async {

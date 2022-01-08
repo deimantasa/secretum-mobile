@@ -121,40 +121,55 @@ class _WelcomePageState extends State<WelcomePage> implements WelcomeView {
         context: context,
         builder: (context) {
           final TextEditingController textEditingController = TextEditingController();
-          return AlertDialog(
-            title: Text('Enter your secret key'),
-            content: TextFormField(
-              autofocus: true,
-              controller: textEditingController,
-              decoration: InputDecoration(hintText: 'Secret Key'),
-              minLines: 1,
-              maxLines: 3,
-            ),
-            actions: [
-              TextButton(
-                child: Text('Paste'),
-                onPressed: () async {
-                  final ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
-                  final String? clipboardDataText = clipboardData?.text;
+          return StatefulBuilder(
+            builder: (context, dialogSetState) {
+              return AlertDialog(
+                title: Text('Enter your secret key'),
+                content: TextFormField(
+                  autofocus: true,
+                  controller: textEditingController,
+                  decoration: InputDecoration(hintText: 'Secret Key'),
+                  minLines: 1,
+                  maxLines: 3,
+                ),
+                actions: [
+                  if (_model.fetchingAccountLoadingState.isLoading)
+                    Padding(
+                      // Very specific dimensions, so that dialog would not resize in between loading states
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      child: SizedBox.fromSize(
+                        size: Size.square(24),
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    )
+                  else ...[
+                    TextButton(
+                      child: Text('Paste'),
+                      onPressed: () async {
+                        final ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+                        final String? clipboardDataText = clipboardData?.text;
 
-                  //If there is some data within clipboard - paste it
-                  if (clipboardDataText != null) {
-                    textEditingController.text = clipboardDataText;
-                    textEditingController.selection = TextSelection.fromPosition(
-                      TextPosition(offset: textEditingController.text.length),
-                    );
-                  }
-                },
-              ),
-              TextButton(
-                child: Text('Cancel'),
-                onPressed: () => Navigator.pop(context),
-              ),
-              TextButton(
-                child: Text('Confirm'),
-                onPressed: () => _presenter.confirmSecretKey(textEditingController.text),
-              ),
-            ],
+                        //If there is some data within clipboard - paste it
+                        if (clipboardDataText != null) {
+                          textEditingController.text = clipboardDataText;
+                          textEditingController.selection = TextSelection.fromPosition(
+                            TextPosition(offset: textEditingController.text.length),
+                          );
+                        }
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    TextButton(
+                      child: Text('Confirm'),
+                      onPressed: () => _presenter.confirmSecretKey(textEditingController.text, dialogSetState),
+                    ),
+                  ],
+                ],
+              );
+            },
           );
         });
   }
