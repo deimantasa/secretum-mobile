@@ -51,25 +51,32 @@ Download from AppStore (TBD).
 I've combined [years of experience in Tech. land and Flutter](https://deimantas.dev) and decided to give back to the community.
 
 At first `Secretum` started as a personal project, but with time, I've decided I want to do more.  
+
 Since increasing popularity of blockchain and cryptocurrencies, people tend to have very hard time securing their private keys. And these keys easily can get lost, if stored offline (although offline storage is the most secure). `Secretum` makes it easier to store private keys online with full leverage of `hashing` and `encryption` technologies.
 
 
 ## How it works
-User creates their own Firebase project thus allowing only them to access the project. Since it's their own project, their individual `firestore` database reduce chances to get compromised.
+User creates their own [Firebase](https://firebase.google.com/) project thus allowing only them to access the project. Since it's their own project, their individual `firestore` database reduce chances for it to get compromised.
 
-1. User creates an account with entering only `password`
-2. Random key is generated and provided to the user. This key is stored locally using [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) and it used for encrypting/decrypting data. Furthermore, this key is the only way to recover the account if one deletes the app or logs out.
-3. User's `password` and `key` are hashed with `SHA256` and data is stored in the `firestore`.
-4. User enters the app and can create their `secrets`. Before sending `secret` to `firestore`, data is encrypted using `key` and only then it's sent to `firestore`.
+1. User creates an account with entering only `password`. This `password` is used for sensitive information, such as `secret.code` update, backup generation, etc.
+2. [Random key is generated](https://github.com/deimantasa/secretum-mobile/blob/master/lib/services/encryption_service.dart#L10-L15) and provided to the user. This key is [stored locally](https://github.com/deimantasa/secretum-mobile/blob/master/lib/services/storage_service.dart#L37-L42) using [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage) and it used for encrypting/decrypting data. Furthermore, this key is the only way to recover the account if one deletes the app or logs out.
+3. User's `password` and `key` are [hashed](https://github.com/deimantasa/secretum-mobile/blob/master/lib/services/encryption_service.dart#L44-L49) with `SHA256` and data is stored in the `firestore`.
+4. User enters the app and can create their `secrets`. Before sending `secret` to `firestore`, data is [encrypted](https://github.com/deimantasa/secretum-mobile/blob/master/lib/services/encryption_service.dart#L27-L34) using `key` and only then it's sent to `firestore`.
+5. In order to read encrypted data from `firestore`, all data is being [decrypted](https://github.com/deimantasa/secretum-mobile/blob/master/lib/models/secret.dart#L55-L63), so that in the app it would be readable.
 
-This way ensures that all the data is either `encrypted` or `hashed` and there is no way, without knowing the key, decrypt anything.
+This way ensures that all the data is either `encrypted` or `hashed` and even with knowing raw data from `firestore`, there is no way, without knowing the key, decrypt anything.
 
 Additional functionality includes backups:
-1. On app start, `all user's secrets` are stored in the local text file within phone device. That file data is encrypted (same as in `firestore`).
+1. On app start, `all user's secrets` are [stored in the local text file within phone device](https://github.com/deimantasa/secretum-mobile/blob/master/lib/services/storage_service.dart#L44-L52). That file data is encrypted (same as in `firestore`).
    - User can access each backup via app
    - User at any moment can wipe all locally stores backups  
    - This backup mechanism ensures that in case of data is being compromised, user can still always access their latest non-compromised data-set
-2. User can backup their `secrets` on demand   
+2. User can backup their `secrets` on demand  
+
+
+And the best part - if you want to recoved your account - all you need is to:
+1. Enter your `key`
+2. If `hashed key` is found in the firestore, you will be recovered with that account's data
 
 ## Limitations
 Unfortunately I don't have iOS/Android device with Face Recognition therefore I was not able to test authentication flow with it. It might give some unexpected behaviour.  
@@ -97,9 +104,9 @@ After you've set-up Firebase and linked its configuration - now you should be ab
 My hope is that some of you might find this project useful. If you do - feel free to share your appreciation via donations:  
 
 - Bitcoin  
--- `bc1q6ze04kw5s6dvptk22m9l0yjk43uewykfeks0tj`
+`bc1q6ze04kw5s6dvptk22m9l0yjk43uewykfeks0tj`
 - Nano  
--- `nano_3pozzop44i7kyz4afg7teno41w4sm8q1genyu9rwdxmidfszpzjxitxq4js7`
+`nano_3pozzop44i7kyz4afg7teno41w4sm8q1genyu9rwdxmidfszpzjxitxq4js7`
 - Monero  
--- `44yBuwJXmTmc1fEDaxSKTwVz9As3FkzyHZDqmwCXSnNSWi9tUyieeyt2mgnpzusHFRRKcp7p31jAh9CN1G6dZb3F2MT2j3J`
+`44yBuwJXmTmc1fEDaxSKTwVz9As3FkzyHZDqmwCXSnNSWi9tUyieeyt2mgnpzusHFRRKcp7p31jAh9CN1G6dZb3F2MT2j3J`
 
