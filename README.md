@@ -90,8 +90,7 @@ Furthermore, if device does not have any biometrics/pattern lock - it might misb
 4. Download `google-services.json` (Android) rename it to `google-services-prod.json` and put it to `../secretum/tools/environment-generator/` directory
 5. Follow the guide of how to correctly reference `GoogleServices-Info.plist` for iOS (very important, drag-n-drop instead of copy-paste)
 6. Download second copy of `GoogleServices-Info.plist`, rename it to `GoogleServices-Info-prod.plist` and put it to `../secretum/tools/environment-generator/` directory
-7. Go to `../secretum/tools/environment-generator/` and run `node environment-generator prod`. Firebase configs (prod) will be copied into right places with additional parameters  
-if you'd like to have `dev` build too
+7. Go to `../secretum/tools/environment-generator/` and run `node environment-generator prod`. Firebase configs (`prod`) will be copied into right places with additional parameters. You can also build `dev` if you'd like to have second, independent Firebase project to work on (perfect for development)
 8. Go to your Firebase project and enable `anonymous authentication` within `Authentication`
 9. Go to your Firebase project and enable `Firestore Database`
 10. Set up Firestore rules up your preference
