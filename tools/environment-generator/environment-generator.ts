@@ -9,14 +9,15 @@ const envAndroidFile = 'env.properties';
 const envIOSFile = 'env.xcconfig';
 
 // Only handling two environments
-type Environment = 'prod' | 'dev';
+type Environment = 'prod' | 'dev' | 'private';
 
 // Modify values is they need to change
 const envProd: EnvFile = {appName: "Secretum", appSuffix: ""};
 const envDev: EnvFile = {appName: "DEV Secretum", appSuffix: ".dev"};
+const envPrivate: EnvFile = {appName: "SecretumPrivate", appSuffix: ".private"};
 
 // DON'T MODIFY THIS INTERFACE
-const envGeneral = {"prod": envProd, "dev": envDev};
+const envGeneral = {"prod": envProd, "dev": envDev, "private": envPrivate};
 
 // Helper function to get right fileName for iOS file
 function getIOSEnvFile(env: Environment | 'main') {
@@ -95,7 +96,7 @@ function generateRightEnvironmentFiles(environment: Environment) {
 // Once file is running, it will execute [copyRightEnvironmentFile] function with given arguments
 function generateEnvironmentFiles(environment: string) {
     // If environment match, execute copying script
-    if (environment === 'prod' || environment === 'dev') {
+    if (environment === 'prod' || environment === 'dev' || environment === 'private') {
         console.log(`*********************************************`);
         console.log(`Generating environment files and configs. Environment: ${environment}`);
         generateRightFirebaseEnvironmentFile(environment);

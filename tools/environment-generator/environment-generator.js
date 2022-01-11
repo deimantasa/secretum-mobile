@@ -10,8 +10,9 @@ var envIOSFile = 'env.xcconfig';
 // Modify values is they need to change
 var envProd = { appName: "Secretum", appSuffix: "" };
 var envDev = { appName: "DEV Secretum", appSuffix: ".dev" };
+var envPrivate = { appName: "SecretumP", appSuffix: ".private" };
 // DON'T MODIFY THIS INTERFACE
-var envGeneral = { "prod": envProd, "dev": envDev };
+var envGeneral = { "prod": envProd, "dev": envDev, "private": envPrivate };
 // Helper function to get right fileName for iOS file
 function getIOSEnvFile(env) {
     if (env === 'main') {
@@ -83,7 +84,7 @@ function generateRightEnvironmentFiles(environment) {
 // Once file is running, it will execute [copyRightEnvironmentFile] function with given arguments
 function generateEnvironmentFiles(environment) {
     // If environment match, execute copying script
-    if (environment === 'prod' || environment === 'dev') {
+    if (environment === 'prod' || environment === 'dev' || environment === 'private') {
         console.log("*********************************************");
         console.log("Generating environment files and configs. Environment: " + environment);
         generateRightFirebaseEnvironmentFile(environment);
