@@ -3,6 +3,15 @@
 ### DEMO
 [Full walkthrough with comments - view on YouTube](https://youtu.be/HfjjZviBcg4) (slightly outdated but core principles are there).
 
+#### Hacking purposes only
+
+**[Firestore database](https://firestore.googleapis.com/v1/projects/secretum-test/databases/(default)/documents/users)**. If you're able to crack it open and decode encrypted secrets - please share so that we can fix any vulnerability.
+
+**Apps**  
+Download from [PlayStore](https://play.google.com/store/apps/details?id=com.secretum) (Android).  
+Download from [AppStore](https://apps.apple.com/us/app/apple-store/id1558404007) (iOS).
+
+
 **Features**:
 
 - Register. Sign up with only `primary password`. It will be used for very sensitive operations, as secret deletion, backups, etc.
@@ -34,10 +43,6 @@
 
 - Data in Firestore. Everything is encrypted or hashed.
 <img src="https://user-images.githubusercontent.com/12739071/148643734-deb4f8f0-e617-45dd-89c5-fc480bc8672f.gif" width="800"/>
-
-### Download
-Download from PlayStore (TBD).  
-Download from AppStore (TBD).
 
 # Table of Contents
 1. [Motivation](#motivation)
