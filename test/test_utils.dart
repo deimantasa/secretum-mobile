@@ -4,13 +4,13 @@ import 'package:secretum/models/users_sensitive_information.dart';
 import 'package:secretum/utils/utils.dart';
 
 class TestUtils {
-  static const String kLateInitializationErrorCaught = 'LateInitializationError caught';
-  static const String kEncryptionSecretKey = 'gHgAe/qddTarEgNFcknw3DETxDlYiSRX';
+  static const kLateInitializationErrorCaught = 'LateInitializationError caught';
+  static const kEncryptionSecretKey = 'gHgAe/qddTarEgNFcknw3DETxDlYiSRX';
 
   /// 2020-01-01 00-00-00
-  static final DateTime createdAtDate = DateTime(2000, 1, 1, 0, 0, 0, 0, 0);
-  static const String kCreatedAtISO = '2000-01-01T00:00:00.000';
-  static const String kCreatedAtEncrypted = 'QFGF9yeT/yt5fLblrez3OKqSc0zCEzvxTogsTlYDSGY=';
+  static final createdAtDate = DateTime(2000, 1, 1, 0, 0, 0, 0, 0);
+  static const kCreatedAtISO = '2000-01-01T00:00:00.000';
+  static const kCreatedAtEncrypted = 'QFGF9yeT/yt5fLblrez3OKqSc0zCEzvxTogsTlYDSGY=';
 
   /// Secret
   static Secret getSecret(DateTime dateTime) {

@@ -12,26 +12,28 @@ import '../test_utils.dart';
 void main() {
   loggingService = MockLoggingService();
 
-  final MockDocumentSnapshot mockDocumentSnapshot = MockDocumentSnapshot();
-  final MockDocumentChange mockDocumentChange = MockDocumentChange();
+  final mockDocumentSnapshot = MockDocumentSnapshot();
+  final mockDocumentChange = MockDocumentChange();
 
   late EncryptionService encryptionService;
 
   setUp(() {
     GetIt.instance.registerSingleton(EncryptionService());
+
     encryptionService = GetIt.instance<EncryptionService>();
     encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
   });
 
   tearDown(() async {
+    await GetIt.instance.reset();
+
     reset(mockDocumentSnapshot);
     reset(mockDocumentChange);
-    await GetIt.instance.reset();
   });
 
   test('Secret', () {
-    final DateTime dateTime = DateTime.now();
-    final Secret secret = Secret('addedBy', dateTime, 'name', 'note', 'code');
+    final dateTime = DateTime.now();
+    final secret = Secret('addedBy', dateTime, 'name', 'note', 'code');
 
     expect(secret.addedBy, 'addedBy');
     expect(secret.createdAt, dateTime);
@@ -42,8 +44,8 @@ void main() {
   });
 
   test('Secret.newSecret', () {
-    final DateTime dateTime = DateTime.now();
-    final Secret secret = Secret.newSecret(dateTime, addedBy: 'addedBy', name: 'name');
+    final dateTime = DateTime.now();
+    final secret = Secret.newSecret(dateTime, addedBy: 'addedBy', name: 'name');
 
     expect(secret.addedBy, 'addedBy');
     expect(secret.createdAt, dateTime);
@@ -57,7 +59,7 @@ void main() {
     when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getSecretEncryptedMap());
     when(mockDocumentSnapshot.id).thenReturn('1');
 
-    final Secret secret = Secret.fromFirestore(mockDocumentSnapshot);
+    final secret = Secret.fromFirestore(mockDocumentSnapshot);
 
     expect(secret.documentSnapshot, mockDocumentSnapshot);
     expect(secret.documentChangeType, isNull);
@@ -76,7 +78,7 @@ void main() {
     when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getSecretEncryptedMap());
     when(mockDocumentSnapshot.id).thenReturn('1');
 
-    final Secret secret = Secret.fromFirestoreChanged(mockDocumentChange);
+    final secret = Secret.fromFirestoreChanged(mockDocumentChange);
 
     expect(secret.documentSnapshot, mockDocumentSnapshot);
     expect(secret.documentChangeType, DocumentChangeType.added);
@@ -91,7 +93,7 @@ void main() {
 
   group('Secret.fromJson', () {
     test('isEncrypted', () {
-      final Secret secret = Secret.fromJson(TestUtils.getSecretEncryptedMap());
+      final secret = Secret.fromJson(TestUtils.getSecretEncryptedMap());
 
       expect(secret.addedBy, 'addedBy1');
       expect(secret.createdAt, TestUtils.createdAtDate);
@@ -102,8 +104,8 @@ void main() {
     });
 
     test('!isEncrypted', () {
-      final DateTime dateTime = TestUtils.createdAtDate;
-      final Secret secret = Secret.fromJson(TestUtils.getSecretDecryptedMap(dateTime), isEncrypted: false);
+      final dateTime = TestUtils.createdAtDate;
+      final secret = Secret.fromJson(TestUtils.getSecretDecryptedMap(dateTime), isEncrypted: false);
 
       expect(secret.addedBy, 'addedBy1');
       expect(secret.createdAt, dateTime);
@@ -116,15 +118,15 @@ void main() {
 
   group('toJson', () {
     test('isEncrypted', () {
-      final DateTime dateTime = TestUtils.createdAtDate;
-      final Map<String, dynamic> secretMap = TestUtils.getSecret(dateTime).toJson();
+      final dateTime = TestUtils.createdAtDate;
+      final secretMap = TestUtils.getSecret(dateTime).toJson();
 
       expect(secretMap, TestUtils.getSecretEncryptedMap());
     });
 
     test('!isEncrypted', () {
-      final DateTime dateTime = TestUtils.createdAtDate;
-      final Map<String, dynamic> secretMap = TestUtils.getSecret(dateTime).toJson(isEncrypted: false);
+      final dateTime = TestUtils.createdAtDate;
+      final secretMap = TestUtils.getSecret(dateTime).toJson(isEncrypted: false);
 
       expect(secretMap, TestUtils.getSecretDecryptedMap(dateTime));
     });

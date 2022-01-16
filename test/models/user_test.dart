@@ -13,28 +13,30 @@ import '../test_utils.dart';
 void main() {
   loggingService = MockLoggingService();
 
-  final MockUsersSensitiveInformation mockUsersSensitiveInformation = MockUsersSensitiveInformation();
-  final MockDocumentSnapshot mockDocumentSnapshot = MockDocumentSnapshot();
-  final MockDocumentChange mockDocumentChange = MockDocumentChange();
+  final mockUsersSensitiveInformation = MockUsersSensitiveInformation();
+  final mockDocumentSnapshot = MockDocumentSnapshot();
+  final mockDocumentChange = MockDocumentChange();
 
   late EncryptionService encryptionService;
 
   setUp(() {
     GetIt.instance.registerSingleton(EncryptionService());
+
     encryptionService = GetIt.instance<EncryptionService>();
     encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
   });
 
   tearDown(() async {
+    await GetIt.instance.reset();
+
     reset(mockUsersSensitiveInformation);
     reset(mockDocumentSnapshot);
     reset(mockDocumentChange);
-    await GetIt.instance.reset();
   });
 
   test('User', () {
     withClock(Clock.fixed(TestUtils.createdAtDate), () {
-      final User user = User(mockUsersSensitiveInformation);
+      final user = User(mockUsersSensitiveInformation);
 
       expect(user.sensitiveInformation, mockUsersSensitiveInformation);
       expect(user.createdAt, TestUtils.createdAtDate);
@@ -43,7 +45,7 @@ void main() {
 
   test('User.newUser', () {
     withClock(Clock.fixed(TestUtils.createdAtDate), () {
-      final User user = User.newUser(mockUsersSensitiveInformation);
+      final user = User.newUser(mockUsersSensitiveInformation);
 
       expect(user.sensitiveInformation, mockUsersSensitiveInformation);
       expect(user.createdAt, TestUtils.createdAtDate);
@@ -51,12 +53,10 @@ void main() {
   });
 
   test('User.fromFirestore', () {
-    encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
-
     when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getUserEncryptedMap());
     when(mockDocumentSnapshot.id).thenReturn('1');
 
-    final User user = User.fromFirestore(mockDocumentSnapshot);
+    final user = User.fromFirestore(mockDocumentSnapshot);
 
     expect(user.documentSnapshot, mockDocumentSnapshot);
     expect(user.documentChangeType, isNull);
@@ -67,14 +67,12 @@ void main() {
   });
 
   test('User.fromFirestoreChanged', () {
-    encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
-
     when(mockDocumentChange.doc).thenReturn(mockDocumentSnapshot);
     when(mockDocumentChange.type).thenReturn(DocumentChangeType.added);
     when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getUserEncryptedMap());
     when(mockDocumentSnapshot.id).thenReturn('1');
 
-    final User user = User.fromFirestoreChanged(mockDocumentChange);
+    final user = User.fromFirestoreChanged(mockDocumentChange);
 
     expect(user.documentSnapshot, mockDocumentSnapshot);
     expect(user.documentChangeType, DocumentChangeType.added);
@@ -87,8 +85,7 @@ void main() {
   group('User.fromJson', () {
     test('isEncrypted', () {
       withClock(Clock.fixed(TestUtils.createdAtDate), () {
-        encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
-        final User user = User.fromJson(TestUtils.getUserEncryptedMap());
+        final user = User.fromJson(TestUtils.getUserEncryptedMap());
 
         expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
         expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
@@ -101,7 +98,7 @@ void main() {
     // because date is random string.
     test('!isEncrypted', () {
       try {
-        final User user = User.fromJson(TestUtils.getUserEncryptedMap(), isEncrypted: false);
+        final user = User.fromJson(TestUtils.getUserEncryptedMap(), isEncrypted: false);
 
         expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
         expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
@@ -115,7 +112,7 @@ void main() {
   group('toJson', () {
     test('isEncrypted', () {
       withClock(Clock.fixed(TestUtils.createdAtDate), () {
-        final Map<String, dynamic> userMap = TestUtils.getUser().toJson();
+        final userMap = TestUtils.getUser().toJson();
 
         expect(userMap, TestUtils.getUserEncryptedMap());
       });
@@ -123,7 +120,7 @@ void main() {
 
     test('!isEncrypted', () {
       withClock(Clock.fixed(TestUtils.createdAtDate), () {
-        final Map<String, dynamic> userMap = TestUtils.getUser().toJson(isEncrypted: false);
+        final userMap = TestUtils.getUser().toJson(isEncrypted: false);
 
         expect(userMap, TestUtils.getUserDecryptedMap());
       });

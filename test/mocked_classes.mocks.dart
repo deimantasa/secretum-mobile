@@ -4,19 +4,26 @@
 
 import 'dart:async' as _i8;
 import 'dart:typed_data' as _i9;
+import 'dart:ui' as _i17;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_core/firebase_core.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:secretum/models/enums/log_type.dart' as _i5;
 import 'package:secretum/models/secret.dart' as _i6;
+import 'package:secretum/models/user.dart' as _i16;
 import 'package:secretum/models/users_sensitive_information.dart' as _i7;
 import 'package:secretum/pages/authentication/authentication_contract.dart'
     as _i10;
+import 'package:secretum/pages/backup_preview/backup_preview_contract.dart'
+    as _i12;
+import 'package:secretum/pages/edit_entry/edit_entry_contract.dart' as _i13;
 import 'package:secretum/services/authentication_service.dart' as _i11;
+import 'package:secretum/services/encryption_service.dart' as _i14;
 import 'package:secretum/services/logging_service.dart' as _i4;
+import 'package:secretum/stores/users_store.dart' as _i15;
 
-import 'mock_function.dart' as _i12;
+import 'mock_function.dart' as _i18;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -783,10 +790,132 @@ class MockAuthenticationService extends _i1.Mock
           returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
 }
 
+/// A class which mocks [BackupPreviewView].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBackupPreviewView extends _i1.Mock implements _i12.BackupPreviewView {
+  MockBackupPreviewView() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void updateView() => super.noSuchMethod(Invocation.method(#updateView, []),
+      returnValueForMissingStub: null);
+  @override
+  void showMessage(String? message, {bool? isSuccess}) => super.noSuchMethod(
+      Invocation.method(#showMessage, [message], {#isSuccess: isSuccess}),
+      returnValueForMissingStub: null);
+}
+
+/// A class which mocks [EditEntryView].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockEditEntryView extends _i1.Mock implements _i13.EditEntryView {
+  MockEditEntryView() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void updateView() => super.noSuchMethod(Invocation.method(#updateView, []),
+      returnValueForMissingStub: null);
+  @override
+  void showMessage(String? message, {bool? isSuccess}) => super.noSuchMethod(
+      Invocation.method(#showMessage, [message], {#isSuccess: isSuccess}),
+      returnValueForMissingStub: null);
+}
+
+/// A class which mocks [EncryptionService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockEncryptionService extends _i1.Mock implements _i14.EncryptionService {
+  MockEncryptionService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String generateSecretKey() =>
+      (super.noSuchMethod(Invocation.method(#generateSecretKey, []),
+          returnValue: '') as String);
+  @override
+  void updateSecretKey(String? secretKey) =>
+      super.noSuchMethod(Invocation.method(#updateSecretKey, [secretKey]),
+          returnValueForMissingStub: null);
+  @override
+  void resetSecretKey() =>
+      super.noSuchMethod(Invocation.method(#resetSecretKey, []),
+          returnValueForMissingStub: null);
+  @override
+  String getEncryptedText(String? text) =>
+      (super.noSuchMethod(Invocation.method(#getEncryptedText, [text]),
+          returnValue: '') as String);
+  @override
+  String getDecryptedText(String? text) =>
+      (super.noSuchMethod(Invocation.method(#getDecryptedText, [text]),
+          returnValue: '') as String);
+  @override
+  String getHashedText(String? text) =>
+      (super.noSuchMethod(Invocation.method(#getHashedText, [text]),
+          returnValue: '') as String);
+}
+
+/// A class which mocks [UsersStore].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUsersStore extends _i1.Mock implements _i15.UsersStore {
+  MockUsersStore() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  set user(_i16.User? _user) =>
+      super.noSuchMethod(Invocation.setter(#user, _user),
+          returnValueForMissingStub: null);
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
+  @override
+  void updateUserLocally(_i16.User? user) =>
+      super.noSuchMethod(Invocation.method(#updateUserLocally, [user]),
+          returnValueForMissingStub: null);
+  @override
+  _i8.Future<void> initUserViaSecretKey(String? secretKey) =>
+      (super.noSuchMethod(Invocation.method(#initUserViaSecretKey, [secretKey]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<void> initUserOnAppStart() =>
+      (super.noSuchMethod(Invocation.method(#initUserOnAppStart, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<bool> registerUser(_i16.User? userToRegister) =>
+      (super.noSuchMethod(Invocation.method(#registerUser, [userToRegister]),
+          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
+  @override
+  void resetStore() => super.noSuchMethod(Invocation.method(#resetStore, []),
+      returnValueForMissingStub: null);
+  @override
+  void addListener(_i17.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i17.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+}
+
 /// A class which mocks [FunctionMock].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFunction<T> extends _i1.Mock implements _i12.FunctionMock<T> {
+class MockFunction<T> extends _i1.Mock implements _i18.FunctionMock<T> {
   MockFunction() {
     _i1.throwOnMissingStub(this);
   }
