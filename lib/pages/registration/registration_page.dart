@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:secretum/pages/home/home_page.dart';
+import 'package:secretum/utils/app_assets.dart';
 import 'package:secretum/utils/dialogs.dart';
 import 'package:secretum/utils/hero_tags.dart';
-import 'package:secretum/utils/app_assets.dart';
 
 import 'registration_contract.dart';
 import 'registration_model.dart';

@@ -22,7 +22,6 @@ class StorageService {
   /// Not hashed and not encrypted secretKey (raw)
   Future<String?> getSecretKey() async {
     final String? secretKey = await _flutterSecureStorage.read(key: _kSecretKey);
-    print(secretKey);
 
     if (secretKey != null) {
       loggingService.log('StorageService.getSecretKey: SecretKey retrieved: $secretKey');
@@ -74,6 +73,7 @@ class StorageService {
     final Directory directory = await getApplicationDocumentsDirectory();
     // Cannot simply use root, because if we try to delete it, iOS throws an error
     final Directory backupsDirectory = Directory('${directory.path}/backups');
+    // ignore: avoid_slow_async_io
     final bool doesDirectoryExists = await backupsDirectory.exists();
 
     // Very first time directory does not exist, therefore create it

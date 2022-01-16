@@ -32,57 +32,57 @@ void main() {
     await GetIt.instance.reset();
   });
 
-  // test('User', () {
-  //   withClock(Clock.fixed(TestUtils.createdAtDate), () {
-  //     final User user = User(mockUsersSensitiveInformation);
-  //
-  //     expect(user.sensitiveInformation, mockUsersSensitiveInformation);
-  //     expect(user.createdAt, TestUtils.createdAtDate);
-  //   });
-  // });
-  //
-  // test('User.newUser', () {
-  //   withClock(Clock.fixed(TestUtils.createdAtDate), () {
-  //     final User user = User.newUser(mockUsersSensitiveInformation);
-  //
-  //     expect(user.sensitiveInformation, mockUsersSensitiveInformation);
-  //     expect(user.createdAt, TestUtils.createdAtDate);
-  //   });
-  // });
-  //
-  // test('User.fromFirestore', () {
-  //   encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
-  //
-  //   when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getUserEncryptedMap());
-  //   when(mockDocumentSnapshot.id).thenReturn('1');
-  //
-  //   final User user = User.fromFirestore(mockDocumentSnapshot);
-  //
-  //   expect(user.documentSnapshot, mockDocumentSnapshot);
-  //   expect(user.documentChangeType, isNull);
-  //   expect(user.id, '1');
-  //   expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
-  //   expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
-  //   expect(user.createdAt, DateTime(2000, 1, 1));
-  // });
-  //
-  // test('User.fromFirestoreChanged', () {
-  //   encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
-  //
-  //   when(mockDocumentChange.doc).thenReturn(mockDocumentSnapshot);
-  //   when(mockDocumentChange.type).thenReturn(DocumentChangeType.added);
-  //   when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getUserEncryptedMap());
-  //   when(mockDocumentSnapshot.id).thenReturn('1');
-  //
-  //   final User user = User.fromFirestoreChanged(mockDocumentChange);
-  //
-  //   expect(user.documentSnapshot, mockDocumentSnapshot);
-  //   expect(user.documentChangeType, DocumentChangeType.added);
-  //   expect(user.id, '1');
-  //   expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
-  //   expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
-  //   expect(user.createdAt, DateTime(2000, 1, 1));
-  // });
+  test('User', () {
+    withClock(Clock.fixed(TestUtils.createdAtDate), () {
+      final User user = User(mockUsersSensitiveInformation);
+
+      expect(user.sensitiveInformation, mockUsersSensitiveInformation);
+      expect(user.createdAt, TestUtils.createdAtDate);
+    });
+  });
+
+  test('User.newUser', () {
+    withClock(Clock.fixed(TestUtils.createdAtDate), () {
+      final User user = User.newUser(mockUsersSensitiveInformation);
+
+      expect(user.sensitiveInformation, mockUsersSensitiveInformation);
+      expect(user.createdAt, TestUtils.createdAtDate);
+    });
+  });
+
+  test('User.fromFirestore', () {
+    encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
+
+    when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getUserEncryptedMap());
+    when(mockDocumentSnapshot.id).thenReturn('1');
+
+    final User user = User.fromFirestore(mockDocumentSnapshot);
+
+    expect(user.documentSnapshot, mockDocumentSnapshot);
+    expect(user.documentChangeType, isNull);
+    expect(user.id, '1');
+    expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
+    expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
+    expect(user.createdAt, DateTime(2000, 1, 1));
+  });
+
+  test('User.fromFirestoreChanged', () {
+    encryptionService.updateSecretKey(TestUtils.kEncryptionSecretKey);
+
+    when(mockDocumentChange.doc).thenReturn(mockDocumentSnapshot);
+    when(mockDocumentChange.type).thenReturn(DocumentChangeType.added);
+    when(mockDocumentSnapshot.data()).thenReturn(TestUtils.getUserEncryptedMap());
+    when(mockDocumentSnapshot.id).thenReturn('1');
+
+    final User user = User.fromFirestoreChanged(mockDocumentChange);
+
+    expect(user.documentSnapshot, mockDocumentSnapshot);
+    expect(user.documentChangeType, DocumentChangeType.added);
+    expect(user.id, '1');
+    expect(user.sensitiveInformation.secretKey, 'fb575ab0dacff2d434656d88871a9991b13df170f052a4e3affd5812a305a2c7');
+    expect(user.sensitiveInformation.primaryPassword, '004c4ecec0ca4a52dbc7fa814f7e70f914b9f263a91b9fde6431798e38640ff7');
+    expect(user.createdAt, DateTime(2000, 1, 1));
+  });
 
   group('User.fromJson', () {
     test('isEncrypted', () {

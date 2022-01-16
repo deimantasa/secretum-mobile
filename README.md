@@ -17,7 +17,7 @@ Download from [AppStore](https://apps.apple.com/us/app/apple-store/id1558404007)
 - Register. Sign up with only `primary password`. It will be used for very sensitive operations, as secret deletion, backups, etc.
 <img src="https://user-images.githubusercontent.com/12739071/148643788-ee0f6957-fbdc-44a6-909f-c2d72ead73ec.gif" width="250"/>
 
-- Add new secret. Black screen is biometrics authentication - it's not shown in the recording on purpose.
+- Add new secret. Black screen is biometrics pages.authentication - it's not shown in the recording on purpose.
 <img src="https://user-images.githubusercontent.com/12739071/148643655-50b42f43-a10f-4188-88ba-acdba868503c.gif" width="250"/>
 
 - Preview Secret's data.
@@ -32,7 +32,7 @@ Download from [AppStore](https://apps.apple.com/us/app/apple-store/id1558404007)
 - Backup all your secrets from DB to locally encrypted file
 <img src="https://user-images.githubusercontent.com/12739071/148643647-9b860f86-fd75-46dc-b3b1-aa135d4f9f39.gif" width="250"/>
 
-- Auto backup all your secrets from DB to locally encrypted file on app start. It's extra safety layer to protect user in case someone obtained data in the Firestore and they've somehow messed it up. User will always be able to access their `backups` locally. Black screen is biometrics authentication - it's not shown in the recording on purpose.
+- Auto backup all your secrets from DB to locally encrypted file on app start. It's extra safety layer to protect user in case someone obtained data in the Firestore and they've somehow messed it up. User will always be able to access their `backups` locally. Black screen is biometrics pages.authentication - it's not shown in the recording on purpose.
 <img src="https://user-images.githubusercontent.com/12739071/148643705-c6b470d2-22a1-4447-8c91-b6cfd2dd142b.gif" width="250"/>
 
 - Delete backups. Everything will be deleted from the local storage.
@@ -84,7 +84,7 @@ And the best part - if you want to recoved your account - all you need is to:
 2. If `hashed key` is found in the firestore, you will be recovered with that account's data
 
 ## Limitations
-Unfortunately I don't have iOS/Android device with Face Recognition therefore I was not able to test authentication flow with it. It might give some unexpected behaviour.  
+Unfortunately I don't have iOS/Android device with Face Recognition therefore I was not able to test pages.authentication flow with it. It might give some unexpected behaviour.  
 Furthermore, if device does not have any biometrics/pattern lock - it might misbehave.
 
 ## Connect to your own Firebase project
@@ -96,7 +96,7 @@ Furthermore, if device does not have any biometrics/pattern lock - it might misb
 5. Follow the guide of how to correctly reference `GoogleServices-Info.plist` for iOS (very important, drag-n-drop instead of copy-paste)
 6. Download second copy of `GoogleServices-Info.plist`, rename it to `GoogleServices-Info-prod.plist` and put it to `../secretum/tools/environment-generator/` directory
 7. Go to `../secretum/tools/environment-generator/` and run `node environment-generator prod`. Firebase configs (`prod`) will be copied into right places with additional parameters. You can also build `dev` if you'd like to have second, independent Firebase project to work on (perfect for development)
-8. Go to your Firebase project and enable `anonymous authentication` within `Authentication`
+8. Go to your Firebase project and enable `anonymous pages.authentication` within `Authentication`
 9. Go to your Firebase project and enable `Firestore Database`
 10. Set up Firestore rules up your preference
 11. Delete existing `Secretum` app and build app from source

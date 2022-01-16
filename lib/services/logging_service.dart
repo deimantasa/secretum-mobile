@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:secretum/models/enums/log_type.dart';
 import 'package:logger/logger.dart';
+import 'package:secretum/models/enums/log_type.dart';
 
 class LoggingService {
   final Logger _logger;

@@ -3,6 +3,7 @@ import 'package:firestore_helper/firestore_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:secretum/pages/authentication/authentication_page.dart';
 import 'package:secretum/pages/intro/intro_page.dart';
 import 'package:secretum/services/authentication_service.dart';
@@ -13,7 +14,6 @@ import 'package:secretum/services/logging_service.dart';
 import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
-import 'package:provider/provider.dart';
 
 // Globals
 AppLifecycleState? appLifecycleState;
@@ -79,7 +79,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
       // Make sure we don't show second Auth page on top when user is already in Auth page.
       if (!isAuthenticationPageShown && context != null) {
-        print('push auth');
         Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticationPage()));
       }
     }

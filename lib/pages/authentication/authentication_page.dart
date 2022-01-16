@@ -27,7 +27,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> implements Auth
     _model = AuthenticationModel();
     _presenter = AuthenticationPresenter(this, _model);
 
-    // Once page is opened, immediately fire authentication
+    // Once page is opened, immediately fire pages.authentication
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       _presenter.authenticate();
     });

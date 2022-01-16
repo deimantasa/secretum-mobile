@@ -11,9 +11,12 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:secretum/models/enums/log_type.dart' as _i5;
 import 'package:secretum/models/secret.dart' as _i6;
 import 'package:secretum/models/users_sensitive_information.dart' as _i7;
+import 'package:secretum/pages/authentication/authentication_contract.dart'
+    as _i10;
+import 'package:secretum/services/authentication_service.dart' as _i11;
 import 'package:secretum/services/logging_service.dart' as _i4;
 
-import 'mock_function.dart' as _i10;
+import 'mock_function.dart' as _i12;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -736,10 +739,54 @@ class MockStreamSubscription<T> extends _i1.Mock
           returnValue: Future<E>.value(null)) as _i8.Future<E>);
 }
 
+/// A class which mocks [AuthenticationView].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthenticationView extends _i1.Mock
+    implements _i10.AuthenticationView {
+  MockAuthenticationView() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void updateView() => super.noSuchMethod(Invocation.method(#updateView, []),
+      returnValueForMissingStub: null);
+  @override
+  void showMessage(String? message, {bool? isSuccess}) => super.noSuchMethod(
+      Invocation.method(#showMessage, [message], {#isSuccess: isSuccess}),
+      returnValueForMissingStub: null);
+  @override
+  void closePage() => super.noSuchMethod(Invocation.method(#closePage, []),
+      returnValueForMissingStub: null);
+}
+
+/// A class which mocks [AuthenticationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthenticationService extends _i1.Mock
+    implements _i11.AuthenticationService {
+  MockAuthenticationService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool get areBiometricsAvailable =>
+      (super.noSuchMethod(Invocation.getter(#areBiometricsAvailable),
+          returnValue: false) as bool);
+  @override
+  _i8.Future<void> init() => (super.noSuchMethod(Invocation.method(#init, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+  @override
+  _i8.Future<bool> authViaBiometric({String? reason = r'Verify'}) => (super
+      .noSuchMethod(Invocation.method(#authViaBiometric, [], {#reason: reason}),
+          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
+}
+
 /// A class which mocks [FunctionMock].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFunction<T> extends _i1.Mock implements _i10.FunctionMock<T> {
+class MockFunction<T> extends _i1.Mock implements _i12.FunctionMock<T> {
   MockFunction() {
     _i1.throwOnMissingStub(this);
   }
