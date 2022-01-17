@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secretum/models/sensitive_information.dart';
 
@@ -18,6 +19,11 @@ class UsersSensitiveInformation extends SensitiveInformation {
   UsersSensitiveInformation(this.secretKey, this.primaryPassword);
 
   UsersSensitiveInformation.newUser(this.secretKey, this.primaryPassword);
+
+  @visibleForTesting
+  UsersSensitiveInformation.test()
+      : this.secretKey = 'secretKey',
+        this.primaryPassword = 'primaryPassword';
 
   factory UsersSensitiveInformation.fromJson(Map<String, dynamic> json) => _$UsersSensitiveInformationFromJson(json);
 

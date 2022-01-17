@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:secretum/models/firestore_metadata.dart';
 import 'package:secretum/utils/extensions.dart';
@@ -28,6 +29,15 @@ class Secret extends FirestoreMetadata {
   })  : this.updatedAt = dateTime,
         this.note = '',
         this.code = '',
+        super(createdAt: dateTime);
+
+  @visibleForTesting
+  Secret.test(DateTime dateTime)
+      : this.addedBy = 'addedBy',
+        this.updatedAt = dateTime,
+        this.name = 'name',
+        this.note = 'note',
+        this.code = 'code',
         super(createdAt: dateTime);
 
   factory Secret.fromFirestore(DocumentSnapshot documentSnapshot) {

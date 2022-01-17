@@ -62,16 +62,16 @@ void main() {
 
       expect(result, isTrue);
     });
-  });
 
-  test('false', () {
-    final user = User(mockUsersSensitiveInformation);
-    when(mockUsersSensitiveInformation.primaryPassword).thenReturn('primary');
-    when(mockUsersStore.user).thenReturn(user);
-    when(mockEncryptionService.getHashedText('password')).thenReturn('not primary');
+    test('false', () {
+      final user = User(mockUsersSensitiveInformation);
+      when(mockUsersSensitiveInformation.primaryPassword).thenReturn('primary');
+      when(mockUsersStore.user).thenReturn(user);
+      when(mockEncryptionService.getHashedText('password')).thenReturn('not primary');
 
-    final result = presenter.validatePrimaryPassword('password');
+      final result = presenter.validatePrimaryPassword('password');
 
-    expect(result, isFalse);
+      expect(result, isFalse);
+    });
   });
 }

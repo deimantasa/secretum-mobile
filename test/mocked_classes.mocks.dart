@@ -2,28 +2,34 @@
 // in secretum/test/mocked_classes.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i8;
-import 'dart:typed_data' as _i9;
-import 'dart:ui' as _i17;
+import 'dart:async' as _i5;
+import 'dart:io' as _i4;
+import 'dart:typed_data' as _i10;
+import 'dart:ui' as _i18;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_core/firebase_core.dart' as _i3;
+import 'package:flutter/foundation.dart' as _i23;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:secretum/models/enums/log_type.dart' as _i5;
-import 'package:secretum/models/secret.dart' as _i6;
-import 'package:secretum/models/user.dart' as _i16;
-import 'package:secretum/models/users_sensitive_information.dart' as _i7;
+import 'package:secretum/models/enums/log_type.dart' as _i7;
+import 'package:secretum/models/secret.dart' as _i8;
+import 'package:secretum/models/user.dart' as _i17;
+import 'package:secretum/models/users_sensitive_information.dart' as _i9;
 import 'package:secretum/pages/authentication/authentication_contract.dart'
-    as _i10;
+    as _i11;
 import 'package:secretum/pages/backup_preview/backup_preview_contract.dart'
-    as _i12;
-import 'package:secretum/pages/edit_entry/edit_entry_contract.dart' as _i13;
-import 'package:secretum/services/authentication_service.dart' as _i11;
-import 'package:secretum/services/encryption_service.dart' as _i14;
-import 'package:secretum/services/logging_service.dart' as _i4;
-import 'package:secretum/stores/users_store.dart' as _i15;
+    as _i13;
+import 'package:secretum/pages/edit_entry/edit_entry_contract.dart' as _i14;
+import 'package:secretum/pages/home/home_contract.dart' as _i19;
+import 'package:secretum/pages/home/home_presenter.dart' as _i20;
+import 'package:secretum/services/authentication_service.dart' as _i12;
+import 'package:secretum/services/encryption_service.dart' as _i15;
+import 'package:secretum/services/logging_service.dart' as _i6;
+import 'package:secretum/services/storage_service.dart' as _i22;
+import 'package:secretum/stores/secrets_store.dart' as _i21;
+import 'package:secretum/stores/users_store.dart' as _i16;
 
-import 'mock_function.dart' as _i18;
+import 'mock_function.dart' as _i24;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -65,16 +71,21 @@ class _FakeQuery_10<T extends Object?> extends _i1.Fake
 class _FakeFirebaseFirestore_11 extends _i1.Fake
     implements _i2.FirebaseFirestore {}
 
+class _FakeDirectory_12 extends _i1.Fake implements _i4.Directory {}
+
+class _FakeStreamSubscription_13<T> extends _i1.Fake
+    implements _i5.StreamSubscription<T> {}
+
 /// A class which mocks [LoggingService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLoggingService extends _i1.Mock implements _i4.LoggingService {
+class MockLoggingService extends _i1.Mock implements _i6.LoggingService {
   MockLoggingService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  void log(String? message, {_i5.LogType? logType = _i5.LogType.debug}) => super
+  void log(String? message, {_i7.LogType? logType = _i7.LogType.debug}) => super
       .noSuchMethod(Invocation.method(#log, [message], {#logType: logType}),
           returnValueForMissingStub: null);
 }
@@ -82,7 +93,7 @@ class MockLoggingService extends _i1.Mock implements _i4.LoggingService {
 /// A class which mocks [Secret].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSecret extends _i1.Mock implements _i6.Secret {
+class MockSecret extends _i1.Mock implements _i8.Secret {
   MockSecret() {
     _i1.throwOnMissingStub(this);
   }
@@ -207,7 +218,7 @@ class MockDocumentChange<T extends Object?> extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUsersSensitiveInformation extends _i1.Mock
-    implements _i7.UsersSensitiveInformation {
+    implements _i9.UsersSensitiveInformation {
   MockUsersSensitiveInformation() {
     _i1.throwOnMissingStub(this);
   }
@@ -269,19 +280,19 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
   _i2.WriteBatch batch() => (super.noSuchMethod(Invocation.method(#batch, []),
       returnValue: _FakeWriteBatch_7()) as _i2.WriteBatch);
   @override
-  _i8.Future<void> clearPersistence() =>
+  _i5.Future<void> clearPersistence() =>
       (super.noSuchMethod(Invocation.method(#clearPersistence, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<void> enablePersistence(
+  _i5.Future<void> enablePersistence(
           [_i2.PersistenceSettings? persistenceSettings]) =>
       (super.noSuchMethod(
           Invocation.method(#enablePersistence, [persistenceSettings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i2.LoadBundleTask loadBundle(_i9.Uint8List? bundle) =>
+  _i2.LoadBundleTask loadBundle(_i10.Uint8List? bundle) =>
       (super.noSuchMethod(Invocation.method(#loadBundle, [bundle]),
           returnValue: _FakeLoadBundleTask_8()) as _i2.LoadBundleTask);
   @override
@@ -292,13 +303,13 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
               #useFirestoreEmulator, [host, port], {#sslEnabled: sslEnabled}),
           returnValueForMissingStub: null);
   @override
-  _i8.Future<_i2.QuerySnapshot<Map<String, dynamic>>> namedQueryGet(
+  _i5.Future<_i2.QuerySnapshot<Map<String, dynamic>>> namedQueryGet(
           String? name,
           {_i2.GetOptions? options = const _i2.GetOptions()}) =>
       (super.noSuchMethod(
           Invocation.method(#namedQueryGet, [name], {#options: options}),
           returnValue: Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
-              _FakeQuerySnapshot_9<Map<String, dynamic>>())) as _i8
+              _FakeQuerySnapshot_9<Map<String, dynamic>>())) as _i5
           .Future<_i2.QuerySnapshot<Map<String, dynamic>>>);
   @override
   _i2.Query<Map<String, dynamic>> collectionGroup(String? collectionPath) =>
@@ -306,41 +317,41 @@ class MockFirebaseFirestore extends _i1.Mock implements _i2.FirebaseFirestore {
               returnValue: _FakeQuery_10<Map<String, dynamic>>())
           as _i2.Query<Map<String, dynamic>>);
   @override
-  _i8.Future<void> disableNetwork() =>
+  _i5.Future<void> disableNetwork() =>
       (super.noSuchMethod(Invocation.method(#disableNetwork, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
   _i2.DocumentReference<Map<String, dynamic>> doc(String? documentPath) =>
       (super.noSuchMethod(Invocation.method(#doc, [documentPath]),
               returnValue: _FakeDocumentReference_2<Map<String, dynamic>>())
           as _i2.DocumentReference<Map<String, dynamic>>);
   @override
-  _i8.Future<void> enableNetwork() =>
+  _i5.Future<void> enableNetwork() =>
       (super.noSuchMethod(Invocation.method(#enableNetwork, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Stream<void> snapshotsInSync() =>
+  _i5.Stream<void> snapshotsInSync() =>
       (super.noSuchMethod(Invocation.method(#snapshotsInSync, []),
-          returnValue: Stream<void>.empty()) as _i8.Stream<void>);
+          returnValue: Stream<void>.empty()) as _i5.Stream<void>);
   @override
-  _i8.Future<T> runTransaction<T>(_i2.TransactionHandler<T>? transactionHandler,
+  _i5.Future<T> runTransaction<T>(_i2.TransactionHandler<T>? transactionHandler,
           {Duration? timeout = const Duration(seconds: 30)}) =>
       (super.noSuchMethod(
           Invocation.method(
               #runTransaction, [transactionHandler], {#timeout: timeout}),
-          returnValue: Future<T>.value(null)) as _i8.Future<T>);
+          returnValue: Future<T>.value(null)) as _i5.Future<T>);
   @override
-  _i8.Future<void> terminate() =>
+  _i5.Future<void> terminate() =>
       (super.noSuchMethod(Invocation.method(#terminate, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<void> waitForPendingWrites() =>
+  _i5.Future<void> waitForPendingWrites() =>
       (super.noSuchMethod(Invocation.method(#waitForPendingWrites, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
 }
 
 /// A class which mocks [CollectionReference].
@@ -368,11 +379,11 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#parameters),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i8.Future<_i2.DocumentReference<T>> add(T? data) =>
+  _i5.Future<_i2.DocumentReference<T>> add(T? data) =>
       (super.noSuchMethod(Invocation.method(#add, [data]),
               returnValue: Future<_i2.DocumentReference<T>>.value(
                   _FakeDocumentReference_2<T>()))
-          as _i8.Future<_i2.DocumentReference<T>>);
+          as _i5.Future<_i2.DocumentReference<T>>);
   @override
   _i2.DocumentReference<T> doc([String? path]) => (super.noSuchMethod(
       Invocation.method(#doc, [path]),
@@ -405,11 +416,11 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#endBefore, [values]),
           returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
-  _i8.Future<_i2.QuerySnapshot<T>> get([_i2.GetOptions? options]) =>
+  _i5.Future<_i2.QuerySnapshot<T>> get([_i2.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue:
                   Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_9<T>()))
-          as _i8.Future<_i2.QuerySnapshot<T>>);
+          as _i5.Future<_i2.QuerySnapshot<T>>);
   @override
   _i2.Query<T> limit(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limit, [limit]),
@@ -419,13 +430,13 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#limitToLast, [limit]),
           returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
-  _i8.Stream<_i2.QuerySnapshot<T>> snapshots(
+  _i5.Stream<_i2.QuerySnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
               returnValue: Stream<_i2.QuerySnapshot<T>>.empty())
-          as _i8.Stream<_i2.QuerySnapshot<T>>);
+          as _i5.Stream<_i2.QuerySnapshot<T>>);
   @override
   _i2.Query<T> orderBy(Object? field, {bool? descending = false}) =>
       (super.noSuchMethod(
@@ -515,34 +526,34 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
               returnValue: _FakeCollectionReference_6<Map<String, dynamic>>())
           as _i2.CollectionReference<Map<String, dynamic>>);
   @override
-  _i8.Future<void> delete() =>
+  _i5.Future<void> delete() =>
       (super.noSuchMethod(Invocation.method(#delete, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<void> update(Map<String, Object?>? data) =>
+  _i5.Future<void> update(Map<String, Object?>? data) =>
       (super.noSuchMethod(Invocation.method(#update, [data]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<_i2.DocumentSnapshot<T>> get([_i2.GetOptions? options]) =>
+  _i5.Future<_i2.DocumentSnapshot<T>> get([_i2.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue: Future<_i2.DocumentSnapshot<T>>.value(
                   _FakeDocumentSnapshot_1<T>()))
-          as _i8.Future<_i2.DocumentSnapshot<T>>);
+          as _i5.Future<_i2.DocumentSnapshot<T>>);
   @override
-  _i8.Stream<_i2.DocumentSnapshot<T>> snapshots(
+  _i5.Stream<_i2.DocumentSnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
               returnValue: Stream<_i2.DocumentSnapshot<T>>.empty())
-          as _i8.Stream<_i2.DocumentSnapshot<T>>);
+          as _i5.Stream<_i2.DocumentSnapshot<T>>);
   @override
-  _i8.Future<void> set(T? data, [_i2.SetOptions? options]) =>
+  _i5.Future<void> set(T? data, [_i2.SetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#set, [data, options]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
   _i2.DocumentReference<R> withConverter<R>(
           {_i2.FromFirestore<R>? fromFirestore,
@@ -590,11 +601,11 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
       (super.noSuchMethod(Invocation.method(#endBefore, [values]),
           returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
-  _i8.Future<_i2.QuerySnapshot<T>> get([_i2.GetOptions? options]) =>
+  _i5.Future<_i2.QuerySnapshot<T>> get([_i2.GetOptions? options]) =>
       (super.noSuchMethod(Invocation.method(#get, [options]),
               returnValue:
                   Future<_i2.QuerySnapshot<T>>.value(_FakeQuerySnapshot_9<T>()))
-          as _i8.Future<_i2.QuerySnapshot<T>>);
+          as _i5.Future<_i2.QuerySnapshot<T>>);
   @override
   _i2.Query<T> limit(int? limit) =>
       (super.noSuchMethod(Invocation.method(#limit, [limit]),
@@ -604,13 +615,13 @@ class MockQuery<T extends Object?> extends _i1.Mock implements _i2.Query<T> {
       (super.noSuchMethod(Invocation.method(#limitToLast, [limit]),
           returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
   @override
-  _i8.Stream<_i2.QuerySnapshot<T>> snapshots(
+  _i5.Stream<_i2.QuerySnapshot<T>> snapshots(
           {bool? includeMetadataChanges = false}) =>
       (super.noSuchMethod(
               Invocation.method(#snapshots, [],
                   {#includeMetadataChanges: includeMetadataChanges}),
               returnValue: Stream<_i2.QuerySnapshot<T>>.empty())
-          as _i8.Stream<_i2.QuerySnapshot<T>>);
+          as _i5.Stream<_i2.QuerySnapshot<T>>);
   @override
   _i2.Query<T> orderBy(Object? field, {bool? descending = false}) =>
       (super.noSuchMethod(
@@ -707,7 +718,7 @@ class MockQuerySnapshot<T extends Object?> extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockStreamSubscription<T> extends _i1.Mock
-    implements _i8.StreamSubscription<T> {
+    implements _i5.StreamSubscription<T> {
   MockStreamSubscription() {
     _i1.throwOnMissingStub(this);
   }
@@ -717,10 +728,10 @@ class MockStreamSubscription<T> extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#isPaused), returnValue: false)
           as bool);
   @override
-  _i8.Future<void> cancel() =>
+  _i5.Future<void> cancel() =>
       (super.noSuchMethod(Invocation.method(#cancel, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
   void onData(void Function(T)? handleData) =>
       super.noSuchMethod(Invocation.method(#onData, [handleData]),
@@ -734,23 +745,23 @@ class MockStreamSubscription<T> extends _i1.Mock
       super.noSuchMethod(Invocation.method(#onDone, [handleDone]),
           returnValueForMissingStub: null);
   @override
-  void pause([_i8.Future<void>? resumeSignal]) =>
+  void pause([_i5.Future<void>? resumeSignal]) =>
       super.noSuchMethod(Invocation.method(#pause, [resumeSignal]),
           returnValueForMissingStub: null);
   @override
   void resume() => super.noSuchMethod(Invocation.method(#resume, []),
       returnValueForMissingStub: null);
   @override
-  _i8.Future<E> asFuture<E>([E? futureValue]) =>
+  _i5.Future<E> asFuture<E>([E? futureValue]) =>
       (super.noSuchMethod(Invocation.method(#asFuture, [futureValue]),
-          returnValue: Future<E>.value(null)) as _i8.Future<E>);
+          returnValue: Future<E>.value(null)) as _i5.Future<E>);
 }
 
 /// A class which mocks [AuthenticationView].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationView extends _i1.Mock
-    implements _i10.AuthenticationView {
+    implements _i11.AuthenticationView {
   MockAuthenticationView() {
     _i1.throwOnMissingStub(this);
   }
@@ -771,7 +782,7 @@ class MockAuthenticationView extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAuthenticationService extends _i1.Mock
-    implements _i11.AuthenticationService {
+    implements _i12.AuthenticationService {
   MockAuthenticationService() {
     _i1.throwOnMissingStub(this);
   }
@@ -781,19 +792,19 @@ class MockAuthenticationService extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#areBiometricsAvailable),
           returnValue: false) as bool);
   @override
-  _i8.Future<void> init() => (super.noSuchMethod(Invocation.method(#init, []),
+  _i5.Future<void> init() => (super.noSuchMethod(Invocation.method(#init, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<bool> authViaBiometric({String? reason = r'Verify'}) => (super
+  _i5.Future<bool> authViaBiometric({String? reason = r'Verify'}) => (super
       .noSuchMethod(Invocation.method(#authViaBiometric, [], {#reason: reason}),
-          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
 }
 
 /// A class which mocks [BackupPreviewView].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockBackupPreviewView extends _i1.Mock implements _i12.BackupPreviewView {
+class MockBackupPreviewView extends _i1.Mock implements _i13.BackupPreviewView {
   MockBackupPreviewView() {
     _i1.throwOnMissingStub(this);
   }
@@ -810,7 +821,7 @@ class MockBackupPreviewView extends _i1.Mock implements _i12.BackupPreviewView {
 /// A class which mocks [EditEntryView].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEditEntryView extends _i1.Mock implements _i13.EditEntryView {
+class MockEditEntryView extends _i1.Mock implements _i14.EditEntryView {
   MockEditEntryView() {
     _i1.throwOnMissingStub(this);
   }
@@ -827,7 +838,7 @@ class MockEditEntryView extends _i1.Mock implements _i13.EditEntryView {
 /// A class which mocks [EncryptionService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEncryptionService extends _i1.Mock implements _i14.EncryptionService {
+class MockEncryptionService extends _i1.Mock implements _i15.EncryptionService {
   MockEncryptionService() {
     _i1.throwOnMissingStub(this);
   }
@@ -861,13 +872,13 @@ class MockEncryptionService extends _i1.Mock implements _i14.EncryptionService {
 /// A class which mocks [UsersStore].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUsersStore extends _i1.Mock implements _i15.UsersStore {
+class MockUsersStore extends _i1.Mock implements _i16.UsersStore {
   MockUsersStore() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  set user(_i16.User? _user) =>
+  set user(_i17.User? _user) =>
       super.noSuchMethod(Invocation.setter(#user, _user),
           returnValueForMissingStub: null);
   @override
@@ -875,32 +886,183 @@ class MockUsersStore extends _i1.Mock implements _i15.UsersStore {
       (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
           as bool);
   @override
-  void updateUserLocally(_i16.User? user) =>
+  void updateUserLocally(_i17.User? user) =>
       super.noSuchMethod(Invocation.method(#updateUserLocally, [user]),
           returnValueForMissingStub: null);
   @override
-  _i8.Future<void> initUserViaSecretKey(String? secretKey) =>
+  _i5.Future<void> initUserViaSecretKey(String? secretKey) =>
       (super.noSuchMethod(Invocation.method(#initUserViaSecretKey, [secretKey]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<void> initUserOnAppStart() =>
+  _i5.Future<void> initUserOnAppStart() =>
       (super.noSuchMethod(Invocation.method(#initUserOnAppStart, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i8.Future<bool> registerUser(_i16.User? userToRegister) =>
+  _i5.Future<bool> registerUser(_i17.User? userToRegister) =>
       (super.noSuchMethod(Invocation.method(#registerUser, [userToRegister]),
-          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
   @override
   void resetStore() => super.noSuchMethod(Invocation.method(#resetStore, []),
       returnValueForMissingStub: null);
   @override
-  void addListener(_i17.VoidCallback? listener) =>
+  void addListener(_i18.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void removeListener(_i17.VoidCallback? listener) =>
+  void removeListener(_i18.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [HomeView].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockHomeView extends _i1.Mock implements _i19.HomeView {
+  MockHomeView() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void updateView() => super.noSuchMethod(Invocation.method(#updateView, []),
+      returnValueForMissingStub: null);
+  @override
+  void showMessage(String? message, {bool? isSuccess}) => super.noSuchMethod(
+      Invocation.method(#showMessage, [message], {#isSuccess: isSuccess}),
+      returnValueForMissingStub: null);
+  @override
+  void goToWelcomePage() =>
+      super.noSuchMethod(Invocation.method(#goToWelcomePage, []),
+          returnValueForMissingStub: null);
+  @override
+  void showMessageDialog(String? fileLocation) =>
+      super.noSuchMethod(Invocation.method(#showMessageDialog, [fileLocation]),
+          returnValueForMissingStub: null);
+}
+
+/// A class which mocks [HomePresenterHelper].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockHomePresenterHelper extends _i1.Mock
+    implements _i20.HomePresenterHelper {
+  MockHomePresenterHelper() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<String> exportSecretsLocally(
+          _i17.User? user,
+          _i21.SecretsStore? secretsStore,
+          _i22.StorageService? storageService) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #exportSecretsLocally, [user, secretsStore, storageService]),
+          returnValue: Future<String>.value('')) as _i5.Future<String>);
+}
+
+/// A class which mocks [StorageService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStorageService extends _i1.Mock implements _i22.StorageService {
+  MockStorageService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<String?> getSecretKey() =>
+      (super.noSuchMethod(Invocation.method(#getSecretKey, []),
+          returnValue: Future<String?>.value()) as _i5.Future<String?>);
+  @override
+  _i5.Future<void> initSecretKey(String? secretKey) =>
+      (super.noSuchMethod(Invocation.method(#initSecretKey, [secretKey]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<String> exportBackup(
+          List<_i8.Secret>? secrets, String? fileName) =>
+      (super.noSuchMethod(Invocation.method(#exportBackup, [secrets, fileName]),
+          returnValue: Future<String>.value('')) as _i5.Future<String>);
+  @override
+  _i5.Future<void> resetStorage() =>
+      (super.noSuchMethod(Invocation.method(#resetStorage, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<bool> deleteBackupFiles() =>
+      (super.noSuchMethod(Invocation.method(#deleteBackupFiles, []),
+          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
+  @override
+  _i5.Future<_i4.Directory> getBackupsDirectory() =>
+      (super.noSuchMethod(Invocation.method(#getBackupsDirectory, []),
+              returnValue: Future<_i4.Directory>.value(_FakeDirectory_12()))
+          as _i5.Future<_i4.Directory>);
+}
+
+/// A class which mocks [SecretsStore].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSecretsStore extends _i1.Mock implements _i21.SecretsStore {
+  MockSecretsStore() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  List<_i8.Secret> get secrets =>
+      (super.noSuchMethod(Invocation.getter(#secrets),
+          returnValue: <_i8.Secret>[]) as List<_i8.Secret>);
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
+  @override
+  void init(String? userId) =>
+      super.noSuchMethod(Invocation.method(#init, [userId]),
+          returnValueForMissingStub: null);
+  @override
+  _i5.Future<List<_i8.Secret>> getAllSecrets(String? userId) =>
+      (super.noSuchMethod(Invocation.method(#getAllSecrets, [userId]),
+              returnValue: Future<List<_i8.Secret>>.value(<_i8.Secret>[]))
+          as _i5.Future<List<_i8.Secret>>);
+  @override
+  _i5.StreamSubscription<dynamic> listenToSecretById(
+          String? userId, String? secretId,
+          {_i23.ValueSetter<_i8.Secret>? onSecretChanged}) =>
+      (super.noSuchMethod(
+              Invocation.method(#listenToSecretById, [userId, secretId],
+                  {#onSecretChanged: onSecretChanged}),
+              returnValue: _FakeStreamSubscription_13<dynamic>())
+          as _i5.StreamSubscription<dynamic>);
+  @override
+  _i5.Future<bool> addNewSecret(String? userId, _i8.Secret? secret) =>
+      (super.noSuchMethod(Invocation.method(#addNewSecret, [userId, secret]),
+          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
+  @override
+  void resetStore() => super.noSuchMethod(Invocation.method(#resetStore, []),
+      returnValueForMissingStub: null);
+  @override
+  _i5.Future<bool> deleteSecret(String? userId, String? secretId) =>
+      (super.noSuchMethod(Invocation.method(#deleteSecret, [userId, secretId]),
+          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
+  @override
+  _i5.Future<bool> updateSecret(
+          String? userId, String? secretId, _i8.Secret? secret) =>
+      (super.noSuchMethod(
+          Invocation.method(#updateSecret, [userId, secretId, secret]),
+          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
+  @override
+  void addListener(_i18.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i18.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
@@ -915,7 +1077,7 @@ class MockUsersStore extends _i1.Mock implements _i15.UsersStore {
 /// A class which mocks [FunctionMock].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFunction<T> extends _i1.Mock implements _i18.FunctionMock<T> {
+class MockFunction<T> extends _i1.Mock implements _i24.FunctionMock<T> {
   MockFunction() {
     _i1.throwOnMissingStub(this);
   }

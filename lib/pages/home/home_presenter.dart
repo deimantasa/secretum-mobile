@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secretum/models/enums/export_from_type.dart';
 import 'package:secretum/models/secret.dart';
+import 'package:secretum/models/user.dart';
 import 'package:secretum/services/storage_service.dart';
 import 'package:secretum/stores/secrets_store.dart';
 import 'package:secretum/stores/users_store.dart';
@@ -15,18 +16,20 @@ import 'home_model.dart';
 class HomePresenter {
   final HomeView _view;
   final HomeModel _model;
+  final HomePresenterHelper _helper;
   final StorageService _storageService;
   final SecretsStore _secretsStore;
   final UsersStore _usersStore;
 
-  HomePresenter(this._view, this._model)
-      : this._storageService = GetIt.instance<StorageService>(),
+  HomePresenter(this._view, this._model, {HomePresenterHelper? helper})
+      : this._helper = helper ?? HomePresenterHelper(),
+        this._storageService = GetIt.instance<StorageService>(),
         this._secretsStore = GetIt.instance<SecretsStore>(),
         this._usersStore = GetIt.instance<UsersStore>();
 
   void init() {
     updateData();
-    exportSecretsLocally();
+    _helper.exportSecretsLocally(_model.user!, _secretsStore, _storageService);
 
     _view.updateView();
   }
@@ -85,6 +88,7 @@ class HomePresenter {
 
   Future<void> deleteBackups() async {
     final bool isSuccess = await _storageService.deleteBackupFiles();
+
     if (isSuccess) {
       _view.showMessage('Backups were deleted');
     } else {
@@ -92,15 +96,19 @@ class HomePresenter {
     }
   }
 
-  /// Export backup at app start. This will make sure user always has latest backup of their data in case something
-  /// goes wrong in the database.
-  @visibleForTesting
-  Future<void> exportSecretsLocally() async {
-    final List<Secret> secrets = await _secretsStore.getAllSecrets(_model.user!.id);
-    await _storageService.exportBackup(secrets, 'secretum-backup-${DateTime.now().toIso8601String()}');
-  }
-
   Future<Directory> getBackupsDirectory() async {
     return _storageService.getBackupsDirectory();
+  }
+}
+
+@visibleForTesting
+class HomePresenterHelper {
+  /// Exports backup at app start. This will make sure user always has latest backup of their data in case something
+  /// goes wrong in the database.
+  Future<String> exportSecretsLocally(User user, SecretsStore secretsStore, StorageService storageService) async {
+    final List<Secret> secrets = await secretsStore.getAllSecrets(user.id);
+    final String filePath = await storageService.exportBackup(secrets, 'secretum-backup-${clock.now().toIso8601String()}');
+
+    return filePath;
   }
 }

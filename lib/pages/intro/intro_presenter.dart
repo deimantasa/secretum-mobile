@@ -8,7 +8,7 @@ import 'intro_model.dart';
 
 class IntroPresenter {
   final IntroView _view;
-  //ignore: unused_field
+  // ignore: unused_field
   final IntroModel _model;
   final AuthenticationService _authenticationService;
   final UsersStore _usersStore;
@@ -21,6 +21,8 @@ class IntroPresenter {
 
   Future<void> init() async {
     await Future.wait([
+      // Giving some delay, so that if all calls succeed very fast, overall
+      // UX would not feel glitched
       Future.delayed(Duration(seconds: 2)),
       _authenticationService.init(),
       _usersStore.initUserOnAppStart(),
